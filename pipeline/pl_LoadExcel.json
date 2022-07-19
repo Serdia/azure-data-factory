@@ -2,6 +2,53 @@
 	"name": "pl_LoadExcel",
 	"properties": {
 		"description": "load data from multiple excel sheets into azure db.\nhttps://www.youtube.com/watch?v=YxqL7cg4b3M&t=645s&ab_channel=TechBrothersIT",
+		"activities": [
+			{
+				"name": "Loop through sheet name",
+				"description": "looping through each sheet name",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.sheetName",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ExcelSource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "excelInputFile",
+									"type": "DatasetReference"
+								}
+							]
+						}
+					]
+				}
+			}
+		],
 		"parameters": {
 			"sheetName": {
 				"type": "array",
