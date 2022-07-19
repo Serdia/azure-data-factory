@@ -1,0 +1,23 @@
+{
+	"name": "pl_LoadExcel",
+	"properties": {
+		"description": "load data from multiple excel sheets into azure db.\nhttps://www.youtube.com/watch?v=YxqL7cg4b3M&t=645s&ab_channel=TechBrothersIT",
+		"parameters": {
+			"sheetName": {
+				"type": "array",
+				"defaultValue": [
+					{
+						"SheetName": "Customer"
+					},
+					{
+						"SheetName": "Product"
+					},
+					{
+						"SheetName": "Order"
+					}
+				]
+			}
+		},
+		"annotations": []
+	}
+}
