@@ -1,0 +1,130 @@
+{
+	"name": "SqlServerDataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SqlServerLinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "DocumentStoreGUID",
+				"type": "uniqueidentifier"
+			},
+			{
+				"name": "Description",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FileAssociation",
+				"type": "varchar"
+			},
+			{
+				"name": "Document",
+				"type": "image"
+			},
+			{
+				"name": "DateAdded",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "FileName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "UserGUIDOriginator",
+				"type": "uniqueidentifier"
+			},
+			{
+				"name": "TypeGUID",
+				"type": "uniqueidentifier"
+			},
+			{
+				"name": "CompressionLevel",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Compressed",
+				"type": "bit"
+			},
+			{
+				"name": "OriginalFileSize",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DocumentThumbnail",
+				"type": "image"
+			},
+			{
+				"name": "FolderID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CopyAssociationsForwardOnRenewal",
+				"type": "bit"
+			},
+			{
+				"name": "MetaXML",
+				"type": "text"
+			},
+			{
+				"name": "ActualFileSize",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "DocumentStoreId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Deleted",
+				"type": "bit"
+			},
+			{
+				"name": "CreatedDate",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ModifiedDate",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "CreationDate",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "LastEditDate",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "DocumentLocation",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CopyAssociationForwardOnlyOnce",
+				"type": "bit"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "tblDocumentStore"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

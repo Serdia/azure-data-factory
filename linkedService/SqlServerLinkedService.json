@@ -1,0 +1,18 @@
+{
+	"name": "SqlServerLinkedService",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "test to offload pdf file from sql to blob",
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=True;data source=10.26.26.14;initial catalog=mejames",
+			"userName": "aligngeneral\\oserdyuk",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIxNWExZWE2Ny1kOTU0LTQ4NmYtYTkxMi1iM2RjYTc1YjMwN2EiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "TutorialIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

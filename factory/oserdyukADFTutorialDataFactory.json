@@ -1,0 +1,9 @@
+{
+	"name": "oserdyukADFTutorialDataFactory",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "a18adb59-3eb7-4809-ae16-622e7d1ad4f7",
+		"tenantId": "6e55ae8a-1b0b-492b-9015-98ffd5fe70b9"
+	}
+}

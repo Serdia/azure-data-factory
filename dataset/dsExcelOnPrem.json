@@ -1,0 +1,26 @@
+{
+	"name": "dsExcelOnPrem",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "isExcelOnPremise",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Sheet1",
+			"location": {
+				"type": "FileServerLocation",
+				"fileName": "Missing CauseLossCd.xlsx"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "Active Contact List\nAs of: 7/13/2022",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
