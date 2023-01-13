@@ -1,0 +1,7 @@
+{
+	"name": "NBIS_LoadMTDPremium",
+	"properties": {
+		"description": "Load data from excel to sql",
+		"annotations": []
+	}
+}
