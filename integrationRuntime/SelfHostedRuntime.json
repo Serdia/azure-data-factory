@@ -1,0 +1,7 @@
+{
+	"name": "SelfHostedRuntime",
+	"properties": {
+		"type": "SelfHosted",
+		"description": "version 5.25.8403.1"
+	}
+}
