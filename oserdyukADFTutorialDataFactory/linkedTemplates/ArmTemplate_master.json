@@ -1,0 +1,106 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "oserdyukADFTutorialDataFactory"
+		},
+		"AzureDatabricks1_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks1'"
+		},
+		"AzureStorageLinkedService_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureStorageLinkedService'"
+		},
+		"SqlServerLinkedService_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServerLinkedService'",
+			"defaultValue": "Integrated Security=True;Data Source=10.26.26.14;Initial Catalog=mejames"
+		},
+		"SqlServerLinkedService_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'SqlServerLinkedService'"
+		},
+		"isExcelOnPremise_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'isExcelOnPremise'"
+		},
+		"AzureDatabricks1_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0614-060655-iv90goau"
+		},
+		"SqlServerLinkedService_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "aligngeneral\\oserdyuk"
+		},
+		"isExcelOnPremise_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "C:\\Users\\oserdyuk\\Downloads"
+		},
+		"isExcelOnPremise_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "aligngeneral\\oserdyuk"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "oserdyukADFTutorialDataFactory_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureDatabricks1_accessToken": {
+						"value": "[parameters('AzureDatabricks1_accessToken')]"
+					},
+					"AzureStorageLinkedService_connectionString": {
+						"value": "[parameters('AzureStorageLinkedService_connectionString')]"
+					},
+					"SqlServerLinkedService_connectionString": {
+						"value": "[parameters('SqlServerLinkedService_connectionString')]"
+					},
+					"SqlServerLinkedService_password": {
+						"value": "[parameters('SqlServerLinkedService_password')]"
+					},
+					"isExcelOnPremise_password": {
+						"value": "[parameters('isExcelOnPremise_password')]"
+					},
+					"AzureDatabricks1_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('AzureDatabricks1_properties_typeProperties_existingClusterId')]"
+					},
+					"SqlServerLinkedService_properties_typeProperties_userName": {
+						"value": "[parameters('SqlServerLinkedService_properties_typeProperties_userName')]"
+					},
+					"isExcelOnPremise_properties_typeProperties_host": {
+						"value": "[parameters('isExcelOnPremise_properties_typeProperties_host')]"
+					},
+					"isExcelOnPremise_properties_typeProperties_userId": {
+						"value": "[parameters('isExcelOnPremise_properties_typeProperties_userId')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

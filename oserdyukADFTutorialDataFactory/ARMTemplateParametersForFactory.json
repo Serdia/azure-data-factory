@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "oserdyukADFTutorialDataFactory"
+		},
+		"AzureDatabricks1_accessToken": {
+			"value": ""
+		},
+		"AzureStorageLinkedService_connectionString": {
+			"value": ""
+		},
+		"SqlServerLinkedService_connectionString": {
+			"value": "Integrated Security=True;Data Source=10.26.26.14;Initial Catalog=mejames"
+		},
+		"SqlServerLinkedService_password": {
+			"value": ""
+		},
+		"isExcelOnPremise_password": {
+			"value": ""
+		},
+		"AzureDatabricks1_properties_typeProperties_existingClusterId": {
+			"value": "0614-060655-iv90goau"
+		},
+		"SqlServerLinkedService_properties_typeProperties_userName": {
+			"value": "aligngeneral\\oserdyuk"
+		},
+		"isExcelOnPremise_properties_typeProperties_host": {
+			"value": "C:\\Users\\oserdyuk\\Downloads"
+		},
+		"isExcelOnPremise_properties_typeProperties_userId": {
+			"value": "aligngeneral\\oserdyuk"
+		}
+	}
+}
