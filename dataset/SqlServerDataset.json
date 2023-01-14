@@ -5,6 +5,11 @@
 			"referenceName": "SqlServerLinkedService",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"tblDocumentStore": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "SqlServerTable",
 		"schema": [
