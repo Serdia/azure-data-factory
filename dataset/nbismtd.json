@@ -14,11 +14,11 @@
 		"type": "SqlServerTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": {
+			"schema": "dbo",
+			"table": {
 				"value": "@dataset().tablename",
 				"type": "Expression"
-			},
-			"table": "tblNBIS_MTDPremium"
+			}
 		}
 	}
 }
