@@ -7,7 +7,8 @@
 		},
 		"parameters": {
 			"tblDocumentStore": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "123"
 			}
 		},
 		"annotations": [],
@@ -125,11 +126,7 @@
 				"name": "CopyAssociationForwardOnlyOnce",
 				"type": "bit"
 			}
-		],
-		"typeProperties": {
-			"schema": "dbo",
-			"table": "tblDocumentStore"
-		}
+		]
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }
