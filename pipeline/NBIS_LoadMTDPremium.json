@@ -28,7 +28,8 @@
 					"sink": {
 						"type": "SqlServerSink",
 						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate"
 					},
 					"enableStaging": false,
 					"translator": {
@@ -49,10 +50,7 @@
 				"outputs": [
 					{
 						"referenceName": "nbismtd",
-						"type": "DatasetReference",
-						"parameters": {
-							"tablename": "tblNBIS_MTDPremium"
-						}
+						"type": "DatasetReference"
 					}
 				]
 			}
