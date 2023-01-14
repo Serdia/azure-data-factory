@@ -20,17 +20,39 @@
 					"source": {
 						"type": "ExcelSource",
 						"storeSettings": {
-							"type": "FileServerReadSettings",
+							"type": "AzureBlobStorageReadSettings",
 							"recursive": true,
 							"enablePartitionDiscovery": false
 						}
 					},
-					"enableStaging": false
+					"sink": {
+						"type": "SqlServerSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
 				},
 				"inputs": [
 					{
-						"referenceName": "dsExcelOnPrem",
+						"referenceName": "MTDPremium",
 						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "nbismtd",
+						"type": "DatasetReference",
+						"parameters": {
+							"tablename": "tblNBIS_MTDPremium"
+						}
 					}
 				]
 			}
