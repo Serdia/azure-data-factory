@@ -8,10 +8,9 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
-			"sheetName": "MTD GWP",
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "MTD Premiums 01-13-2023_1.xlsx",
+				"fileName": "MTD Premiums 01-13-2023.xlsx",
 				"container": "nbiscontainer"
 			},
 			"firstRowAsHeader": true
