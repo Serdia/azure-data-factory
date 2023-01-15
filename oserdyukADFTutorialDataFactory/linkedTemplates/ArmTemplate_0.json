@@ -520,6 +520,7 @@
 							},
 							"sink": {
 								"type": "SqlServerSink",
+								"preCopyScript": " truncate table tblNBIS_MTDPremium",
 								"writeBehavior": "insert",
 								"sqlWriterUseTableLock": false,
 								"tableOption": "autoCreate"
