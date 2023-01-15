@@ -80,7 +80,6 @@
 							},
 							"sink": {
 								"type": "SqlServerSink",
-								"preCopyScript": " truncate table tblNBIS_MTDPremium",
 								"writeBehavior": "insert",
 								"sqlWriterUseTableLock": false,
 								"tableOption": "autoCreate"
@@ -603,7 +602,10 @@
 				"schema": [],
 				"typeProperties": {
 					"schema": "dbo",
-					"table": "tblNBIS_MTDPremium"
+					"table": {
+						"value": "@dataset().tablename",
+						"type": "Expression"
+					}
 				}
 			},
 			"dependsOn": [
