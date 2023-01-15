@@ -532,7 +532,7 @@
 							},
 							"sink": {
 								"type": "SqlServerSink",
-								"preCopyScript": "truncate table tblNBIS_MTDPremium",
+								"preCopyScript": "if exists tblNBIS_MTDPremium  truncate table tblNBIS_MTDPremium",
 								"writeBehavior": "insert",
 								"sqlWriterUseTableLock": false,
 								"tableOption": "autoCreate"
