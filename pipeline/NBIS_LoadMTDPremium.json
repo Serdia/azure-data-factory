@@ -36,6 +36,7 @@
 					},
 					"sink": {
 						"type": "SqlServerSink",
+						"preCopyScript": "IF OBJECT_ID('tblNBIS_MTDPremium')  IS NOT NULL TRUNCATE TABLE tblNBIS_MTDPremium",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
 						"tableOption": "autoCreate"
