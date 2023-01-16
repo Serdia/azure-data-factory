@@ -184,6 +184,12 @@
 					"referenceName": "AzureStorageLinkedService",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"cellRange": {
+						"type": "string",
+						"defaultValue": "A6:F10"
+					}
+				},
 				"annotations": [],
 				"type": "Excel",
 				"typeProperties": {
@@ -193,7 +199,10 @@
 						"fileName": "MTD Premiums 01-13-2023.xlsx",
 						"container": "nbiscontainer"
 					},
-					"range": "A6:F10",
+					"range": {
+						"value": "@dataset().cellRange",
+						"type": "Expression"
+					},
 					"firstRowAsHeader": true
 				},
 				"schema": [
