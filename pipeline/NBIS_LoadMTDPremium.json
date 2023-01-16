@@ -7,7 +7,14 @@
 				"name": "fromExcelToSql",
 				"description": "copy data from excel file located in blob to sql database",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "dateValue",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -69,6 +76,37 @@
 						}
 					}
 				]
+			},
+			{
+				"name": "dateValue",
+				"description": "capture cell with date value to add it as a new column",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ExcelSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"dataset": {
+						"referenceName": "MTDPremium",
+						"type": "DatasetReference",
+						"parameters": {
+							"cellRange": "A3:A3"
+						}
+					}
+				}
 			}
 		],
 		"annotations": []
