@@ -106,7 +106,7 @@
 							"cellRange": "A3:A3"
 						}
 					},
-					"firstRowOnly": true
+					"firstRowOnly": false
 				}
 			}
 		],
