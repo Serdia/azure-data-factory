@@ -6,8 +6,9 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"parDate": {
-				"type": "string"
+			"cellRange": {
+				"type": "string",
+				"defaultValue": "A6:F10"
 			}
 		},
 		"annotations": [],
@@ -19,7 +20,10 @@
 				"fileName": "MTD Premiums 01-13-2023.xlsx",
 				"container": "nbiscontainer"
 			},
-			"range": "",
+			"range": {
+				"value": "@dataset().cellRange",
+				"type": "Expression"
+			},
 			"firstRowAsHeader": true
 		},
 		"schema": [
