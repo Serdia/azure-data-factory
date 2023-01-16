@@ -105,7 +105,8 @@
 						"parameters": {
 							"cellRange": "A3:A3"
 						}
-					}
+					},
+					"firstRowOnly": false
 				}
 			}
 		],
