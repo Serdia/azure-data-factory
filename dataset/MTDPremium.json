@@ -19,7 +19,7 @@
 				"fileName": "MTD Premiums 01-13-2023.xlsx",
 				"container": "nbiscontainer"
 			},
-			"range": "A6:F10",
+			"range": "",
 			"firstRowAsHeader": true
 		},
 		"schema": [
