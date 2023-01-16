@@ -7,12 +7,7 @@
 		},
 		"parameters": {
 			"cellRange": {
-				"type": "string",
-				"defaultValue": "A6:F10"
-			},
-			"dateCell": {
-				"type": "string",
-				"defaultValue": "A3"
+				"type": "string"
 			}
 		},
 		"annotations": [],
