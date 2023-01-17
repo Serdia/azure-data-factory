@@ -30,7 +30,7 @@
 							{
 								"name": "loadDate",
 								"value": {
-									"value": "@activity('dateValue').output.count",
+									"value": "@activity('dateValue').output",
 									"type": "Expression"
 								}
 							}
