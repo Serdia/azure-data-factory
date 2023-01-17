@@ -103,10 +103,10 @@
 						"referenceName": "MTDPremium",
 						"type": "DatasetReference",
 						"parameters": {
-							"cellRange": "A3:A3"
+							"cellRange": "A1:A1"
 						}
 					},
-					"firstRowOnly": false
+					"firstRowOnly": true
 				}
 			}
 		],
