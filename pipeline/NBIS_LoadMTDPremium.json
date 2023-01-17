@@ -45,7 +45,10 @@
 				"inputs": [
 					{
 						"referenceName": "MTDPremium",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"cellRange": "dataset().cellRange"
+						}
 					}
 				],
 				"outputs": [
