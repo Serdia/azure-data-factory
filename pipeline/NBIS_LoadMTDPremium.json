@@ -30,7 +30,7 @@
 							{
 								"name": "loadDate",
 								"value": {
-									"value": "@activity('dateValue').output?.firstRow",
+									"value": "@activity('dateValue').output.firstRow",
 									"type": "Expression"
 								}
 							}
