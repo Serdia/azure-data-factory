@@ -24,7 +24,7 @@
 				"value": "@dataset().cellRange",
 				"type": "Expression"
 			},
-			"firstRowAsHeader": false
+			"firstRowAsHeader": true
 		},
 		"schema": [
 			{
