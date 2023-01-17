@@ -7,7 +7,14 @@
 				"name": "fromExcelToSql",
 				"description": "copy data from excel file located in blob to sql database",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "dateValue",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -19,6 +26,15 @@
 				"typeProperties": {
 					"source": {
 						"type": "ExcelSource",
+						"additionalColumns": [
+							{
+								"name": "loadDate",
+								"value": {
+									"value": "@activity('dateValue').output.value",
+									"type": "Expression"
+								}
+							}
+						],
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
 							"recursive": true,
@@ -47,7 +63,7 @@
 						"referenceName": "MTDPremium",
 						"type": "DatasetReference",
 						"parameters": {
-							"cellRange": "dataset().cellRange"
+							"cellRange": "A6:F10"
 						}
 					}
 				],
