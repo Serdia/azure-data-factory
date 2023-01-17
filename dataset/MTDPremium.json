@@ -9,6 +9,9 @@
 			"cellRange": {
 				"type": "string",
 				"defaultValue": "A6:F10"
+			},
+			"firstRowAsHeader": {
+				"type": "string"
 			}
 		},
 		"annotations": [],
