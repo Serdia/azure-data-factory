@@ -100,7 +100,7 @@
 						"referenceName": "MTDPremium",
 						"type": "DatasetReference",
 						"parameters": {
-							"cellRange": "A2:A2"
+							"cellRange": "A3:A3"
 						}
 					},
 					"firstRowOnly": false
