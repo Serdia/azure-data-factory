@@ -11,8 +11,8 @@
 				"defaultValue": "A6:F10"
 			},
 			"firstRowAsHeader": {
-				"type": "string",
-				"defaultValue": "true"
+				"type": "bool",
+				"defaultValue": true
 			}
 		},
 		"annotations": [],
