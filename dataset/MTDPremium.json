@@ -11,7 +11,8 @@
 				"defaultValue": "A6:F10"
 			},
 			"firstRowAsHeader": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "true"
 			}
 		},
 		"annotations": [],
@@ -27,7 +28,7 @@
 				"value": "@dataset().cellRange",
 				"type": "Expression"
 			},
-			"firstRowAsHeader": true
+			"firstRowAsHeader": false
 		},
 		"schema": [
 			{
