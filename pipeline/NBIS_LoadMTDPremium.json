@@ -30,7 +30,7 @@
 							{
 								"name": "loadDate",
 								"value": {
-									"value": "@activity('dateValue')?.output.firstRow.Prop_0",
+									"value": "@activity('dateValue').output.firstRow.Prop_1",
 									"type": "Expression"
 								}
 							}
@@ -61,10 +61,7 @@
 				"inputs": [
 					{
 						"referenceName": "MTDPremium",
-						"type": "DatasetReference",
-						"parameters": {
-							"cellRange": "A6:F10"
-						}
+						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
