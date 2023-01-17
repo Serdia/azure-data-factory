@@ -7,7 +7,8 @@
 		},
 		"parameters": {
 			"cellRange": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "A7:F10"
 			}
 		},
 		"annotations": [],
