@@ -28,7 +28,10 @@
 				"value": "@dataset().cellRange",
 				"type": "Expression"
 			},
-			"firstRowAsHeader": false
+			"firstRowAsHeader": {
+				"value": "@dataset().firstRowAsHeader",
+				"type": "Expression"
+			}
 		},
 		"schema": [
 			{

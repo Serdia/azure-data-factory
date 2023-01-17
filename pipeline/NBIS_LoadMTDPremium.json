@@ -63,7 +63,8 @@
 						"referenceName": "MTDPremium",
 						"type": "DatasetReference",
 						"parameters": {
-							"cellRange": "A6:F10"
+							"cellRange": "A6:F10",
+							"firstRowAsHeader": true
 						}
 					}
 				],
@@ -103,7 +104,8 @@
 						"referenceName": "MTDPremium",
 						"type": "DatasetReference",
 						"parameters": {
-							"cellRange": "A3:A3"
+							"cellRange": "A3:A3",
+							"firstRowAsHeader": false
 						}
 					},
 					"firstRowOnly": true
