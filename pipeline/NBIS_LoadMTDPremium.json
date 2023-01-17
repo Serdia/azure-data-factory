@@ -30,7 +30,7 @@
 							{
 								"name": "loadDate",
 								"value": {
-									"value": "@activity('dateValue').output.firstRow.Prop_1",
+									"value": "@activity('dateValue').output.firstRow.Prop_0",
 									"type": "Expression"
 								}
 							}
@@ -103,7 +103,7 @@
 							"cellRange": "A3:A3"
 						}
 					},
-					"firstRowOnly": false
+					"firstRowOnly": true
 				}
 			}
 		],
