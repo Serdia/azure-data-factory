@@ -11,7 +11,7 @@
 					{
 						"activity": "dateValue",
 						"dependencyConditions": [
-							"Succeeded"
+							"Completed"
 						]
 					}
 				],
