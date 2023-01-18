@@ -96,7 +96,7 @@
 						"type": "ExcelSource",
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
-							"recursive": false,
+							"recursive": true,
 							"wildcardFileName": "MTD Premiums *.xlsx",
 							"enablePartitionDiscovery": false
 						}
