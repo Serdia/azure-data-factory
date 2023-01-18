@@ -38,6 +38,7 @@
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
 							"recursive": true,
+							"wildcardFileName": "MTD Premiums?.xlsx",
 							"enablePartitionDiscovery": false
 						}
 					},
@@ -97,6 +98,7 @@
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
 							"recursive": true,
+							"wildcardFileName": "MTD Premiums?.xlsx",
 							"enablePartitionDiscovery": false
 						}
 					},
