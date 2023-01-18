@@ -136,6 +136,13 @@
 						"referenceName": "MTDPremium",
 						"type": "DatasetReference"
 					},
+					"logStorageSettings": {
+						"linkedServiceName": {
+							"referenceName": "AzureStorageLinkedService",
+							"type": "LinkedServiceReference"
+						},
+						"path": "nbiscontainer/logging"
+					},
 					"enableLogging": true,
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
