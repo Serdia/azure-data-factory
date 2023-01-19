@@ -147,14 +147,7 @@
 			{
 				"name": "Lookup_grabDate",
 				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "GetMetadata_readFileNames",
-						"dependencyConditions": [
-							"Completed"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
