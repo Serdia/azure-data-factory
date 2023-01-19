@@ -18,6 +18,7 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
+			"sheetName": "MTD GWP",
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"folderPath": "input",
