@@ -9,9 +9,9 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "dateValue",
+						"activity": "ForEach1",
 						"dependencyConditions": [
-							"Completed"
+							"Succeeded"
 						]
 					}
 				],
@@ -79,40 +79,6 @@
 				]
 			},
 			{
-				"name": "dateValue",
-				"description": "capture cell with date value to add it as a new column",
-				"type": "Lookup",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "ExcelSource",
-						"storeSettings": {
-							"type": "AzureBlobStorageReadSettings",
-							"recursive": true,
-							"wildcardFileName": "MTD Premiums *.xlsx",
-							"enablePartitionDiscovery": false
-						}
-					},
-					"dataset": {
-						"referenceName": "MTDPremium",
-						"type": "DatasetReference",
-						"parameters": {
-							"cellRange": "A3:A3",
-							"firstRowAsHeader": false
-						}
-					},
-					"firstRowOnly": true
-				}
-			},
-			{
 				"name": "Delete1",
 				"type": "Delete",
 				"dependsOn": [
@@ -155,8 +121,79 @@
 			{
 				"name": "ForEach1",
 				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "GetMetadata_readFileNames",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"activities": [
+						{
+							"name": "dateValue",
+							"description": "capture cell with date value to add it as a new column",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ExcelSource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": true,
+										"wildcardFileName": "MTD Premiums *.xlsx",
+										"enablePartitionDiscovery": false
+									}
+								},
+								"dataset": {
+									"referenceName": "MTDPremium",
+									"type": "DatasetReference",
+									"parameters": {
+										"cellRange": "A3:A3",
+										"firstRowAsHeader": false
+									}
+								},
+								"firstRowOnly": true
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "GetMetadata_readFileNames",
+				"type": "GetMetadata",
 				"dependsOn": [],
-				"userProperties": []
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "MTDPremium",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"enablePartitionDiscovery": false
+					}
+				}
 			}
 		],
 		"annotations": []
