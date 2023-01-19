@@ -9,7 +9,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Lookup_grabDate",
+						"activity": "ForEach1",
 						"dependencyConditions": [
 							"Completed"
 						]
@@ -149,45 +149,6 @@
 				}
 			},
 			{
-				"name": "Lookup_grabDate",
-				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "ForEach1",
-						"dependencyConditions": [
-							"Completed"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "ExcelSource",
-						"storeSettings": {
-							"type": "AzureBlobStorageReadSettings",
-							"recursive": true,
-							"wildcardFileName": "*MTD Premiums *.xlsx",
-							"enablePartitionDiscovery": false
-						}
-					},
-					"dataset": {
-						"referenceName": "MTDPremium",
-						"type": "DatasetReference",
-						"parameters": {
-							"cellRange": "A3:A3",
-							"firstRowAsHeader": false
-						}
-					}
-				}
-			},
-			{
 				"name": "ForEach1",
 				"type": "ForEach",
 				"dependsOn": [
@@ -204,7 +165,41 @@
 						"value": "@activity('GetMetadata_readFileNames').output.childItems",
 						"type": "Expression"
 					},
-					"isSequential": true
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Lookup_grabDate",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ExcelSource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": true,
+										"wildcardFileName": "*MTD Premiums *.xlsx",
+										"enablePartitionDiscovery": false
+									}
+								},
+								"dataset": {
+									"referenceName": "MTDPremium",
+									"type": "DatasetReference",
+									"parameters": {
+										"cellRange": "A3:A3",
+										"firstRowAsHeader": false
+									}
+								}
+							}
+						}
+					]
 				}
 			}
 		],
