@@ -184,8 +184,7 @@
 									"type": "ExcelSource",
 									"storeSettings": {
 										"type": "AzureBlobStorageReadSettings",
-										"recursive": true,
-										"wildcardFileName": "*MTD Premiums *.xlsx",
+										"fileListPath": "nbiscontainer/input",
 										"enablePartitionDiscovery": false
 									}
 								},
