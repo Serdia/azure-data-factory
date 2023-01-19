@@ -100,7 +100,11 @@
 				"typeProperties": {
 					"dataset": {
 						"referenceName": "MTDPremium",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"cellRange": "A6:F10",
+							"firstRowAsHeader": true
+						}
 					},
 					"logStorageSettings": {
 						"linkedServiceName": {
@@ -149,7 +153,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "GetMetadata_readFileNames",
+						"activity": "ForEach1",
 						"dependencyConditions": [
 							"Completed"
 						]
@@ -181,6 +185,26 @@
 							"firstRowAsHeader": false
 						}
 					}
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "GetMetadata_readFileNames",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('GetMetadata_readFileNames').output.childItems",
+						"type": "Expression"
+					},
+					"isSequential": true
 				}
 			}
 		],
