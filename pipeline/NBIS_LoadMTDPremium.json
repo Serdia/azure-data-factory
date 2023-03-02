@@ -190,7 +190,10 @@
 									"type": "ExcelSource",
 									"storeSettings": {
 										"type": "AzureBlobStorageReadSettings",
-										"recursive": true,
+										"fileListPath": {
+											"value": "@activity('GetMetadata_readFileNames').output",
+											"type": "Expression"
+										},
 										"enablePartitionDiscovery": false
 									}
 								},
