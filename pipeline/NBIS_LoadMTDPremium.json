@@ -190,7 +190,7 @@
 									"type": "ExcelSource",
 									"storeSettings": {
 										"type": "AzureBlobStorageReadSettings",
-										"fileListPath": "nbiscontainer/input/",
+										"fileListPath": "nbiscontainer/input/MTD Premiums 01-13-2023.xlsx",
 										"enablePartitionDiscovery": false
 									}
 								},
