@@ -190,7 +190,7 @@
 									"type": "ExcelSource",
 									"storeSettings": {
 										"type": "AzureBlobStorageReadSettings",
-										"fileListPath": "nbiscontainer/input",
+										"recursive": true,
 										"enablePartitionDiscovery": false
 									}
 								},
