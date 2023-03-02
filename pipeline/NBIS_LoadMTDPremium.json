@@ -191,7 +191,7 @@
 									"storeSettings": {
 										"type": "AzureBlobStorageReadSettings",
 										"fileListPath": {
-											"value": "@activity('GetMetadata_readFileNames').output",
+											"value": "@item()",
 											"type": "Expression"
 										},
 										"enablePartitionDiscovery": false
