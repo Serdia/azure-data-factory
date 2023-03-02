@@ -124,6 +124,7 @@
 			},
 			{
 				"name": "GetMetadata_readFileNames",
+				"description": "read excel file names stored in blob container",
 				"type": "GetMetadata",
 				"dependsOn": [],
 				"policy": {
