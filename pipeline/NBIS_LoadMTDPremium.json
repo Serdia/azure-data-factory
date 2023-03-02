@@ -9,7 +9,7 @@
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Lookup_grabDate_copy1",
+						"activity": "Lookup_grabDate",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -174,7 +174,7 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Lookup_grabDate",
+							"name": "Lookup_grabDate1",
 							"type": "Lookup",
 							"dependsOn": [],
 							"policy": {
@@ -208,7 +208,7 @@
 				}
 			},
 			{
-				"name": "Lookup_grabDate_copy1",
+				"name": "Lookup_grabDate",
 				"type": "Lookup",
 				"dependsOn": [
 					{
