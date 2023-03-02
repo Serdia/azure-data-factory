@@ -190,7 +190,9 @@
 									"type": "ExcelSource",
 									"storeSettings": {
 										"type": "AzureBlobStorageReadSettings",
-										"fileListPath": {
+										"recursive": true,
+										"wildcardFolderPath": "nbiscontainer/input",
+										"wildcardFileName": {
 											"value": "@item()",
 											"type": "Expression"
 										},
