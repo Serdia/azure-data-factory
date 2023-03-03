@@ -129,8 +129,10 @@
 									],
 									"storeSettings": {
 										"type": "AzureBlobStorageReadSettings",
-										"recursive": true,
-										"wildcardFileName": "MTD Premiums *.xlsx",
+										"fileListPath": {
+											"value": "@item().name",
+											"type": "Expression"
+										},
 										"enablePartitionDiscovery": false
 									}
 								},
