@@ -71,8 +71,10 @@
 									"type": "ExcelSource",
 									"storeSettings": {
 										"type": "AzureBlobStorageReadSettings",
-										"fileListPath": {
-											"value": "@activity('GetMetadata_readFileNames').output",
+										"recursive": true,
+										"wildcardFolderPath": "nbiscontainer",
+										"wildcardFileName": {
+											"value": "@item().name",
 											"type": "Expression"
 										},
 										"enablePartitionDiscovery": false
