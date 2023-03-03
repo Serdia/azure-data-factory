@@ -28,7 +28,7 @@
 						"type": "ExcelSource",
 						"additionalColumns": [
 							{
-								"name": "LoadDate",
+								"name": "loadDate",
 								"value": {
 									"value": "@utcnow()",
 									"type": "Expression"
