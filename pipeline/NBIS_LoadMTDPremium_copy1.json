@@ -30,7 +30,7 @@
 							{
 								"name": "loadDate",
 								"value": {
-									"value": "utcNow('yyyy-MM-dd')",
+									"value": "@utcNow('yyyy-MM-dd')",
 									"type": "Expression"
 								}
 							}
