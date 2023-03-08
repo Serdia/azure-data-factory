@@ -750,9 +750,9 @@
 				"description": "Load data from excel to sql",
 				"activities": [
 					{
-						"name": "fromExcelToSql",
-						"description": "copy data from excel file located in blob to sql database",
-						"type": "Copy",
+						"name": "GetMetadata_readFileNames",
+						"description": "read excel file names stored in blob container",
+						"type": "GetMetadata",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
@@ -763,50 +763,165 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"source": {
-								"type": "ExcelSource",
-								"storeSettings": {
-									"type": "AzureBlobStorageReadSettings",
-									"recursive": true,
-									"wildcardFileName": "MTD Premiums *.xlsx",
-									"enablePartitionDiscovery": false
-								}
-							},
-							"sink": {
-								"type": "SqlServerSink",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false,
-								"tableOption": "autoCreate"
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
+							"dataset": {
 								"referenceName": "MTDPremium",
 								"type": "DatasetReference",
 								"parameters": {
 									"cellRange": "A6:F10",
 									"firstRowAsHeader": true
 								}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							}
+						}
+					},
+					{
+						"name": "ForEach",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "GetMetadata_readFileNames",
+								"dependencyConditions": [
+									"Succeeded"
+								]
 							}
 						],
-						"outputs": [
-							{
-								"referenceName": "nbismtd",
-								"type": "DatasetReference",
-								"parameters": {
-									"tablename": "tblNBIS_MTDPremium"
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetMetadata_readFileNames').output.childItems",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Lookup_grabDate",
+									"type": "Lookup",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "ExcelSource",
+											"storeSettings": {
+												"type": "AzureBlobStorageReadSettings",
+												"recursive": true,
+												"wildcardFileName": {
+													"value": "@item().name",
+													"type": "Expression"
+												},
+												"enablePartitionDiscovery": false
+											}
+										},
+										"dataset": {
+											"referenceName": "MTDPremium",
+											"type": "DatasetReference",
+											"parameters": {
+												"cellRange": "A3:A3",
+												"firstRowAsHeader": false
+											}
+										}
+									}
+								},
+								{
+									"name": "fromExcelToSql",
+									"description": "copy data from excel file located in blob to sql database",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "Lookup_grabDate",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "ExcelSource",
+											"additionalColumns": [
+												{
+													"name": "loadDate",
+													"value": {
+														"value": "@utcNow('yyyy-MM-dd')",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "premiumDate",
+													"value": {
+														"value": "@activity('Lookup_grabDate').output.firstRow.Prop_0",
+														"type": "Expression"
+													}
+												}
+											],
+											"storeSettings": {
+												"type": "AzureBlobStorageReadSettings",
+												"recursive": true,
+												"wildcardFileName": {
+													"value": "@item().name",
+													"type": "Expression"
+												},
+												"enablePartitionDiscovery": false
+											}
+										},
+										"sink": {
+											"type": "SqlServerSink",
+											"writeBehavior": "insert",
+											"sqlWriterUseTableLock": false,
+											"tableOption": "autoCreate"
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "MTDPremium",
+											"type": "DatasetReference",
+											"parameters": {
+												"cellRange": "A6:F10",
+												"firstRowAsHeader": true
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "nbismtd",
+											"type": "DatasetReference",
+											"parameters": {
+												"tablename": "tblNBIS_MTDPremium"
+											}
+										}
+									]
 								}
-							}
-						]
+							]
+						}
 					}
 				],
 				"policy": {
