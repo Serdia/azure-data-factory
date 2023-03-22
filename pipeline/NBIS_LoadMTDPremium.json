@@ -1,5 +1,5 @@
 {
-	"name": "NBIS_LoadMTDPremium_copy1",
+	"name": "NBIS_LoadMTDPremium",
 	"properties": {
 		"description": "Load data from excel to sql",
 		"activities": [
@@ -96,9 +96,9 @@
 							"type": "Copy",
 							"dependsOn": [
 								{
-									"activity": "update sql tbl",
+									"activity": "Lookup_grabDate",
 									"dependencyConditions": [
-										"Completed"
+										"Succeeded"
 									]
 								}
 							],
@@ -117,7 +117,7 @@
 										{
 											"name": "loadDate",
 											"value": {
-												"value": "@convertTimeZone(utcNow(),'UTC','Pacific Standard Time')",
+												"value": "@utcNow('yyyy-MM-dd')",
 												"type": "Expression"
 											}
 										},
@@ -125,13 +125,6 @@
 											"name": "premiumDate",
 											"value": {
 												"value": "@activity('Lookup_grabDate').output.firstRow.Prop_0",
-												"type": "Expression"
-											}
-										},
-										{
-											"name": "IsCurrent",
-											"value": {
-												"value": "1",
 												"type": "Expression"
 											}
 										}
@@ -181,41 +174,6 @@
 									}
 								}
 							]
-						},
-						{
-							"name": "update sql tbl",
-							"type": "Lookup",
-							"dependsOn": [
-								{
-									"activity": "Lookup_grabDate",
-									"dependencyConditions": [
-										"Completed"
-									]
-								}
-							],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"source": {
-									"type": "SqlServerSource",
-									"sqlReaderQuery": "update dbo.tblNBIS_MTDPremium\nset IsCurrent = '0'\nselect 0 as DummyValue",
-									"queryTimeout": "02:00:00",
-									"partitionOption": "None"
-								},
-								"dataset": {
-									"referenceName": "nbismtd",
-									"type": "DatasetReference",
-									"parameters": {
-										"tablename": "tblNBIS_MTDPremium"
-									}
-								}
-							}
 						}
 					]
 				}
