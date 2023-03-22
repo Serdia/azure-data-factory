@@ -117,7 +117,7 @@
 										{
 											"name": "loadDate",
 											"value": {
-												"value": "@utcNow() ",
+												"value": "@convertTimeZone(utcNow(),'UTC','Pacific Standard Time')",
 												"type": "Expression"
 											}
 										},
