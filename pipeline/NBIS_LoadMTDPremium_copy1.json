@@ -204,7 +204,7 @@
 							"typeProperties": {
 								"source": {
 									"type": "SqlServerSource",
-									"sqlReaderQuery": "update dbo.tblNBIS_MTDPremium\nset IsCurrent = '0'",
+									"sqlReaderQuery": "update dbo.tblNBIS_MTDPremium\nset IsCurrent = '0'\nselect 0 as DummyValue",
 									"queryTimeout": "02:00:00",
 									"partitionOption": "None"
 								},
