@@ -210,7 +210,10 @@
 								},
 								"dataset": {
 									"referenceName": "nbismtd",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"tablename": "tblNBIS_MTDPremium"
+									}
 								}
 							}
 						}
