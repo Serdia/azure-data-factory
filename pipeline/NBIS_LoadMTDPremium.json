@@ -127,6 +127,13 @@
 												"value": "@activity('Lookup_grabDate').output.firstRow.Prop_0",
 												"type": "Expression"
 											}
+										},
+										{
+											"name": "IsCurrent",
+											"value": {
+												"value": "\"1\"",
+												"type": "Expression"
+											}
 										}
 									],
 									"storeSettings": {
