@@ -19,6 +19,7 @@
 					"value": "@dataset().filename",
 					"type": "Expression"
 				},
+				"folderPath": "input",
 				"container": "deletefiles"
 			},
 			"columnDelimiter": ",",
