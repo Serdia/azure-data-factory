@@ -1,0 +1,248 @@
+{
+	"name": "DelimitedText1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureStorageLinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"filename": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().filename",
+					"type": "Expression"
+				},
+				"container": "deletefiles"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "policy_number",
+				"type": "String"
+			},
+			{
+				"name": "policy_effective_date",
+				"type": "String"
+			},
+			{
+				"name": "policy_expiration_date",
+				"type": "String"
+			},
+			{
+				"name": "transaction_type",
+				"type": "String"
+			},
+			{
+				"name": "transaction_effective_date",
+				"type": "String"
+			},
+			{
+				"name": "primary_insured_name",
+				"type": "String"
+			},
+			{
+				"name": "dba_name",
+				"type": "String"
+			},
+			{
+				"name": "primary_insured_street_address_1",
+				"type": "String"
+			},
+			{
+				"name": "primary_insured_street_address_2",
+				"type": "String"
+			},
+			{
+				"name": "primary_insured_city",
+				"type": "String"
+			},
+			{
+				"name": "primary_insured_state",
+				"type": "String"
+			},
+			{
+				"name": "primary_insured_zip_code",
+				"type": "String"
+			},
+			{
+				"name": "primary_insured_country",
+				"type": "String"
+			},
+			{
+				"name": "source_system_module",
+				"type": "String"
+			},
+			{
+				"name": "sic_code",
+				"type": "String"
+			},
+			{
+				"name": "domicile_city",
+				"type": "String"
+			},
+			{
+				"name": "domicile_state",
+				"type": "String"
+			},
+			{
+				"name": "domicile_country",
+				"type": "String"
+			},
+			{
+				"name": "currency",
+				"type": "String"
+			},
+			{
+				"name": "customer_number",
+				"type": "String"
+			},
+			{
+				"name": "qual_exempt_comm_pol_holder",
+				"type": "String"
+			},
+			{
+				"name": "ny_free_trade_zone",
+				"type": "String"
+			},
+			{
+				"name": "underwriter_name",
+				"type": "String"
+			},
+			{
+				"name": "master_company",
+				"type": "String"
+			},
+			{
+				"name": "billing_type",
+				"type": "String"
+			},
+			{
+				"name": "payment_plan",
+				"type": "String"
+			},
+			{
+				"name": "endorsement_billing_method",
+				"type": "String"
+			},
+			{
+				"name": "producer_code",
+				"type": "String"
+			},
+			{
+				"name": "premium_financed_policy",
+				"type": "String"
+			},
+			{
+				"name": "policy_symbol",
+				"type": "String"
+			},
+			{
+				"name": "terrorism_type",
+				"type": "String"
+			},
+			{
+				"name": "terrorism_change_amount",
+				"type": "String"
+			},
+			{
+				"name": "coverage_trigger",
+				"type": "String"
+			},
+			{
+				"name": "claims_made",
+				"type": "String"
+			},
+			{
+				"name": "original_entry_into_claims_made",
+				"type": "String"
+			},
+			{
+				"name": "retroactive_date",
+				"type": "String"
+			},
+			{
+				"name": "pollution_coverage_occurrence_limit",
+				"type": "String"
+			},
+			{
+				"name": "deductible_form",
+				"type": "String"
+			},
+			{
+				"name": "pollution_coverage_deductible_amount",
+				"type": "String"
+			},
+			{
+				"name": "premium_change_amount",
+				"type": "String"
+			},
+			{
+				"name": "policy_aggregate_limit",
+				"type": "String"
+			},
+			{
+				"name": "commission_rate",
+				"type": "String"
+			},
+			{
+				"name": "professional_coverage_occurrence_limit",
+				"type": "String"
+			},
+			{
+				"name": "professional_coverage_deductible_amount",
+				"type": "String"
+			},
+			{
+				"name": "cancellation_reason",
+				"type": "String"
+			},
+			{
+				"name": "cancellation_reason_other_description",
+				"type": "String"
+			},
+			{
+				"name": "nonrenewal_reason",
+				"type": "String"
+			},
+			{
+				"name": "nonrenewal_reason_other_description",
+				"type": "String"
+			},
+			{
+				"name": "tax_surcharge_type_1",
+				"type": "String"
+			},
+			{
+				"name": "tax_surcharge_type_2",
+				"type": "String"
+			},
+			{
+				"name": "tax_surcharge_change_amount_1",
+				"type": "String"
+			},
+			{
+				"name": "tax_surcharge_change_amount_2",
+				"type": "String"
+			},
+			{
+				"name": "tax_location_code",
+				"type": "String"
+			},
+			{
+				"name": "policy_mod",
+				"type": "String"
+			}
+		]
+	}
+}
