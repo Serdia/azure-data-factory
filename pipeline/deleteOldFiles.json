@@ -17,10 +17,7 @@
 				"typeProperties": {
 					"dataset": {
 						"referenceName": "DelimitedText1",
-						"type": "DatasetReference",
-						"parameters": {
-							"filename": "AG04022023Mono.csv"
-						}
+						"type": "DatasetReference"
 					},
 					"fieldList": [
 						"childItems"
