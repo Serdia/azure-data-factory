@@ -22,9 +22,7 @@
 							"filename": " AG02072023GL.csv"
 						}
 					},
-					"fieldList": [
-						"childItems"
-					],
+					"fieldList": [],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
 						"enablePartitionDiscovery": false
