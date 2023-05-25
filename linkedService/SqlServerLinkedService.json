@@ -8,7 +8,7 @@
 		"typeProperties": {
 			"connectionString": "integrated security=True;data source=10.26.26.14;initial catalog=mejames",
 			"userName": "aligngeneral\\oserdyuk",
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJiNTA1MWJkMi1jYmYyLTQzNmEtOWFjMi03MDRkYTUzMGI0YTciLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI5MDgzM2I1NS03NzQ5LTQwOGUtYTk2Yy1iMTE4OTBkM2Q5ZmQiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
 		},
 		"connectVia": {
 			"referenceName": "SelfHostedRuntime",
