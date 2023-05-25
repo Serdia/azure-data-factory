@@ -17,10 +17,7 @@
 				"typeProperties": {
 					"dataset": {
 						"referenceName": "DelimitedText1",
-						"type": "DatasetReference",
-						"parameters": {
-							"filename": " AG02072023GL.csv"
-						}
+						"type": "DatasetReference"
 					},
 					"fieldList": [
 						"itemName"
