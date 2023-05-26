@@ -7,7 +7,7 @@
 		},
 		"parameters": {
 			"delfile": {
-				"type": "bool"
+				"type": "string"
 			}
 		},
 		"annotations": [],
