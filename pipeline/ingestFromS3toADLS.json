@@ -1,0 +1,70 @@
+{
+	"name": "ingestFromS3toADLS",
+	"properties": {
+		"description": "copy data from S3 to data lake storage Gen2",
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AmazonS3ReadSettings",
+							"recursive": true,
+							"wildcardFileName": "*.json",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Json1",
+						"type": "DatasetReference",
+						"parameters": {
+							"folderPath": {
+								"value": "@concat(\r\n    formatDateTime(utcnow(), 'yyyy'), \r\n    '/', \r\n    formatDateTime(utcnow(), 'MM'), \r\n    '/', \r\n    formatDateTime(utcnow(), 'dd'), \r\n    '/' )",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Azure_DL_DS",
+						"type": "DatasetReference",
+						"parameters": {
+							"landingFolder": {
+								"value": "@concat(\n    'landing/',\n    formatDateTime(utcnow(), 'yyyy'), \n    '/', \n    formatDateTime(utcnow(), 'MM'), \n    '/', \n    formatDateTime(utcnow(), 'dd'), \n    '/' )",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"annotations": []
+	}
+}
