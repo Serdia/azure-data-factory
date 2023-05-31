@@ -1,0 +1,11 @@
+{
+	"name": "KeyVault_LS",
+	"properties": {
+		"description": "connection to Azure Key Vault",
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://kvVehicleSystem.vault.azure.net/"
+		}
+	}
+}
