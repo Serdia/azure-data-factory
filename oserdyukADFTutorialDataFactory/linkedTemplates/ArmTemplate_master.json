@@ -15,6 +15,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureStorageLinkedService'"
 		},
+		"DLSGen2_LS_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'DLSGen2_LS'"
+		},
+		"LS_SQLDB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_SQLDB'"
+		},
 		"SqlServerLinkedService_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'SqlServerLinkedService'",
@@ -32,6 +40,25 @@
 			"type": "string",
 			"defaultValue": "0614-060655-iv90goau"
 		},
+		"DLSGen2_LS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://datalakev2storacct.dfs.core.windows.net/"
+		},
+		"KeyVault_LS_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kvVehicleSystem.vault.azure.net/"
+		},
+		"S3_LS_properties_typeProperties_accessKeyId": {
+			"type": "object",
+			"defaultValue": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KeyVault_LS",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "s3AccessKeyID"
+			}
+		},
 		"SqlServerLinkedService_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "aligngeneral\\oserdyuk"
@@ -43,6 +70,10 @@
 		"isExcelOnPremise_properties_typeProperties_userId": {
 			"type": "string",
 			"defaultValue": "aligngeneral\\oserdyuk"
+		},
+		"Storage_Trigger_For_Json_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/204031b5-0de4-401e-83b5-7a551ee0c4b2/resourceGroups/rg_VehicleSystem/providers/Microsoft.Storage/storageAccounts/datalakev2storacct"
 		},
 		"containerUri": {
 			"type": "string",
@@ -74,6 +105,12 @@
 					"AzureDatabricks1_accessToken": {
 						"value": "[parameters('AzureDatabricks1_accessToken')]"
 					},
+					"DLSGen2_LS_accountKey": {
+						"value": "[parameters('DLSGen2_LS_accountKey')]"
+					},
+					"LS_SQLDB_connectionString": {
+						"value": "[parameters('LS_SQLDB_connectionString')]"
+					},
 					"AzureStorageLinkedService_connectionString": {
 						"value": "[parameters('AzureStorageLinkedService_connectionString')]"
 					},
@@ -89,6 +126,15 @@
 					"AzureDatabricks1_properties_typeProperties_existingClusterId": {
 						"value": "[parameters('AzureDatabricks1_properties_typeProperties_existingClusterId')]"
 					},
+					"DLSGen2_LS_properties_typeProperties_url": {
+						"value": "[parameters('DLSGen2_LS_properties_typeProperties_url')]"
+					},
+					"KeyVault_LS_properties_typeProperties_baseUrl": {
+						"value": "[parameters('KeyVault_LS_properties_typeProperties_baseUrl')]"
+					},
+					"S3_LS_properties_typeProperties_accessKeyId": {
+						"value": "[parameters('S3_LS_properties_typeProperties_accessKeyId')]"
+					},
 					"SqlServerLinkedService_properties_typeProperties_userName": {
 						"value": "[parameters('SqlServerLinkedService_properties_typeProperties_userName')]"
 					},
@@ -101,6 +147,29 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "oserdyukADFTutorialDataFactory_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"Storage_Trigger_For_Json_properties_typeProperties_scope": {
+						"value": "[parameters('Storage_Trigger_For_Json_properties_typeProperties_scope')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'oserdyukADFTutorialDataFactory_ArmTemplate_0')]"
+			]
 		}
 	]
 }

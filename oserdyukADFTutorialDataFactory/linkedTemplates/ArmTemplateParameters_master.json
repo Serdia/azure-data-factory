@@ -11,6 +11,12 @@
 		"AzureStorageLinkedService_connectionString": {
 			"value": ""
 		},
+		"DLSGen2_LS_accountKey": {
+			"value": ""
+		},
+		"LS_SQLDB_connectionString": {
+			"value": ""
+		},
 		"SqlServerLinkedService_connectionString": {
 			"value": "Integrated Security=True;Data Source=10.26.26.14;Initial Catalog=mejames"
 		},
@@ -23,6 +29,22 @@
 		"AzureDatabricks1_properties_typeProperties_existingClusterId": {
 			"value": "0614-060655-iv90goau"
 		},
+		"DLSGen2_LS_properties_typeProperties_url": {
+			"value": "https://datalakev2storacct.dfs.core.windows.net/"
+		},
+		"KeyVault_LS_properties_typeProperties_baseUrl": {
+			"value": "https://kvVehicleSystem.vault.azure.net/"
+		},
+		"S3_LS_properties_typeProperties_accessKeyId": {
+			"value": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KeyVault_LS",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "s3AccessKeyID"
+			}
+		},
 		"SqlServerLinkedService_properties_typeProperties_userName": {
 			"value": "aligngeneral\\oserdyuk"
 		},
@@ -31,6 +53,9 @@
 		},
 		"isExcelOnPremise_properties_typeProperties_userId": {
 			"value": "aligngeneral\\oserdyuk"
+		},
+		"Storage_Trigger_For_Json_properties_typeProperties_scope": {
+			"value": "/subscriptions/204031b5-0de4-401e-83b5-7a551ee0c4b2/resourceGroups/rg_VehicleSystem/providers/Microsoft.Storage/storageAccounts/datalakev2storacct"
 		},
 		"containerUri": {
 			"value": ""
