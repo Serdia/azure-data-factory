@@ -5,7 +5,7 @@
 		"activities": [
 			{
 				"name": "Copy data1",
-				"description": "copy date from S3 bucket to ADLS2 landing folder",
+				"description": "copy date from S3 bucket to ADLS2 landing folder:  input / landing / YYYY / MM / DD",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
