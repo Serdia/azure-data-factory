@@ -1,0 +1,19 @@
+{
+	"name": "Valid_json_DS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DLSGen2_LS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "staging",
+				"fileSystem": "input"
+			}
+		},
+		"schema": {}
+	}
+}
