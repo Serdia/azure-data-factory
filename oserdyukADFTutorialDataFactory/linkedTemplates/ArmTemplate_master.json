@@ -136,9 +136,6 @@
 					"KeyVault_LS_properties_typeProperties_baseUrl": {
 						"value": "[parameters('KeyVault_LS_properties_typeProperties_baseUrl')]"
 					},
-					"event_trigger_properties_typeProperties_scope": {
-						"value": "[parameters('event_trigger_properties_typeProperties_scope')]"
-					},
 					"S3_LS_properties_typeProperties_accessKeyId": {
 						"value": "[parameters('S3_LS_properties_typeProperties_accessKeyId')]"
 					},
@@ -171,6 +168,9 @@
 					},
 					"Storage_Trigger_For_Json_properties_typeProperties_scope": {
 						"value": "[parameters('Storage_Trigger_For_Json_properties_typeProperties_scope')]"
+					},
+					"event_trigger_properties_typeProperties_scope": {
+						"value": "[parameters('event_trigger_properties_typeProperties_scope')]"
 					}
 				}
 			},
