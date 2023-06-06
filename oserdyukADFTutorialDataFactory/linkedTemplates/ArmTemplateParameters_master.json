@@ -57,6 +57,9 @@
 		"Storage_Trigger_For_Json_properties_typeProperties_scope": {
 			"value": "/subscriptions/204031b5-0de4-401e-83b5-7a551ee0c4b2/resourceGroups/rg_VehicleSystem/providers/Microsoft.Storage/storageAccounts/datalakev2storacct"
 		},
+		"event_trigger_properties_typeProperties_scope": {
+			"value": "/subscriptions/204031b5-0de4-401e-83b5-7a551ee0c4b2/resourceGroups/rg_VehicleSystem/providers/Microsoft.Storage/storageAccounts/datalakev2storacct"
+		},
 		"containerUri": {
 			"value": ""
 		},
