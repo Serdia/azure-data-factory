@@ -55,7 +55,13 @@
 				"outputs": [
 					{
 						"referenceName": "dsetJsonBlobStor",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"landingFolder": {
+								"value": "\n@concat(\n    'landing/',\n    formatDateTime(utcnow(), 'yyyy'), \n    '/', \n    formatDateTime(utcnow(), 'MM'), \n    '/', \n    formatDateTime(utcnow(), 'dd'), \n    '/' )",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}
