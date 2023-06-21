@@ -58,7 +58,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"landingFolder": {
-								"value": "@concat(\n    formatDateTime(utcNow(), 'yyyy'), \n'/',formatDateTime(utcNow(), 'MM'), \n'/', formatDateTime(utcNow(), 'dd'), \n'/'\n)",
+								"value": "@concat('landing',\n    '/',formatDateTime(utcNow(), 'yyyy'), \n    '/',formatDateTime(utcNow(), 'MM'), \n    '/', formatDateTime(utcNow(), 'dd'), \n    '/'\n)",
 								"type": "Expression"
 							}
 						}
