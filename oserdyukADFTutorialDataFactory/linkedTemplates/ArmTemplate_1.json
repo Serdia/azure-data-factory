@@ -1705,7 +1705,7 @@
 				],
 				"type": "BlobEventsTrigger",
 				"typeProperties": {
-					"blobPathBeginsWith": "/input/blobs/staging/",
+					"blobPathBeginsWith": "/input/blobs/staging/.json",
 					"ignoreEmptyBlobs": true,
 					"scope": "[parameters('Storage_Trigger_For_Json_properties_typeProperties_scope')]",
 					"events": [
