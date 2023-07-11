@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "trigger will be initiated when file dropped to ADLS2 storage",
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipelines": [
 			{
 				"pipelineReference": {
