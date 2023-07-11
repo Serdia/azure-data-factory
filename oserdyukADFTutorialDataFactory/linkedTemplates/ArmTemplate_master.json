@@ -79,6 +79,10 @@
 			"type": "string",
 			"defaultValue": "/subscriptions/204031b5-0de4-401e-83b5-7a551ee0c4b2/resourceGroups/rg_VehicleSystem/providers/Microsoft.Storage/storageAccounts/datalakev2storacct"
 		},
+		"testtrigger1_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/204031b5-0de4-401e-83b5-7a551ee0c4b2/resourceGroups/rg_VehicleSystem/providers/Microsoft.Storage/storageAccounts/datalakev2storacct"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -171,6 +175,9 @@
 					},
 					"event_trigger_properties_typeProperties_scope": {
 						"value": "[parameters('event_trigger_properties_typeProperties_scope')]"
+					},
+					"testtrigger1_properties_typeProperties_scope": {
+						"value": "[parameters('testtrigger1_properties_typeProperties_scope')]"
 					}
 				}
 			},
