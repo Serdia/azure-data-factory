@@ -15,11 +15,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "FileServerLocation",
-				"fileName": {
-					"value": "@dataset().FolderName",
-					"type": "Expression"
-				},
-				"folderPath": "TPAClaims"
+				"folderPath": "@dataset().FolderName"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
