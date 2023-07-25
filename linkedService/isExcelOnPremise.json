@@ -6,9 +6,9 @@
 		"annotations": [],
 		"type": "FileServer",
 		"typeProperties": {
-			"host": "C:\\Users\\oserdyuk",
+			"host": "\\\\fs01\\Align\\Public\\temp",
 			"userId": "aligngeneral\\oserdyuk",
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIwMTA4MGI2YS05NWQ0LTRmMDYtYjFjOC1jZTE2YWQ3ZDY4NDYiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI5ZDNlMTBlZS04ZGFiLTQ2YmUtYTg2OC04M2E1ZGE2M2FkZmYiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
 		},
 		"connectVia": {
 			"referenceName": "SelfHostedRuntime",
