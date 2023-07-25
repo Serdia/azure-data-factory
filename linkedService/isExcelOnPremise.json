@@ -8,7 +8,7 @@
 		"typeProperties": {
 			"host": "C:\\Users\\oserdyuk\\Downloads",
 			"userId": "aligngeneral\\oserdyuk",
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI5ZDNmNGU1YS1jYWI1LTQyZmUtYjUzZi0wN2FjMzdlNTQ4NzEiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIwMjZmNDY2Ny1mZDg0LTRlN2ItODQyZi00NjA5ZjEzY2ZlMTEiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
 		},
 		"connectVia": {
 			"referenceName": "SelfHostedRuntime",
