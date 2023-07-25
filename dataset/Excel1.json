@@ -13,6 +13,7 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
+			"sheetName": "Report",
 			"location": {
 				"type": "FileServerLocation",
 				"fileName": "@dataset().FolderName",
