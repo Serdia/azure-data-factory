@@ -64,7 +64,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"dataset": {
-									"referenceName": "Excel1",
+									"referenceName": "DelimitedText4",
 									"type": "DatasetReference",
 									"parameters": {
 										"FolderName": {
@@ -74,11 +74,14 @@
 									}
 								},
 								"fieldList": [
-									"itemName"
+									"childItems"
 								],
 								"storeSettings": {
 									"type": "FileServerReadSettings",
 									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
 								}
 							}
 						}
