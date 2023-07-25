@@ -1,0 +1,31 @@
+{
+	"name": "DelimitedText4",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "isExcelOnPremise",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"FolderName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation",
+				"fileName": {
+					"value": "@dataset().FolderName",
+					"type": "Expression"
+				},
+				"folderPath": "TPAClaims"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
