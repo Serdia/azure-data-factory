@@ -14,7 +14,8 @@
 		"type": "Excel",
 		"typeProperties": {
 			"location": {
-				"type": "FileServerLocation"
+				"type": "FileServerLocation",
+				"folderPath": "TPAClaims"
 			}
 		},
 		"schema": []
