@@ -5,11 +5,6 @@
 			"referenceName": "isExcelOnPremise",
 			"type": "LinkedServiceReference"
 		},
-		"parameters": {
-			"inputfolder": {
-				"type": "string"
-			}
-		},
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
