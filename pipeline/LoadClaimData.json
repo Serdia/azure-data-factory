@@ -50,7 +50,7 @@
 					},
 					"activities": [
 						{
-							"name": "GetMetadata",
+							"name": "GetMetadata2",
 							"description": "go through each folder and read file names",
 							"type": "GetMetadata",
 							"dependsOn": [],
