@@ -2,7 +2,7 @@
 	"name": "LoadClaimData_Dset",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "DLSGen2_LS",
+			"referenceName": "isExcelOnPremise",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
@@ -13,14 +13,8 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
-			"sheetName": "Sheet1",
 			"location": {
-				"type": "AzureBlobFSLocation",
-				"folderPath": {
-					"value": "@dataset().inputfolder",
-					"type": "Expression"
-				},
-				"fileSystem": "claimstpa"
+				"type": "FileServerLocation"
 			}
 		},
 		"schema": []
