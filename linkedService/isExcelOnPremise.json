@@ -6,9 +6,9 @@
 		"annotations": [],
 		"type": "FileServer",
 		"typeProperties": {
-			"host": "C:\\Users\\oserdyuk\\Downloads\\",
+			"host": "C:\\Users\\oserdyuk\\Downloads",
 			"userId": "aligngeneral\\oserdyuk",
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJlMDYyNjM2ZC04MTk2LTQzNjUtOGQzYy01MjE1YjE3ZWQwZDIiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJiMzJmNjA5Ny04N2VmLTRlMGQtYmQwNC1jNGZkMzdiMTJiNmMiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
 		},
 		"connectVia": {
 			"referenceName": "SelfHostedRuntime",
