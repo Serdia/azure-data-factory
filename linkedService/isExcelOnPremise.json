@@ -6,9 +6,9 @@
 		"annotations": [],
 		"type": "FileServer",
 		"typeProperties": {
-			"host": "\\\\fs01\\Align\\Public\\temp",
+			"host": "\\\\fs01\\Align\\Public\\temp\\TPAClaims",
 			"userId": "aligngeneral\\oserdyuk",
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIyMTEzN2QyNS0yZWMzLTRlYTMtODdmOS02ZTM2NTk3YmEwMWYiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJiMGUyYzZhOS0zMTM5LTRmNTctOWMwMi02MTYyNjI0MTIyYzkiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
 		},
 		"connectVia": {
 			"referenceName": "SelfHostedRuntime",
