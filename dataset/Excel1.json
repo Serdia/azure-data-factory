@@ -16,11 +16,7 @@
 			"sheetName": "Sheet1",
 			"location": {
 				"type": "FileServerLocation",
-				"fileName": {
-					"value": "@dataset().FolderName",
-					"type": "Expression"
-				},
-				"folderPath": "TPAClaims"
+				"folderPath": "@dataset().FolderName"
 			}
 		},
 		"schema": []
