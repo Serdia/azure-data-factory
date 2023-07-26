@@ -5,7 +5,7 @@
 		"activities": [
 			{
 				"name": "GetMetadata_readFileNames",
-				"description": "read excel file names stored in blob container",
+				"description": "read child folder name in folder TPAClaims",
 				"type": "GetMetadata",
 				"dependsOn": [],
 				"policy": {
@@ -89,14 +89,9 @@
 						{
 							"name": "Copy data1",
 							"type": "Copy",
-							"dependsOn": [
-								{
-									"activity": "GetMetadata2",
-									"dependencyConditions": [
-										"Completed"
-									]
-								}
-							],
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
+							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
 								"retry": 0,
@@ -149,11 +144,41 @@
 									"type": "DatasetReference"
 								}
 							]
+						},
+						{
+							"name": "Set variable1",
+							"description": "grab data from folder name",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "GetMetadata2",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "FileDate",
+								"value": {
+									"value": "item().name",
+									"type": "Expression"
+								}
+							}
 						}
 					]
 				}
 			}
 		],
+		"variables": {
+			"FileDate": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
