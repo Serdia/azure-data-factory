@@ -152,6 +152,10 @@
 										"FolderName": {
 											"value": "@item().name",
 											"type": "Expression"
+										},
+										"FileDate": {
+											"value": "@substring(item().Name, 0, lastIndexOf(item().Name, ' '))",
+											"type": "Expression"
 										}
 									}
 								}
