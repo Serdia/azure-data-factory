@@ -139,7 +139,7 @@
 											"type": "Expression"
 										},
 										"FileName": {
-											"value": "@activity('GetMetadata2').output.childItems",
+											"value": "@activity('GetMetadata2').output.childItems.select(item => item.name)",
 											"type": "Expression"
 										}
 									}
