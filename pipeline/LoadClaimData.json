@@ -115,7 +115,21 @@
 										"enablePartitionDiscovery": false
 									}
 								},
-								"enableStaging": false
+								"sink": {
+									"type": "SqlServerSink",
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false,
+									"tableOption": "autoCreate"
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
 							},
 							"inputs": [
 								{
@@ -127,10 +141,16 @@
 											"type": "Expression"
 										},
 										"FileName": {
-											"value": "@activity('GetMetadata2').output.itemName",
+											"value": "@activity('GetMetadata2').output.childItems",
 											"type": "Expression"
 										}
 									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_SqlServerLoadClaimData",
+									"type": "DatasetReference"
 								}
 							]
 						}
