@@ -93,9 +93,14 @@
 						{
 							"name": "Copy data1",
 							"type": "Copy",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "GetMetadata2",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
 							"policy": {
 								"timeout": "0.12:00:00",
 								"retry": 0,
@@ -107,6 +112,15 @@
 							"typeProperties": {
 								"source": {
 									"type": "ExcelSource",
+									"additionalColumns": [
+										{
+											"name": "FileDate",
+											"value": {
+												"value": "@variables('FileDate')",
+												"type": "Expression"
+											}
+										}
+									],
 									"storeSettings": {
 										"type": "FileServerReadSettings",
 										"recursive": true,
@@ -148,33 +162,6 @@
 									"type": "DatasetReference"
 								}
 							]
-						},
-						{
-							"name": "Set variable1",
-							"description": "grab data from folder name",
-							"type": "SetVariable",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
-							"dependsOn": [
-								{
-									"activity": "GetMetadata2",
-									"dependencyConditions": [
-										"Completed"
-									]
-								}
-							],
-							"policy": {
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "FileDate",
-								"value": {
-									"value": "item().name",
-									"type": "Expression"
-								}
-							}
 						}
 					]
 				}
