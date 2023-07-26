@@ -116,7 +116,7 @@
 										{
 											"name": "FileDate",
 											"value": {
-												"value": "@variables('FileDate')",
+												"value": "@substring(item().Name, 0, lastIndexOf(item().Name, ' '))",
 												"type": "Expression"
 											}
 										}
