@@ -13,7 +13,7 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
-			"sheetName": "Sheet1",
+			"sheetName": "Report",
 			"location": {
 				"type": "FileServerLocation",
 				"folderPath": {
