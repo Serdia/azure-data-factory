@@ -112,15 +112,6 @@
 							"typeProperties": {
 								"source": {
 									"type": "ExcelSource",
-									"additionalColumns": [
-										{
-											"name": "FileDate",
-											"value": {
-												"value": "@variables('FileDate')",
-												"type": "Expression"
-											}
-										}
-									],
 									"storeSettings": {
 										"type": "FileServerReadSettings",
 										"recursive": true,
