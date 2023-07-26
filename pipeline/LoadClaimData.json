@@ -70,6 +70,10 @@
 										"FolderName": {
 											"value": "@item().name",
 											"type": "Expression"
+										},
+										"FileDate": {
+											"value": "@substring(item().Name, 0, lastIndexOf(item().Name, ' '))",
+											"type": "Expression"
 										}
 									}
 								},
@@ -149,6 +153,8 @@
 							"name": "Set variable1",
 							"description": "grab data from folder name",
 							"type": "SetVariable",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
 									"activity": "GetMetadata2",
