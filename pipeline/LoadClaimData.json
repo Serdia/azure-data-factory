@@ -182,7 +182,7 @@
 							"typeProperties": {
 								"variableName": "DatePart",
 								"value": {
-									"value": "@activity('GetMetadata2').output.itemName",
+									"value": "@activity('GetMetadata2').output.Name",
 									"type": "Expression"
 								}
 							}
