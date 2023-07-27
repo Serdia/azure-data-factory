@@ -175,7 +175,7 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "DatePart",
+								"variableName": "FileDate",
 								"value": {
 									"value": "@substring(item().name, lastIndexOf(item().name, ' '), 1)",
 									"type": "Expression"
