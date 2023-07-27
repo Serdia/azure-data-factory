@@ -93,14 +93,9 @@
 						{
 							"name": "Copy data1",
 							"type": "Copy",
-							"dependsOn": [
-								{
-									"activity": "GetMetadata2",
-									"dependencyConditions": [
-										"Completed"
-									]
-								}
-							],
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
+							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
 								"retry": 0,
@@ -166,9 +161,14 @@
 						{
 							"name": "Set variable1",
 							"type": "SetVariable",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "GetMetadata2",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
 							"policy": {
 								"secureOutput": false,
 								"secureInput": false
@@ -177,7 +177,7 @@
 							"typeProperties": {
 								"variableName": "DatePart",
 								"value": {
-									"value": "@variables('FileDate')",
+									"value": "@split(item().Name, ' ')[2]",
 									"type": "Expression"
 								}
 							}
