@@ -177,7 +177,7 @@
 							"typeProperties": {
 								"variableName": "FileDate",
 								"value": {
-									"value": "@substring(item().name, add(lastIndexOf(item().name, ' '), 1),5)",
+									"value": "@substring(item().name, add(lastIndexOf(item().name, ' '), 1), sub(length(item().name), lastIndexOf(item().name, ' ')))",
 									"type": "Expression"
 								}
 							}
