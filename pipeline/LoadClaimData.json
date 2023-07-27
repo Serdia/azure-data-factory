@@ -180,7 +180,7 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "DatePart",
+								"variableName": "DataPartArray",
 								"value": {
 									"value": "@activity('GetMetadata2').output.childItems",
 									"type": "Expression"
@@ -197,6 +197,9 @@
 			},
 			"DatePart": {
 				"type": "String"
+			},
+			"DataPartArray": {
+				"type": "Array"
 			}
 		},
 		"annotations": []
