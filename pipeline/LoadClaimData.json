@@ -202,7 +202,7 @@
 							"typeProperties": {
 								"variableName": "DatePart",
 								"value": {
-									"value": "@variables('FileDate')",
+									"value": "@replace(variables('FileDate'), '.', '/')",
 									"type": "Expression"
 								}
 							}
