@@ -160,6 +160,7 @@
 						},
 						{
 							"name": "Set variable1",
+							"description": "substring only date from folder name and store it to a variable",
 							"type": "SetVariable",
 							"dependsOn": [
 								{
@@ -178,6 +179,30 @@
 								"variableName": "FileDate",
 								"value": {
 									"value": "@substring(\n    item().name\n    , add(lastIndexOf(item().name, ' '), 1)\n    , sub(length(item().name), add(lastIndexOf(item().name, ' '),1)))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set variable2",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set variable1",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "DatePart",
+								"value": {
+									"value": "@variables('FileDate')",
 									"type": "Expression"
 								}
 							}
