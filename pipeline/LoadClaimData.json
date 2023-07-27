@@ -95,7 +95,7 @@
 							"type": "Copy",
 							"dependsOn": [
 								{
-									"activity": "GetMetadata2",
+									"activity": "Set variable1",
 									"dependencyConditions": [
 										"Completed"
 									]
@@ -166,6 +166,30 @@
 									"type": "DatasetReference"
 								}
 							]
+						},
+						{
+							"name": "Set variable1",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "GetMetadata2",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "DatePart",
+								"value": {
+									"value": "@replace(variables('FileDate'), '.', '/')",
+									"type": "Expression"
+								}
+							}
 						}
 					]
 				}
@@ -173,6 +197,9 @@
 		],
 		"variables": {
 			"FileDate": {
+				"type": "String"
+			},
+			"DatePart": {
 				"type": "String"
 			}
 		},
