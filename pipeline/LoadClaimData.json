@@ -72,7 +72,7 @@
 											"type": "Expression"
 										},
 										"FileDate": {
-											"value": "@substring(item().Name, 0, lastIndexOf(item().Name, ' '))",
+											"value": "@substring(item().name, 0, lastIndexOf(item().name, ' '))",
 											"type": "Expression"
 										}
 									}
