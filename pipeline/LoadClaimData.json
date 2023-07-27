@@ -182,7 +182,7 @@
 							"typeProperties": {
 								"variableName": "DatePart",
 								"value": {
-									"value": "@activity('GetMetadata_readFileNames').output.childItems",
+									"value": "@activity('GetMetadata2').output.childItems",
 									"type": "Expression"
 								}
 							}
