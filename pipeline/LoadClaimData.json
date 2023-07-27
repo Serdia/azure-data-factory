@@ -180,7 +180,7 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "DatePart",
+								"variableName": "FileDate",
 								"value": {
 									"value": "@activity('GetMetadata_readFileNames').output.childItems",
 									"type": "Expression"
