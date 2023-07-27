@@ -61,7 +61,11 @@
 								"secureOutput": false,
 								"secureInput": false
 							},
-							"userProperties": [],
+							"userProperties": [
+								{
+									"name": "FileDate"
+								}
+							],
 							"typeProperties": {
 								"dataset": {
 									"referenceName": "DelimitedText4",
@@ -69,10 +73,6 @@
 									"parameters": {
 										"FolderName": {
 											"value": "@item().name",
-											"type": "Expression"
-										},
-										"FileDate": {
-											"value": "@substring(item().Name, 0, lastIndexOf(item().Name, ' '))",
 											"type": "Expression"
 										}
 									}
