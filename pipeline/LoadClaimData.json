@@ -177,7 +177,7 @@
 							"typeProperties": {
 								"variableName": "DatePart",
 								"value": {
-									"value": "@split(item().Name, ' ')[2]",
+									"value": "@substring(item().Name, 0, lastIndexOf(item().Name, ' '))",
 									"type": "Expression"
 								}
 							}
