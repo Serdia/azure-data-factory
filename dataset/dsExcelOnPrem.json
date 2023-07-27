@@ -8,6 +8,9 @@
 		"parameters": {
 			"FolderName": {
 				"type": "string"
+			},
+			"FileDate": {
+				"type": "string"
 			}
 		},
 		"annotations": [],
