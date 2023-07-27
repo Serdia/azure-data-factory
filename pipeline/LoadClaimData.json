@@ -116,7 +116,7 @@
 										{
 											"name": "FileDate",
 											"value": {
-												"value": "@split(item().Name, ' ')[2]",
+												"value": "@variables('FileDate')",
 												"type": "Expression"
 											}
 										}
