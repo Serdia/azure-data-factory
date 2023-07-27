@@ -184,7 +184,7 @@
 							"typeProperties": {
 								"variableName": "DatePart",
 								"value": {
-									"value": "@replace(variables('FileDate'), '.', '/')",
+									"value": "@activity('GetMetadata2').output.itemName",
 									"type": "Expression"
 								}
 							}
