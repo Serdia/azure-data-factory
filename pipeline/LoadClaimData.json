@@ -93,9 +93,14 @@
 						{
 							"name": "Copy data1",
 							"type": "Copy",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "Set variable2",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
 							"policy": {
 								"timeout": "0.12:00:00",
 								"retry": 0,
@@ -111,7 +116,7 @@
 										{
 											"name": "FileDate",
 											"value": {
-												"value": "@variables('FileDate')",
+												"value": "@variables('DatePart')",
 												"type": "Expression"
 											}
 										}
