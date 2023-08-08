@@ -1,0 +1,19 @@
+{
+	"name": "DLSA_V2_Excel",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DLSGen2_LS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "inputfolder",
+				"fileSystem": "claimstpa"
+			}
+		},
+		"schema": []
+	}
+}
