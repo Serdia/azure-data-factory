@@ -8,10 +8,9 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
-			"sheetName": "Report",
+			"sheetName": "Sheet1",
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "RK51_B579-E&S-DCFL-Brit-22DCA160-NA22DU01 CAT2311_882..xlsx",
 				"folderPath": "inputfolder",
 				"fileSystem": "claimstpa"
 			},
