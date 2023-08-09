@@ -14,7 +14,8 @@
 				"folderPath": "inputfolder/John Eastern 5.31.2023",
 				"fileSystem": "claimstpa"
 			},
-			"sheetIndex": 1
+			"sheetIndex": 1,
+			"firstRowAsHeader": true
 		},
 		"schema": []
 	}
