@@ -10,11 +10,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "RK51_B579-E&S-DCFL-Brit-22DCA160-NA22DU01 CAT2311_882..xlsx",
-				"folderPath": "inputfolder/John Eastern 5.31.2023",
+				"fileName": "MyTestFile.xlsx",
+				"folderPath": "inputfolder/AnotherTPA 7.31.2023",
 				"fileSystem": "claimstpa"
 			},
-			"sheetIndex": 1,
 			"firstRowAsHeader": true
 		},
 		"schema": []
