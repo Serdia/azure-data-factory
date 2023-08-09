@@ -95,7 +95,7 @@
 							"type": "Copy",
 							"dependsOn": [
 								{
-									"activity": "Set variable2",
+									"activity": "Set variable3",
 									"dependencyConditions": [
 										"Completed"
 									]
@@ -159,7 +159,13 @@
 							"outputs": [
 								{
 									"referenceName": "ds_SqlServerLoadClaimData",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"tablename": {
+											"value": "@variables('foldername')",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						},
@@ -190,6 +196,7 @@
 						},
 						{
 							"name": "Set variable2",
+							"description": "convert file date to format 1/1/2023",
 							"type": "SetVariable",
 							"dependsOn": [
 								{
@@ -211,6 +218,31 @@
 									"type": "Expression"
 								}
 							}
+						},
+						{
+							"name": "Set variable3",
+							"description": "get folder name without spaces to use it as a table name dynamically",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set variable2",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "foldername",
+								"value": {
+									"value": "@replace(\n    substring(item().name, 0, lastIndexOf(item().name, ' '))\n    , ' ', '')",
+									"type": "Expression"
+								}
+							}
 						}
 					]
 				}
@@ -225,6 +257,9 @@
 			},
 			"DataPartArray": {
 				"type": "Array"
+			},
+			"foldername": {
+				"type": "String"
 			}
 		},
 		"annotations": []
