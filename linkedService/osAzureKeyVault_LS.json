@@ -1,0 +1,11 @@
+{
+	"name": "osAzureKeyVault_LS",
+	"properties": {
+		"description": "linked service to osAzureKeyvault",
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://osAzureKeyvault.vault.azure.net/"
+		}
+	}
+}
