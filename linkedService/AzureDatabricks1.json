@@ -1,7 +1,7 @@
 {
 	"name": "AzureDatabricks1",
 	"properties": {
-		"description": "my test azure databricks",
+		"description": "linked service to create databricks account",
 		"annotations": [],
 		"type": "AzureDatabricks",
 		"typeProperties": {
