@@ -8,6 +8,9 @@
 				"pipelineReference": {
 					"referenceName": "MorganDataPlatform",
 					"type": "PipelineReference"
+				},
+				"parameters": {
+					"fileName": "@triggerBody().fileName"
 				}
 			}
 		],
