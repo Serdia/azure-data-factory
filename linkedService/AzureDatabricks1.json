@@ -12,9 +12,14 @@
 					"referenceName": "osAzureKeyVault_LS",
 					"type": "LinkedServiceReference"
 				},
-				"secretName": "databrickstoken"
+				"secretName": "databrickstoken",
+				"secretVersion": "660cd5f79cf24f249719e652ae37741e"
 			},
-			"existingClusterId": "0713-054208-n19vt55v"
+			"newClusterNodeType": "Standard_DS3_v2",
+			"newClusterNumOfWorker": "1",
+			"newClusterVersion": "10.4.x-scala2.12",
+			"clusterOption": "Fixed",
+			"newClusterInitScripts": []
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/linkedservices"
