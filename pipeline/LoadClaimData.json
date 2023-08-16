@@ -159,7 +159,10 @@
 							"outputs": [
 								{
 									"referenceName": "ds_SqlServerLoadClaimData",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"tablename": "dbo.mytest"
+									}
 								}
 							]
 						},
