@@ -7,9 +7,9 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "oserdyukADFTutorialDataFactory"
 		},
-		"AzureDatabricks1_accessToken": {
+		"ADLS2toStormorgandataplatform_accountKey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks1'"
+			"metadata": "Secure string for 'accountKey' of 'ADLS2toStormorgandataplatform'"
 		},
 		"AzureStorageLinkedService_connectionString": {
 			"type": "secureString",
@@ -36,9 +36,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'isExcelOnPremise'"
 		},
+		"ADLS2toStormorgandataplatform_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://stormorgandataplatform.dfs.core.windows.net/"
+		},
 		"AzureDatabricks1_properties_typeProperties_existingClusterId": {
 			"type": "string",
-			"defaultValue": "0614-060655-iv90goau"
+			"defaultValue": "0713-054208-n19vt55v"
 		},
 		"DLSGen2_LS_properties_typeProperties_url": {
 			"type": "string",
@@ -65,11 +69,23 @@
 		},
 		"isExcelOnPremise_properties_typeProperties_host": {
 			"type": "string",
-			"defaultValue": "C:\\Users\\oserdyuk\\Downloads"
+			"defaultValue": "\\\\fs01\\Align\\Public\\temp\\TPAClaims"
 		},
 		"isExcelOnPremise_properties_typeProperties_userId": {
 			"type": "string",
 			"defaultValue": "aligngeneral\\oserdyuk"
+		},
+		"osAzureKeyVault_LS_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://osAzureKeyvault.vault.azure.net/"
+		},
+		"StorageEventTrigger_properties_MorganDataPlatform_parameters_fileName": {
+			"type": "string",
+			"defaultValue": "@triggerBody().fileName"
+		},
+		"StorageEventTrigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/204031b5-0de4-401e-83b5-7a551ee0c4b2/resourceGroups/rg_MorganDataPlatform/providers/Microsoft.Storage/storageAccounts/stormorgandataplatform"
 		},
 		"Storage_Trigger_For_Json_properties_typeProperties_scope": {
 			"type": "string",
@@ -153,6 +169,679 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/Valid_json_DS')]",
 				"[concat(variables('factoryId'), '/datasets/SQL_DB_DS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LoadClaimData')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "read data from Excel files and load into sql table",
+				"activities": [
+					{
+						"name": "GetMetadata_readFileNames",
+						"description": "read child folder name in folder TPAClaims",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "LoadClaimData_Dset",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "FileServerReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "GetMetadata_readFileNames",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetMetadata_readFileNames').output.childItems",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "GetMetadata2",
+									"description": "go through each folder and read file names",
+									"type": "GetMetadata",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataset": {
+											"referenceName": "DelimitedText4",
+											"type": "DatasetReference",
+											"parameters": {
+												"FolderName": {
+													"value": "@item().name",
+													"type": "Expression"
+												},
+												"FileDate": {
+													"value": "@split(item().Name, ' ')[2]",
+													"type": "Expression"
+												}
+											}
+										},
+										"fieldList": [
+											"childItems"
+										],
+										"storeSettings": {
+											"type": "FileServerReadSettings",
+											"recursive": true,
+											"enablePartitionDiscovery": false
+										},
+										"formatSettings": {
+											"type": "DelimitedTextReadSettings"
+										}
+									}
+								},
+								{
+									"name": "Copy data1",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "Set variable2",
+											"dependencyConditions": [
+												"Completed"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "ExcelSource",
+											"additionalColumns": [
+												{
+													"name": "FileDate",
+													"value": {
+														"value": "@variables('DatePart')",
+														"type": "Expression"
+													}
+												}
+											],
+											"storeSettings": {
+												"type": "FileServerReadSettings",
+												"recursive": true,
+												"wildcardFileName": "*.xlsx",
+												"enablePartitionDiscovery": false
+											}
+										},
+										"sink": {
+											"type": "SqlServerSink",
+											"writeBehavior": "insert",
+											"sqlWriterUseTableLock": false,
+											"tableOption": "autoCreate"
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "dsExcelOnPrem",
+											"type": "DatasetReference",
+											"parameters": {
+												"FolderName": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_SqlServerLoadClaimData",
+											"type": "DatasetReference",
+											"parameters": {
+												"tablename": "dbo.mytest"
+											}
+										}
+									]
+								},
+								{
+									"name": "Set variable1",
+									"description": "substring only date from folder name and store it to a variable",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "GetMetadata2",
+											"dependencyConditions": [
+												"Completed"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "FileDate",
+										"value": {
+											"value": "@substring(\n    item().name\n    , add(lastIndexOf(item().name, ' '), 1)\n    , sub(length(item().name), add(lastIndexOf(item().name, ' '),1)))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set variable2",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set variable1",
+											"dependencyConditions": [
+												"Completed"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "DatePart",
+										"value": {
+											"value": "@replace(variables('FileDate'), '.', '/')",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"FileDate": {
+						"type": "String"
+					},
+					"DatePart": {
+						"type": "String"
+					},
+					"DataPartArray": {
+						"type": "Array"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/LoadClaimData_Dset')]",
+				"[concat(variables('factoryId'), '/datasets/DelimitedText4')]",
+				"[concat(variables('factoryId'), '/datasets/dsExcelOnPrem')]",
+				"[concat(variables('factoryId'), '/datasets/ds_SqlServerLoadClaimData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LoadClaimData_V2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "read data from Excel files and load into sql table",
+				"activities": [
+					{
+						"name": "GetMetadata_readFileNames",
+						"description": "read child folder name in folder TPAClaims",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "LoadClaimData_Dset",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "FileServerReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "GetMetadata_readFileNames",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetMetadata_readFileNames').output.childItems",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "GetMetadata2",
+									"description": "go through each folder and read file names",
+									"type": "GetMetadata",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataset": {
+											"referenceName": "DelimitedText4",
+											"type": "DatasetReference",
+											"parameters": {
+												"FolderName": {
+													"value": "@item().name",
+													"type": "Expression"
+												},
+												"FileDate": {
+													"value": "@split(item().Name, ' ')[2]",
+													"type": "Expression"
+												}
+											}
+										},
+										"fieldList": [
+											"childItems"
+										],
+										"storeSettings": {
+											"type": "FileServerReadSettings",
+											"recursive": true,
+											"enablePartitionDiscovery": false
+										},
+										"formatSettings": {
+											"type": "DelimitedTextReadSettings"
+										}
+									}
+								},
+								{
+									"name": "Set variable1",
+									"description": "substring only date from folder name and store it to a variable",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "GetMetadata2",
+											"dependencyConditions": [
+												"Completed"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "FileDate",
+										"value": {
+											"value": "@substring(\n    item().name\n    , add(lastIndexOf(item().name, ' '), 1)\n    , sub(length(item().name), add(lastIndexOf(item().name, ' '),1)))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set variable2",
+									"description": "convert file date to format 1/1/2023",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set variable1",
+											"dependencyConditions": [
+												"Completed"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "DatePart",
+										"value": {
+											"value": "@replace(variables('FileDate'), '.', '/')",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set variable3",
+									"description": "get folder name without spaces to use it as a table name dynamically",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set variable2",
+											"dependencyConditions": [
+												"Completed"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "foldername",
+										"value": {
+											"value": "@replace(\n    substring(item().name, 0, lastIndexOf(item().name, ' '))\n    , ' ', '')",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Switch1",
+									"type": "Switch",
+									"dependsOn": [
+										{
+											"activity": "Set variable3",
+											"dependencyConditions": [
+												"Completed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"on": {
+											"value": "@variables('foldername')",
+											"type": "Expression"
+										},
+										"cases": [
+											{
+												"value": "JohnEastern",
+												"activities": [
+													{
+														"name": "JohnEastern",
+														"type": "Copy",
+														"dependsOn": [],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"source": {
+																"type": "ExcelSource",
+																"additionalColumns": [
+																	{
+																		"name": "FileDate",
+																		"value": {
+																			"value": "@variables('DatePart')",
+																			"type": "Expression"
+																		}
+																	}
+																],
+																"storeSettings": {
+																	"type": "FileServerReadSettings",
+																	"recursive": true,
+																	"wildcardFileName": "*.xlsx",
+																	"enablePartitionDiscovery": false
+																}
+															},
+															"sink": {
+																"type": "SqlServerSink",
+																"writeBehavior": "insert",
+																"sqlWriterUseTableLock": false,
+																"tableOption": "autoCreate"
+															},
+															"enableStaging": false,
+															"translator": {
+																"type": "TabularTranslator",
+																"typeConversion": true,
+																"typeConversionSettings": {
+																	"allowDataTruncation": true,
+																	"treatBooleanAsNumber": false
+																}
+															}
+														},
+														"inputs": [
+															{
+																"referenceName": "dsExcelOnPrem",
+																"type": "DatasetReference",
+																"parameters": {
+																	"FolderName": {
+																		"value": "@item().name",
+																		"type": "Expression"
+																	}
+																}
+															}
+														],
+														"outputs": [
+															{
+																"referenceName": "ds_SqlServerLoadClaimData",
+																"type": "DatasetReference",
+																"parameters": {
+																	"tablename": {
+																		"value": "@variables('foldername')",
+																		"type": "Expression"
+																	}
+																}
+															}
+														]
+													}
+												]
+											},
+											{
+												"value": "OlegTPA",
+												"activities": [
+													{
+														"name": "OlegTPA",
+														"type": "Copy",
+														"dependsOn": [],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"source": {
+																"type": "ExcelSource",
+																"additionalColumns": [
+																	{
+																		"name": "FileDate",
+																		"value": {
+																			"value": "@variables('DatePart')",
+																			"type": "Expression"
+																		}
+																	}
+																],
+																"storeSettings": {
+																	"type": "FileServerReadSettings",
+																	"recursive": true,
+																	"wildcardFileName": "*.xlsx",
+																	"enablePartitionDiscovery": false
+																}
+															},
+															"sink": {
+																"type": "SqlServerSink",
+																"writeBehavior": "insert",
+																"sqlWriterUseTableLock": false,
+																"tableOption": "autoCreate"
+															},
+															"enableStaging": false,
+															"translator": {
+																"type": "TabularTranslator",
+																"typeConversion": true,
+																"typeConversionSettings": {
+																	"allowDataTruncation": true,
+																	"treatBooleanAsNumber": false
+																}
+															}
+														},
+														"inputs": [
+															{
+																"referenceName": "dsExcelOnPrem",
+																"type": "DatasetReference",
+																"parameters": {
+																	"FolderName": {
+																		"value": "@item().name",
+																		"type": "Expression"
+																	}
+																}
+															}
+														],
+														"outputs": [
+															{
+																"referenceName": "ds_SqlServerLoadClaimData",
+																"type": "DatasetReference",
+																"parameters": {
+																	"tablename": {
+																		"value": "OlegTPA",
+																		"type": "Expression"
+																	}
+																}
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"FileDate": {
+						"type": "String"
+					},
+					"DatePart": {
+						"type": "String"
+					},
+					"DataPartArray": {
+						"type": "Array"
+					},
+					"foldername": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/LoadClaimData_Dset')]",
+				"[concat(variables('factoryId'), '/datasets/DelimitedText4')]",
+				"[concat(variables('factoryId'), '/datasets/dsExcelOnPrem')]",
+				"[concat(variables('factoryId'), '/datasets/ds_SqlServerLoadClaimData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MorganDataPlatform')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Udemy project",
+				"activities": [
+					{
+						"name": "Notebook1",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Project2",
+							"baseParameters": {
+								"fileName": {
+									"value": "@pipeline().parameters.fileName",
+									"type": "Expression"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks1",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"fileName": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks1')]"
 			]
 		},
 		{
@@ -706,82 +1395,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/fromPremToBlob')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "fromOnPremToBlob",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "ExcelSource",
-								"storeSettings": {
-									"type": "FileServerReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								}
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "dsExcelOnPrem",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "dsTestOnPremXL",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-07-15T05:47:11Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/dsExcelOnPrem')]",
-				"[concat(variables('factoryId'), '/datasets/dsTestOnPremXL')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/ingestFromS3toADLS')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -995,6 +1608,33 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureStorageLinkedService')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLSA_V2_Excel')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DLSGen2_LS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "MyTestFile.xlsx",
+						"folderPath": "inputfolder/AnotherTPA 7.31.2023",
+						"fileSystem": "claimstpa"
+					},
+					"sheetIndex": 0,
+					"firstRowAsHeader": true
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/DLSGen2_LS')]"
 			]
 		},
 		{
@@ -1640,6 +2280,503 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText4')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "isExcelOnPremise",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"FolderName": {
+						"type": "string"
+					},
+					"FileDate": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "FileServerLocation",
+						"folderPath": {
+							"value": "@dataset().FolderName",
+							"type": "Expression"
+						}
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": false,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/isExcelOnPremise')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Excel1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DLSGen2_LS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Sheet1",
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "inputfolder",
+						"fileSystem": "claimstpa"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "Field",
+						"type": "String"
+					},
+					{
+						"name": "Coverholder Name",
+						"type": "String"
+					},
+					{
+						"name": "TPA Name",
+						"type": "String"
+					},
+					{
+						"name": "Agreement No",
+						"type": "String"
+					},
+					{
+						"name": "Unique Market Reference (UMR) / Policy Number",
+						"type": "String"
+					},
+					{
+						"name": "Binder Contract Inception",
+						"type": "String"
+					},
+					{
+						"name": "Binder Contract Expiry",
+						"type": "String"
+					},
+					{
+						"name": "Reporting Period (End Date)",
+						"type": "String"
+					},
+					{
+						"name": "Class of Business: Section No, Risk code or description",
+						"type": "String"
+					},
+					{
+						"name": "Class of Business",
+						"type": "String"
+					},
+					{
+						"name": "Lloyd's Risk Code",
+						"type": "String"
+					},
+					{
+						"name": "Section No",
+						"type": "String"
+					},
+					{
+						"name": "Original Currency",
+						"type": "String"
+					},
+					{
+						"name": "Settlement Currency",
+						"type": "String"
+					},
+					{
+						"name": "Rate of Exchange",
+						"type": "String"
+					},
+					{
+						"name": "Certificate Reference",
+						"type": "String"
+					},
+					{
+						"name": "Claim Reference / Number",
+						"type": "String"
+					},
+					{
+						"name": "Insured Full Name or Company Name",
+						"type": "String"
+					},
+					{
+						"name": "Insured State, Province, Territory, Canton etc.",
+						"type": "String"
+					},
+					{
+						"name": "Insured Country",
+						"type": "String"
+					},
+					{
+						"name": "Location of risk State, Province, Territory, Canton",
+						"type": "String"
+					},
+					{
+						"name": "Location of risk Country",
+						"type": "String"
+					},
+					{
+						"name": "Risk Inception Date",
+						"type": "String"
+					},
+					{
+						"name": "Risk Expiry Date",
+						"type": "String"
+					},
+					{
+						"name": "Period of Cover - Narrative",
+						"type": "String"
+					},
+					{
+						"name": "Location of loss State, Province, Territory, Canton ",
+						"type": "String"
+					},
+					{
+						"name": "Location of loss Country",
+						"type": "String"
+					},
+					{
+						"name": "Cause of Loss Code",
+						"type": "String"
+					},
+					{
+						"name": "Loss Description",
+						"type": "String"
+					},
+					{
+						"name": "Date of Loss (From)",
+						"type": "String"
+					},
+					{
+						"name": "Date of Loss to",
+						"type": "String"
+					},
+					{
+						"name": "Date Claim First Advised/Date Claim Made",
+						"type": "String"
+					},
+					{
+						"name": "Claim Status",
+						"type": "String"
+					},
+					{
+						"name": "Refer to Underwriters",
+						"type": "String"
+					},
+					{
+						"name": "Denial",
+						"type": "String"
+					},
+					{
+						"name": "Claimant Name",
+						"type": "String"
+					},
+					{
+						"name": "Loss County",
+						"type": "String"
+					},
+					{
+						"name": "State of Filing",
+						"type": "String"
+					},
+					{
+						"name": "PCS Code",
+						"type": "String"
+					},
+					{
+						"name": "Medicare United States Bodily Injury",
+						"type": "String"
+					},
+					{
+						"name": "Medicare Eligibility Check Performance",
+						"type": "String"
+					},
+					{
+						"name": "Medicare Outcome of Eligibility Status Check",
+						"type": "String"
+					},
+					{
+						"name": "Medicare Conditional Payments",
+						"type": "String"
+					},
+					{
+						"name": "Medicare MSP Compliance Services",
+						"type": "String"
+					},
+					{
+						"name": "Paid this month - Indemnity",
+						"type": "String"
+					},
+					{
+						"name": "Paid this month - Fees",
+						"type": "String"
+					},
+					{
+						"name": "Previously Paid - Indemnity",
+						"type": "String"
+					},
+					{
+						"name": "Previously Paid - Fees",
+						"type": "String"
+					},
+					{
+						"name": "Reserve - Indemnity",
+						"type": "String"
+					},
+					{
+						"name": "Reserve - Fees",
+						"type": "String"
+					},
+					{
+						"name": "Change this month - Indemnity",
+						"type": "String"
+					},
+					{
+						"name": "Change this month - Fees",
+						"type": "String"
+					},
+					{
+						"name": "Total Incurred - Indemnity",
+						"type": "String"
+					},
+					{
+						"name": "Total Incurred - Fees",
+						"type": "String"
+					},
+					{
+						"name": "Coverholder PIN",
+						"type": "String"
+					},
+					{
+						"name": "Reporting Period Start Date",
+						"type": "String"
+					},
+					{
+						"name": "Type of Insurance (Direct, or Type of RI)",
+						"type": "String"
+					},
+					{
+						"name": "Policy or Group Ref",
+						"type": "String"
+					},
+					{
+						"name": "Insured Address ",
+						"type": "String"
+					},
+					{
+						"name": "Insured Postcode / Zip Code or similar",
+						"type": "String"
+					},
+					{
+						"name": "Location of Risk Location ID",
+						"type": "String"
+					},
+					{
+						"name": "Location of Risk Address",
+						"type": "String"
+					},
+					{
+						"name": "Location of Risk Postcode / Zip Code or similar",
+						"type": "String"
+					},
+					{
+						"name": "Deductible Amount",
+						"type": "String"
+					},
+					{
+						"name": "Deductible Basis",
+						"type": "String"
+					},
+					{
+						"name": "Sums Insured Amount",
+						"type": "String"
+					},
+					{
+						"name": "Location of loss Address",
+						"type": "String"
+					},
+					{
+						"name": "Location of loss Postcode / Zip Code or similar",
+						"type": "String"
+					},
+					{
+						"name": "Date Closed",
+						"type": "String"
+					},
+					{
+						"name": "Lloyd's Cat Code",
+						"type": "String"
+					},
+					{
+						"name": "Catastrophe Name",
+						"type": "String"
+					},
+					{
+						"name": "Paid this month - Expenses",
+						"type": "String"
+					},
+					{
+						"name": "Paid this month - Attorney Coverage Fees",
+						"type": "String"
+					},
+					{
+						"name": "Paid this month - Adjusters Fees",
+						"type": "String"
+					},
+					{
+						"name": "Paid this month - Defence Fees",
+						"type": "String"
+					},
+					{
+						"name": "Paid this month - TPA Fees",
+						"type": "String"
+					},
+					{
+						"name": "Previously Paid - Expenses",
+						"type": "String"
+					},
+					{
+						"name": "Previously Paid - Attorney Coverage Fees",
+						"type": "String"
+					},
+					{
+						"name": "Previously Paid - Adjusters Fees",
+						"type": "String"
+					},
+					{
+						"name": "Previously Paid - Defence Fees",
+						"type": "String"
+					},
+					{
+						"name": "Previously Paid - TPA Fees",
+						"type": "String"
+					},
+					{
+						"name": "Reserve - Expenses",
+						"type": "String"
+					},
+					{
+						"name": "Reserve - Attorney Coverage Fees",
+						"type": "String"
+					},
+					{
+						"name": "Reserve - Adjusters Fees",
+						"type": "String"
+					},
+					{
+						"name": "Reserve - Defence Fees",
+						"type": "String"
+					},
+					{
+						"name": "Reserve - TPA Fees",
+						"type": "String"
+					},
+					{
+						"name": "Total Incurred",
+						"type": "String"
+					},
+					{
+						"name": "Name or Reg No of Aircraft Vehicle, Vessel etc. ",
+						"type": "String"
+					},
+					{
+						"name": "% Ceded (Reinsurance)",
+						"type": "String"
+					},
+					{
+						"name": "Plan",
+						"type": "String"
+					},
+					{
+						"name": "Patient Name",
+						"type": "String"
+					},
+					{
+						"name": "Treatment Type",
+						"type": "String"
+					},
+					{
+						"name": "Country of Treatment",
+						"type": "String"
+					},
+					{
+						"name": "Date of Treatment",
+						"type": "String"
+					},
+					{
+						"name": "Expert - Role",
+						"type": "String"
+					},
+					{
+						"name": "Expert Firm / Company Name",
+						"type": "String"
+					},
+					{
+						"name": "Expert Reference No etc.",
+						"type": "String"
+					},
+					{
+						"name": "Expert Address",
+						"type": "String"
+					},
+					{
+						"name": "Expert State, Province, Territory, Canton etc.",
+						"type": "String"
+					},
+					{
+						"name": "Expert Postcode / Zip Code or similar",
+						"type": "String"
+					},
+					{
+						"name": "Expert Country",
+						"type": "String"
+					},
+					{
+						"name": "Notes",
+						"type": "String"
+					},
+					{
+						"name": "Date Claim Opened",
+						"type": "String"
+					},
+					{
+						"name": "Ex gratia payment",
+						"type": "String"
+					},
+					{
+						"name": "Claim First Notification Acknowledgement Date",
+						"type": "String"
+					},
+					{
+						"name": "Date First Reserve Established",
+						"type": "String"
+					},
+					{
+						"name": "Diary date",
+						"type": "String"
+					},
+					{
+						"name": "Peer review date",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/DLSGen2_LS')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Json1')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1691,6 +2828,29 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/S3_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LoadClaimData_Dset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "isExcelOnPremise",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Sheet1",
+					"location": {
+						"type": "FileServerLocation"
+					}
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/isExcelOnPremise')]"
 			]
 		},
 		{
@@ -1977,13 +3137,21 @@
 					"referenceName": "isExcelOnPremise",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"FolderName": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "Excel",
 				"typeProperties": {
-					"sheetName": "Sheet1",
+					"sheetName": "Report",
 					"location": {
 						"type": "FileServerLocation",
-						"fileName": "Missing CauseLossCd.xlsx"
+						"folderPath": {
+							"value": "@dataset().FolderName",
+							"type": "Expression"
+						}
 					},
 					"firstRowAsHeader": true
 				},
@@ -2022,6 +3190,35 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureStorageLinkedService')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_SqlServerLoadClaimData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SqlServerLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"tablename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": {
+						"value": "@dataset().tablename",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SqlServerLinkedService')]"
 			]
 		},
 		{
@@ -2187,23 +3384,47 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ADLS2toStormorgandataplatform')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "connection to stormorgandataplatform storage account",
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ADLS2toStormorgandataplatform_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ADLS2toStormorgandataplatform_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureDatabricks1')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"description": "my test azure databricks",
+				"description": "linked service to create databricks account",
 				"annotations": [],
 				"type": "AzureDatabricks",
 				"typeProperties": {
-					"domain": "https://adb-4422633782521920.0.azuredatabricks.net",
+					"domain": "https://adb-2147164793109402.2.azuredatabricks.net",
 					"accessToken": {
-						"type": "SecureString",
-						"value": "[parameters('AzureDatabricks1_accessToken')]"
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "osAzureKeyVault_LS",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "databrickstoken"
 					},
 					"existingClusterId": "[parameters('AzureDatabricks1_properties_typeProperties_existingClusterId')]"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/osAzureKeyVault_LS')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/AzureStorageLinkedService')]",
@@ -2348,13 +3569,60 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/osAzureKeyVault_LS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "linked service to osAzureKeyvault",
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('osAzureKeyVault_LS_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/StorageEventTrigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "MorganDataPlatform",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"fileName": "[parameters('StorageEventTrigger_properties_MorganDataPlatform_parameters_fileName')]"
+						}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/inputdata/blobs/landing/",
+					"blobPathEndsWith": ".csv",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('StorageEventTrigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/MorganDataPlatform')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Storage_Trigger_For_Json')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"description": "trigger will be initiated when file dropped to ADLS2 storage",
 				"annotations": [],
-				"runtimeState": "Started",
+				"runtimeState": "Stopped",
 				"pipelines": [
 					{
 						"pipelineReference": {
@@ -2411,27 +3679,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/SelfHostedRuntime')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"description": "version 5.25.8403.1",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TutorialIntegrationRuntime')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/testtrigger1')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
@@ -2460,6 +3707,72 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/ADLS to SQLDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SelfHostedRuntime')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"description": "version 5.25.8403.1",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TutorialIntegrationRuntime')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DLSA_V2_Excel",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source1 derive(NewCol = 'test') ~> derivedColumn1",
+						"derivedColumn1 sink(validateSchema: false,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     store: 'cache',",
+						"     format: 'inline',",
+						"     output: false,",
+						"     saveOrder: 1) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DLSA_V2_Excel')]"
 			]
 		}
 	]

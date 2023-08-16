@@ -7,9 +7,9 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "oserdyukADFTutorialDataFactory"
 		},
-		"AzureDatabricks1_accessToken": {
+		"ADLS2toStormorgandataplatform_accountKey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks1'"
+			"metadata": "Secure string for 'accountKey' of 'ADLS2toStormorgandataplatform'"
 		},
 		"AzureStorageLinkedService_connectionString": {
 			"type": "secureString",
@@ -36,9 +36,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'isExcelOnPremise'"
 		},
+		"ADLS2toStormorgandataplatform_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://stormorgandataplatform.dfs.core.windows.net/"
+		},
 		"AzureDatabricks1_properties_typeProperties_existingClusterId": {
 			"type": "string",
-			"defaultValue": "0614-060655-iv90goau"
+			"defaultValue": "0713-054208-n19vt55v"
 		},
 		"DLSGen2_LS_properties_typeProperties_url": {
 			"type": "string",
@@ -65,11 +69,23 @@
 		},
 		"isExcelOnPremise_properties_typeProperties_host": {
 			"type": "string",
-			"defaultValue": "C:\\Users\\oserdyuk\\Downloads"
+			"defaultValue": "\\\\fs01\\Align\\Public\\temp\\TPAClaims"
 		},
 		"isExcelOnPremise_properties_typeProperties_userId": {
 			"type": "string",
 			"defaultValue": "aligngeneral\\oserdyuk"
+		},
+		"osAzureKeyVault_LS_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://osAzureKeyvault.vault.azure.net/"
+		},
+		"StorageEventTrigger_properties_MorganDataPlatform_parameters_fileName": {
+			"type": "string",
+			"defaultValue": "@triggerBody().fileName"
+		},
+		"StorageEventTrigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/204031b5-0de4-401e-83b5-7a551ee0c4b2/resourceGroups/rg_MorganDataPlatform/providers/Microsoft.Storage/storageAccounts/stormorgandataplatform"
 		},
 		"Storage_Trigger_For_Json_properties_typeProperties_scope": {
 			"type": "string",
@@ -110,8 +126,8 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"AzureDatabricks1_accessToken": {
-						"value": "[parameters('AzureDatabricks1_accessToken')]"
+					"ADLS2toStormorgandataplatform_accountKey": {
+						"value": "[parameters('ADLS2toStormorgandataplatform_accountKey')]"
 					},
 					"DLSGen2_LS_accountKey": {
 						"value": "[parameters('DLSGen2_LS_accountKey')]"
@@ -131,14 +147,20 @@
 					"isExcelOnPremise_password": {
 						"value": "[parameters('isExcelOnPremise_password')]"
 					},
-					"AzureDatabricks1_properties_typeProperties_existingClusterId": {
-						"value": "[parameters('AzureDatabricks1_properties_typeProperties_existingClusterId')]"
+					"ADLS2toStormorgandataplatform_properties_typeProperties_url": {
+						"value": "[parameters('ADLS2toStormorgandataplatform_properties_typeProperties_url')]"
 					},
 					"DLSGen2_LS_properties_typeProperties_url": {
 						"value": "[parameters('DLSGen2_LS_properties_typeProperties_url')]"
 					},
 					"KeyVault_LS_properties_typeProperties_baseUrl": {
 						"value": "[parameters('KeyVault_LS_properties_typeProperties_baseUrl')]"
+					},
+					"osAzureKeyVault_LS_properties_typeProperties_baseUrl": {
+						"value": "[parameters('osAzureKeyVault_LS_properties_typeProperties_baseUrl')]"
+					},
+					"AzureDatabricks1_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('AzureDatabricks1_properties_typeProperties_existingClusterId')]"
 					},
 					"S3_LS_properties_typeProperties_accessKeyId": {
 						"value": "[parameters('S3_LS_properties_typeProperties_accessKeyId')]"
@@ -169,6 +191,32 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'oserdyukADFTutorialDataFactory_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "oserdyukADFTutorialDataFactory_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"StorageEventTrigger_properties_MorganDataPlatform_parameters_fileName": {
+						"value": "[parameters('StorageEventTrigger_properties_MorganDataPlatform_parameters_fileName')]"
+					},
+					"StorageEventTrigger_properties_typeProperties_scope": {
+						"value": "[parameters('StorageEventTrigger_properties_typeProperties_scope')]"
 					},
 					"Storage_Trigger_For_Json_properties_typeProperties_scope": {
 						"value": "[parameters('Storage_Trigger_For_Json_properties_typeProperties_scope')]"
@@ -182,7 +230,7 @@
 				}
 			},
 			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'oserdyukADFTutorialDataFactory_ArmTemplate_0')]"
+				"[resourceId('Microsoft.Resources/deployments', 'oserdyukADFTutorialDataFactory_ArmTemplate_1')]"
 			]
 		}
 	]
