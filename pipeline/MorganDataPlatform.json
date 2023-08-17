@@ -16,7 +16,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/oserdyuk@aligngeneral.com/MyTestFolder/Project2",
+					"notebookPath": "/Project2",
 					"baseParameters": {
 						"fileName": {
 							"value": "@pipeline().parameters.fileName",
