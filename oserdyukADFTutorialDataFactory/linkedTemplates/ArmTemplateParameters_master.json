@@ -8,6 +8,9 @@
 		"ADLS2toStormorgandataplatform_accountKey": {
 			"value": ""
 		},
+		"AzureDatabricks2_accessToken": {
+			"value": ""
+		},
 		"AzureStorageLinkedService_connectionString": {
 			"value": ""
 		},
@@ -29,7 +32,7 @@
 		"ADLS2toStormorgandataplatform_properties_typeProperties_url": {
 			"value": "https://stormorgandataplatform.dfs.core.windows.net/"
 		},
-		"AzureDatabricks1_properties_typeProperties_existingClusterId": {
+		"AzureDatabricks2_properties_typeProperties_existingClusterId": {
 			"value": "0713-054208-n19vt55v"
 		},
 		"DLSGen2_LS_properties_typeProperties_url": {
