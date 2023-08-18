@@ -205,7 +205,7 @@
 															{
 																"name": "FileDate",
 																"value": {
-																	"value": "@variables('DatePart')",
+																	"value": "@activity('GetMetadata2').output",
 																	"type": "Expression"
 																}
 															}
