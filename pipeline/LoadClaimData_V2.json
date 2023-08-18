@@ -205,7 +205,7 @@
 															{
 																"name": "FileDate",
 																"value": {
-																	"value": "@activity('GetMetadata_readFileNames').output.itemName",
+																	"value": "@variables('foldername')",
 																	"type": "Expression"
 																}
 															}
