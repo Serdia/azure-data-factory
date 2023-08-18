@@ -208,6 +208,13 @@
 																	"value": "@variables('DatePart')",
 																	"type": "Expression"
 																}
+															},
+															{
+																"name": "DatePart",
+																"value": {
+																	"value": "@variables('DatePart')",
+																	"type": "Expression"
+																}
 															}
 														],
 														"storeSettings": {
