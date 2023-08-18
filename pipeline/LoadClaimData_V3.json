@@ -242,7 +242,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"FolderName": {
-													"value": "@variables('foldername')",
+													"value": "@activity('GetMetadata_readFileNames').output.itemName",
 													"type": "Expression"
 												}
 											}
