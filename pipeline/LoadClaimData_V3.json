@@ -267,11 +267,6 @@
 				}
 			}
 		],
-		"parameters": {
-			"foldername1": {
-				"type": "string"
-			}
-		},
 		"variables": {
 			"FileDate": {
 				"type": "String"
