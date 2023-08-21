@@ -291,7 +291,7 @@
 										{
 											"name": "FileDateVariable",
 											"value": {
-												"value": "@variables('FileDate')",
+												"value": "@variables('DatePart')",
 												"type": "Expression"
 											}
 										}
