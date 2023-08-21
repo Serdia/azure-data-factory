@@ -192,10 +192,7 @@
 									"referenceName": "ds_SqlServerLoadClaimData",
 									"type": "DatasetReference",
 									"parameters": {
-										"tablename": {
-											"value": "@variables('foldername')",
-											"type": "Expression"
-										}
+										"tablename": "JohnEastern"
 									}
 								}
 							]
