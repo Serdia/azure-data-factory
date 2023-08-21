@@ -109,7 +109,7 @@
 							"typeProperties": {
 								"variableName": "TestVar",
 								"value": {
-									"value": "@activity('GetMetadata2').output.parameters.FileDate",
+									"value": "@activity('GetMetadata2').output.itemName",
 									"type": "Expression"
 								}
 							}
