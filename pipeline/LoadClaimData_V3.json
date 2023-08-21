@@ -118,12 +118,6 @@
 				}
 			}
 		],
-		"parameters": {
-			"testParam": {
-				"type": "string",
-				"defaultValue": "test"
-			}
-		},
 		"variables": {
 			"TestVar": {
 				"type": "String"
