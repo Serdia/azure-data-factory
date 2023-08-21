@@ -282,9 +282,16 @@
 									"type": "ExcelSource",
 									"additionalColumns": [
 										{
-											"name": "FileDate",
+											"name": "ItemName",
 											"value": {
 												"value": "@item().name",
+												"type": "Expression"
+											}
+										},
+										{
+											"name": "FileDateVariable",
+											"value": {
+												"value": "@variables('FileDate')",
 												"type": "Expression"
 											}
 										}
