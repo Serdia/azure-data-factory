@@ -109,7 +109,7 @@
 							"typeProperties": {
 								"variableName": "TestVar",
 								"value": {
-									"value": "@activity('GetMetadata2').output.metadata.FileDate",
+									"value": "@activity('GetMetadata2').output.parameters.FileDate",
 									"type": "Expression"
 								}
 							}
@@ -118,19 +118,13 @@
 				}
 			}
 		],
+		"parameters": {
+			"testParam": {
+				"type": "string",
+				"defaultValue": "test"
+			}
+		},
 		"variables": {
-			"FileDate": {
-				"type": "String"
-			},
-			"DatePart": {
-				"type": "String"
-			},
-			"DataPartArray": {
-				"type": "Array"
-			},
-			"foldername": {
-				"type": "String"
-			},
 			"TestVar": {
 				"type": "String"
 			}
