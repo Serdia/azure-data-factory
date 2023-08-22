@@ -117,8 +117,6 @@
 						{
 							"name": "JohnEastern_copy1",
 							"type": "Copy",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
 									"activity": "Set variable1",
@@ -149,7 +147,7 @@
 										{
 											"name": "FileDateVariable",
 											"value": {
-												"value": "@variables('TestVar')",
+												"value": "@variables('myvar')",
 												"type": "Expression"
 											}
 										}
