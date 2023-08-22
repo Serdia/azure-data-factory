@@ -1647,7 +1647,8 @@
 										"FolderName": {
 											"value": "@item().name",
 											"type": "Expression"
-										}
+										},
+										"sheetname": "Report"
 									}
 								}
 							],
