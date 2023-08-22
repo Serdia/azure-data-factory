@@ -1505,6 +1505,8 @@
 							"name": "GetMetadata2_copy1",
 							"description": "go through each folder and read file names",
 							"type": "GetMetadata",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
@@ -1539,6 +1541,23 @@
 								},
 								"formatSettings": {
 									"type": "DelimitedTextReadSettings"
+								}
+							}
+						},
+						{
+							"name": "Set variable1",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "myvar",
+								"value": {
+									"value": "@item()",
+									"type": "Expression"
 								}
 							}
 						}
