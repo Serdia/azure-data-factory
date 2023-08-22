@@ -99,7 +99,7 @@
 							"typeProperties": {
 								"variableName": "Datepart",
 								"value": {
-									"value": "@replace(split(item().name,' ')[2],'.','/')",
+									"value": "@substring(\n    item().name\n    , add(lastIndexOf(item().name, ' '), 1)\n    , sub(length(item().name), add(lastIndexOf(item().name, ' '),1)))",
 									"type": "Expression"
 								}
 							}
