@@ -34,14 +34,9 @@
 			{
 				"name": "ForEach1",
 				"type": "ForEach",
-				"dependsOn": [
-					{
-						"activity": "GetMetadata_readFileNames",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
@@ -148,8 +143,87 @@
 									}
 								}
 							]
+						},
+						{
+							"name": "GetMetadata2_copy1",
+							"description": "go through each folder and read file names",
+							"type": "GetMetadata",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "DelimitedText4",
+									"type": "DatasetReference",
+									"parameters": {
+										"FolderName": {
+											"value": "@item().name",
+											"type": "Expression"
+										},
+										"FileDate": {
+											"value": "@split(item().Name, ' ')[2]",
+											"type": "Expression"
+										}
+									}
+								},
+								"fieldList": [
+									"childItems"
+								],
+								"storeSettings": {
+									"type": "FileServerReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							}
 						}
 					]
+				}
+			},
+			{
+				"name": "GetMetadata2",
+				"description": "go through each folder and read file names",
+				"type": "GetMetadata",
+				"dependsOn": [
+					{
+						"activity": "GetMetadata_readFileNames",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "LoadClaimData_Dset",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						{
+							"value": "@activity('GetMetadata_readFileNames').output.itemName",
+							"type": "Expression"
+						}
+					],
+					"storeSettings": {
+						"type": "FileServerReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					}
 				}
 			}
 		],
