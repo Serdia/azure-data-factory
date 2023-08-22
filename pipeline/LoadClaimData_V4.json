@@ -159,7 +159,7 @@
 									"type": "ExcelSource",
 									"additionalColumns": [
 										{
-											"name": "FolderName",
+											"name": "ItemName",
 											"value": {
 												"value": "item().name",
 												"type": "Expression"
