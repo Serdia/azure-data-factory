@@ -13,9 +13,12 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
-			"sheetName": "Report",
 			"location": {
 				"type": "FileServerLocation",
+				"fileName": {
+					"value": "item().Name",
+					"type": "Expression"
+				},
 				"folderPath": {
 					"value": "@dataset().FolderName",
 					"type": "Expression"
