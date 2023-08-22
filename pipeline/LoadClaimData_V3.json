@@ -95,16 +95,23 @@
 							"type": "SetVariable",
 							"state": "Inactive",
 							"onInactiveMarkAs": "Succeeded",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "GetMetadata2",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
 							"policy": {
 								"secureOutput": false,
 								"secureInput": false
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "TestVar",
+								"variableName": "myvar",
 								"value": {
-									"value": "@substring(\n    item().name\n    , add(lastIndexOf(item().name, ' '), 1)\n    , sub(length(item().name), add(lastIndexOf(item().name, ' '),1)))\n",
+									"value": "@activity('GetMetadata2').output.firstRow.FileDate",
 									"type": "Expression"
 								}
 							}
@@ -193,51 +200,13 @@
 									}
 								}
 							]
-						},
-						{
-							"name": "Lookup1",
-							"type": "Lookup",
-							"dependsOn": [
-								{
-									"activity": "GetMetadata2",
-									"dependencyConditions": [
-										"Completed"
-									]
-								}
-							],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"source": {
-									"type": "ExcelSource",
-									"storeSettings": {
-										"type": "FileServerReadSettings",
-										"recursive": true,
-										"wildcardFileName": "*.xlsx",
-										"enablePartitionDiscovery": false
-									}
-								},
-								"dataset": {
-									"referenceName": "dsExcelOnPrem",
-									"type": "DatasetReference",
-									"parameters": {
-										"FolderName": "@item().name"
-									}
-								}
-							}
 						}
 					]
 				}
 			}
 		],
 		"variables": {
-			"TestVar": {
+			"myvar": {
 				"type": "String"
 			}
 		},
