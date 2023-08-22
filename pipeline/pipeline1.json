@@ -68,7 +68,9 @@
 										"FileDate": "@split(item().Name, ' ')[2]"
 									}
 								},
-								"fieldList": [],
+								"fieldList": [
+									"childItems"
+								],
 								"storeSettings": {
 									"type": "FileServerReadSettings",
 									"enablePartitionDiscovery": false
