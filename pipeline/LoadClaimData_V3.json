@@ -1520,7 +1520,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"FolderName": {
-											"value": "@item().name",
+											"value": "John Eastern 5.31.2023",
 											"type": "Expression"
 										},
 										"FileDate": {
