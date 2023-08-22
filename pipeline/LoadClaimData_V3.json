@@ -109,7 +109,7 @@
 							"typeProperties": {
 								"variableName": "myvar",
 								"value": {
-									"value": "@activity('GetMetadata2').output.value",
+									"value": "@substring(\n    item().name\n    , add(lastIndexOf(item().name, ' '), 1)\n    , sub(length(item().name), add(lastIndexOf(item().name, ' '),1)))",
 									"type": "Expression"
 								}
 							}
