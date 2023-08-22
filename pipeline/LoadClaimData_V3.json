@@ -215,7 +215,7 @@
 					},
 					"fieldList": [
 						{
-							"value": "@activity('GetMetadata_readFileNames').output.itemName",
+							"value": "@activity('GetMetadata_readFileNames').output.childItems\n",
 							"type": "Expression"
 						}
 					],
