@@ -111,7 +111,7 @@
 							"typeProperties": {
 								"variableName": "FileDate",
 								"value": {
-									"value": "@substring(\n    item().name\n    , add(lastIndexOf(item().name, ' '), 1)\n    , sub(length(item().name), add(lastIndexOf(item().name, ' '),1)))",
+									"value": "substring(\n    item().name\n    , add(lastIndexOf(item().name, ' '), 1)\n    , sub(length(item().name), add(lastIndexOf(item().name, ' '),1)))\n  ",
 									"type": "Expression"
 								}
 							}
@@ -149,7 +149,7 @@
 										{
 											"name": "FileDateVariable",
 											"value": {
-												"value": "@variables('FileDate')",
+												"value": "@replace(variables('FileDate'),'.', '/' )\n",
 												"type": "Expression"
 											}
 										}
