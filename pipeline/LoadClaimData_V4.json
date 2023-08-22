@@ -157,6 +157,15 @@
 							"typeProperties": {
 								"source": {
 									"type": "ExcelSource",
+									"additionalColumns": [
+										{
+											"name": "FolderName",
+											"value": {
+												"value": "item().name",
+												"type": "Expression"
+											}
+										}
+									],
 									"storeSettings": {
 										"type": "FileServerReadSettings",
 										"recursive": true,
