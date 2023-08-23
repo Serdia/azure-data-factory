@@ -119,13 +119,18 @@
 						{
 							"name": "Switch1",
 							"type": "Switch",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "Set variable1",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
 							"userProperties": [],
 							"typeProperties": {
 								"on": {
-									"value": "@variables('foldername')",
+									"value": "@replace(\n    substring(item().name, 0, lastIndexOf(item().name, ' '))\n    , ' ', '')",
 									"type": "Expression"
 								},
 								"cases": [
