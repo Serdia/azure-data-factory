@@ -45,13 +45,14 @@
 				"outputs": [
 					{
 						"referenceName": "SQL_DB_DS",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"TableName": "AzureDBVehicleSystem"
+						}
 					}
 				]
 			}
 		],
-		"annotations": [],
-		"lastPublishTime": "2023-06-06T19:05:56Z"
-	},
-	"type": "Microsoft.DataFactory/factories/pipelines"
+		"annotations": []
+	}
 }
