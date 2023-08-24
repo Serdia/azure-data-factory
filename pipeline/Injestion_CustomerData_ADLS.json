@@ -27,7 +27,7 @@
 						"referenceName": "SQL_DB_DS",
 						"type": "DatasetReference",
 						"parameters": {
-							"TableName": "dbo.Customer"
+							"TableName": "Customers"
 						}
 					}
 				]
