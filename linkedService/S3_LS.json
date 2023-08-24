@@ -1,5 +1,6 @@
 {
 	"name": "S3_LS",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"description": "connection to S3 bucket AWS",
 		"annotations": [],

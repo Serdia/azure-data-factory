@@ -22,5 +22,6 @@
 				"container": "deletefiles"
 			}
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

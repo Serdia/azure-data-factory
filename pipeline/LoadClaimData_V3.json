@@ -1,5 +1,5 @@
 {
-	"name": "LoadClaimData_V2",
+	"name": "LoadClaimData_V3",
 	"properties": {
 		"description": "read data from Excel files and load into sql table",
 		"activities": [
@@ -38,7 +38,7 @@
 					{
 						"activity": "GetMetadata_readFileNames",
 						"dependencyConditions": [
-							"Succeeded"
+							"Completed"
 						]
 					}
 				],
@@ -89,186 +89,32 @@
 									"type": "DelimitedTextReadSettings"
 								}
 							}
-						},
+						}
+					]
+				}
+			},
+			{
+				"name": "ForEach2",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('GetMetadata2').output.childItems",
+						"type": "Expression"
+					},
+					"activities": [
 						{
-							"name": "Set variable1",
-							"description": "substring only date from folder name and store it to a variable",
-							"type": "SetVariable",
-							"dependsOn": [
-								{
-									"activity": "GetMetadata2",
-									"dependencyConditions": [
-										"Completed"
-									]
-								}
-							],
-							"policy": {
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "FileDate",
-								"value": {
-									"value": "@substring(\n    item().name\n    , add(lastIndexOf(item().name, ' '), 1)\n    , sub(length(item().name), add(lastIndexOf(item().name, ' '),1)))",
-									"type": "Expression"
-								}
-							}
-						},
-						{
-							"name": "Set variable2",
-							"description": "convert file date to format 1/1/2023",
-							"type": "SetVariable",
-							"dependsOn": [
-								{
-									"activity": "Set variable1",
-									"dependencyConditions": [
-										"Completed"
-									]
-								}
-							],
-							"policy": {
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "DatePart",
-								"value": {
-									"value": "@substring(\n    item().name\n    , add(lastIndexOf(item().name, ' '), 1)\n    , sub(length(item().name), add(lastIndexOf(item().name, ' '),1)))",
-									"type": "Expression"
-								}
-							}
-						},
-						{
-							"name": "Set variable3",
-							"description": "get folder name without spaces to use it as a table name dynamically",
-							"type": "SetVariable",
-							"dependsOn": [
-								{
-									"activity": "Set variable2",
-									"dependencyConditions": [
-										"Completed"
-									]
-								}
-							],
-							"policy": {
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "foldername",
-								"value": {
-									"value": "@replace(\n    substring(item().name, 0, lastIndexOf(item().name, ' '))\n    , ' ', '')",
-									"type": "Expression"
-								}
-							}
-						},
-						{
-							"name": "Switch1",
-							"type": "Switch",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
-							"dependsOn": [],
-							"userProperties": [],
-							"typeProperties": {
-								"on": {
-									"value": "@variables('foldername')",
-									"type": "Expression"
-								},
-								"cases": [
-									{
-										"value": "JohnEastern",
-										"activities": [
-											{
-												"name": "JohnEastern",
-												"type": "Copy",
-												"dependsOn": [],
-												"policy": {
-													"timeout": "0.12:00:00",
-													"retry": 0,
-													"retryIntervalInSeconds": 30,
-													"secureOutput": false,
-													"secureInput": false
-												},
-												"userProperties": [],
-												"typeProperties": {
-													"source": {
-														"type": "ExcelSource",
-														"additionalColumns": [
-															{
-																"name": "FileDate",
-																"value": {
-																	"value": "@variables('FileDate')",
-																	"type": "Expression"
-																}
-															}
-														],
-														"storeSettings": {
-															"type": "FileServerReadSettings",
-															"recursive": true,
-															"wildcardFileName": "*.xlsx",
-															"enablePartitionDiscovery": false
-														}
-													},
-													"sink": {
-														"type": "SqlServerSink",
-														"writeBehavior": "insert",
-														"sqlWriterUseTableLock": false,
-														"tableOption": "autoCreate"
-													},
-													"enableStaging": false,
-													"translator": {
-														"type": "TabularTranslator",
-														"typeConversion": true,
-														"typeConversionSettings": {
-															"allowDataTruncation": true,
-															"treatBooleanAsNumber": false
-														}
-													}
-												},
-												"inputs": [
-													{
-														"referenceName": "dsExcelOnPrem",
-														"type": "DatasetReference",
-														"parameters": {
-															"FolderName": {
-																"value": "@item().name",
-																"type": "Expression"
-															}
-														}
-													}
-												],
-												"outputs": [
-													{
-														"referenceName": "ds_SqlServerLoadClaimData",
-														"type": "DatasetReference",
-														"parameters": {
-															"tablename": {
-																"value": "@variables('foldername')",
-																"type": "Expression"
-															}
-														}
-													}
-												]
-											}
-										]
-									}
-								]
-							}
-						},
-						{
-							"name": "JohnEastern_copy1",
+							"name": "JohnEastern",
 							"type": "Copy",
-							"dependsOn": [
-								{
-									"activity": "Set variable3",
-									"dependencyConditions": [
-										"Completed"
-									]
-								}
-							],
+							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
 								"retry": 0,
@@ -287,19 +133,11 @@
 												"value": "@item().name",
 												"type": "Expression"
 											}
-										},
-										{
-											"name": "FileDateVariable",
-											"value": {
-												"value": "@variables('DatePart')",
-												"type": "Expression"
-											}
 										}
 									],
 									"storeSettings": {
 										"type": "FileServerReadSettings",
 										"recursive": true,
-										"wildcardFileName": "*.xlsx",
 										"enablePartitionDiscovery": false
 									}
 								},
@@ -1645,7 +1483,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"FolderName": {
-											"value": "@item().name",
+											"value": "@activity('GetMetadata_readFileNames').output.childItems",
 											"type": "Expression"
 										}
 									}
@@ -1666,16 +1504,7 @@
 			}
 		],
 		"variables": {
-			"FileDate": {
-				"type": "String"
-			},
-			"DatePart": {
-				"type": "String"
-			},
-			"DataPartArray": {
-				"type": "Array"
-			},
-			"foldername": {
+			"myvar": {
 				"type": "String"
 			}
 		},

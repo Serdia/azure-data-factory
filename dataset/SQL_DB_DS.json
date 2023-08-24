@@ -43,5 +43,6 @@
 			"schema": "dbo",
 			"table": "VehicleData1"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

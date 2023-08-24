@@ -1,5 +1,6 @@
 {
 	"name": "osAzureKeyVault_LS",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"description": "linked service to osAzureKeyvault",
 		"annotations": [],

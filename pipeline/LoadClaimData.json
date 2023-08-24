@@ -152,8 +152,7 @@
 										"FolderName": {
 											"value": "@item().name",
 											"type": "Expression"
-										},
-										"sheetname": "Report"
+										}
 									}
 								}
 							],
@@ -231,6 +230,8 @@
 				"type": "Array"
 			}
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2023-08-16T04:41:15Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }

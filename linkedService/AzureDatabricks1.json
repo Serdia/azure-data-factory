@@ -1,5 +1,6 @@
 {
 	"name": "AzureDatabricks1",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"description": "linked service to create databricks account",
 		"annotations": [],
@@ -21,6 +22,5 @@
 			"clusterOption": "Fixed",
 			"newClusterInitScripts": []
 		}
-	},
-	"type": "Microsoft.DataFactory/factories/linkedservices"
+	}
 }

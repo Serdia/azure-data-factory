@@ -8,20 +8,18 @@
 		"parameters": {
 			"FolderName": {
 				"type": "string"
-			},
-			"sheetname": {
-				"type": "string"
 			}
 		},
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
-			"sheetName": {
-				"value": "@dataset().sheetname",
-				"type": "Expression"
-			},
+			"sheetName": "Report",
 			"location": {
 				"type": "FileServerLocation",
+				"fileName": {
+					"value": "item().Name",
+					"type": "Expression"
+				},
 				"folderPath": {
 					"value": "@dataset().FolderName",
 					"type": "Expression"

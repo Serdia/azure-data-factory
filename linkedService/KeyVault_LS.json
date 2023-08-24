@@ -1,5 +1,6 @@
 {
 	"name": "KeyVault_LS",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"description": "connection to Azure Key Vault",
 		"annotations": [],
