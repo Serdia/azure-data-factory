@@ -1,0 +1,6 @@
+{
+	"name": "DUAL-IntegrationRuntime",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}
