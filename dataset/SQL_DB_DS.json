@@ -3,7 +3,10 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "LS_SQLDB",
-			"type": "LinkedServiceReference"
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"dbname": "AzureDBVehicleSystem"
+			}
 		},
 		"parameters": {
 			"TableName": {
