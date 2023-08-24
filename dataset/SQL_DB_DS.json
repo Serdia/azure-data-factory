@@ -5,6 +5,11 @@
 			"referenceName": "LS_SQLDB",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"TableName": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [
@@ -43,6 +48,5 @@
 			"schema": "dbo",
 			"table": "VehicleData1"
 		}
-	},
-	"type": "Microsoft.DataFactory/factories/datasets"
+	}
 }
