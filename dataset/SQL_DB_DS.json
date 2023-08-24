@@ -5,7 +5,7 @@
 			"referenceName": "LS_SQLDB",
 			"type": "LinkedServiceReference",
 			"parameters": {
-				"dbname": "AzureDBVehicleSystem"
+				"dbname": "myAzureSQLdb"
 			}
 		},
 		"parameters": {
@@ -49,7 +49,10 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "VehicleData1"
+			"table": {
+				"value": "@dataset().TableName",
+				"type": "Expression"
+			}
 		}
 	}
 }
