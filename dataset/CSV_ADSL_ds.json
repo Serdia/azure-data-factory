@@ -17,7 +17,7 @@
 				"folderPath": "landing",
 				"fileSystem": "inputdata"
 			},
-			"columnDelimiter": "",
+			"columnDelimiter": ",",
 			"rowDelimiter": "\n",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
