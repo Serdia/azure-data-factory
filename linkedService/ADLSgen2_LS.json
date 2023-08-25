@@ -1,0 +1,23 @@
+{
+	"name": "ADLSgen2_LS",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"type": "AzureBlobFS",
+		"parameters": {
+			"URL": {
+				"type": "String"
+			},
+			"accountkey": {
+				"type": "String"
+			}
+		},
+		"typeProperties": {
+			"url": "@{linkedService().URL}",
+			"accountkey": {
+				"type": "SecureString",
+				"value": "**********"
+			}
+		},
+		"annotations": []
+	}
+}
