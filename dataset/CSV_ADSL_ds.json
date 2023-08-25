@@ -2,14 +2,11 @@
 	"name": "CSV_ADSL_ds",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ADLSv2_LS",
+			"referenceName": "ADLSgen2_LS",
 			"type": "LinkedServiceReference",
 			"parameters": {
 				"URL": "https://stormorgandataplatform.dfs.core.windows.net/",
-				"accountkey": {
-					"type": "SecureString",
-					"value": "**********"
-				}
+				"accountkey": "YJBAsl+26wJUY+VOtqUSMZyUe2hWeRJDXz8ekdOdtv/cum3ez9O4DaYiESRp3HC7GXLLcgfjAFlW+AStIrpT1Q=="
 			}
 		},
 		"annotations": [],
