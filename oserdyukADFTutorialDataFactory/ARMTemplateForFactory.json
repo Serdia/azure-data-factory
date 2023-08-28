@@ -11,17 +11,41 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ADLS2toStormorgandataplatform'"
 		},
+		"ADLSgen2_LS_accountkey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountkey' of 'ADLSgen2_LS'"
+		},
+		"ADLSv2_LS_accountkey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountkey' of 'ADLSv2_LS'"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"AzureDataLakeStorage1_accountkey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountkey' of 'AzureDataLakeStorage1'"
+		},
+		"AzureDataLakeStorage1test_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1test'"
+		},
 		"AzureDatabricks2_accessToken": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks2'"
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
 		},
 		"AzureStorageLinkedService_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureStorageLinkedService'"
 		},
-		"DLSGen2_LS_accountKey": {
+		"DLSGen2_LS_accountkey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'DLSGen2_LS'"
+			"metadata": "Secure string for 'accountkey' of 'DLSGen2_LS'"
 		},
 		"LS_SQLDB_connectionString": {
 			"type": "secureString",
@@ -44,13 +68,29 @@
 			"type": "string",
 			"defaultValue": "https://stormorgandataplatform.dfs.core.windows.net/"
 		},
+		"ADLSgen2_LS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().URL}"
+		},
+		"ADLSv2_LS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().URL}"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().URL}"
+		},
+		"AzureDataLakeStorage1test_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://stormorgandataplatform.dfs.core.windows.net/"
+		},
 		"AzureDatabricks2_properties_typeProperties_existingClusterId": {
 			"type": "string",
 			"defaultValue": "0713-054208-n19vt55v"
 		},
 		"DLSGen2_LS_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://datalakev2storacct.dfs.core.windows.net/"
+			"defaultValue": "@{linkedService().URL}"
 		},
 		"KeyVault_LS_properties_typeProperties_baseUrl": {
 			"type": "string",
@@ -159,7 +199,9 @@
 							{
 								"referenceName": "SQL_DB_DS",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"TableName": "AzureDBVehicleSystem"
+								}
 							}
 						]
 					}
@@ -173,6 +215,80 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/Valid_json_DS')]",
 				"[concat(variables('factoryId'), '/datasets/SQL_DB_DS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Injestion_CustomerData_ADLS')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data from SQL db to ADLS",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".csv"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SQL_DB_DS",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": "Customers"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "CSV_ADSL_ds",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SQL_DB_DS')]",
+				"[concat(variables('factoryId'), '/datasets/CSV_ADSL_ds')]"
 			]
 		},
 		{
@@ -414,7 +530,8 @@
 						"type": "Array"
 					}
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2023-08-16T04:41:15Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/LoadClaimData_Dset')]",
@@ -2111,7 +2228,8 @@
 						"type": "String"
 					}
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2023-08-22T02:37:50Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/LoadClaimData_Dset')]",
@@ -3637,6 +3755,588 @@
 						"type": "String"
 					}
 				},
+				"annotations": [],
+				"lastPublishTime": "2023-08-22T02:37:50Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/LoadClaimData_Dset')]",
+				"[concat(variables('factoryId'), '/datasets/DelimitedText4')]",
+				"[concat(variables('factoryId'), '/datasets/dsExcelOnPrem')]",
+				"[concat(variables('factoryId'), '/datasets/ds_SqlServerLoadClaimData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LoadClaimData_V4')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "read data from Excel files and load into sql table",
+				"activities": [
+					{
+						"name": "GetMetadata_readFileNames",
+						"description": "read child folder name in folder TPAClaims",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "LoadClaimData_Dset",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "FileServerReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "GetMetadata_readFileNames",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetMetadata_readFileNames').output.childItems",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Switch1",
+									"type": "Switch",
+									"state": "Inactive",
+									"onInactiveMarkAs": "Succeeded",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"on": {
+											"value": "@variables('foldername')",
+											"type": "Expression"
+										},
+										"cases": [
+											{
+												"value": "JohnEastern",
+												"activities": [
+													{
+														"name": "JohnEastern",
+														"type": "Copy",
+														"dependsOn": [],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"source": {
+																"type": "ExcelSource",
+																"additionalColumns": [
+																	{
+																		"name": "FileDate",
+																		"value": {
+																			"value": "@variables('FileDate')",
+																			"type": "Expression"
+																		}
+																	}
+																],
+																"storeSettings": {
+																	"type": "FileServerReadSettings",
+																	"recursive": true,
+																	"wildcardFileName": "*.xlsx",
+																	"enablePartitionDiscovery": false
+																}
+															},
+															"sink": {
+																"type": "SqlServerSink",
+																"writeBehavior": "insert",
+																"sqlWriterUseTableLock": false,
+																"tableOption": "autoCreate"
+															},
+															"enableStaging": false,
+															"translator": {
+																"type": "TabularTranslator",
+																"typeConversion": true,
+																"typeConversionSettings": {
+																	"allowDataTruncation": true,
+																	"treatBooleanAsNumber": false
+																}
+															}
+														},
+														"inputs": [
+															{
+																"referenceName": "dsExcelOnPrem",
+																"type": "DatasetReference",
+																"parameters": {
+																	"FolderName": {
+																		"value": "@item().name",
+																		"type": "Expression"
+																	}
+																}
+															}
+														],
+														"outputs": [
+															{
+																"referenceName": "ds_SqlServerLoadClaimData",
+																"type": "DatasetReference",
+																"parameters": {
+																	"tablename": {
+																		"value": "@variables('foldername')",
+																		"type": "Expression"
+																	}
+																}
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								},
+								{
+									"name": "JohnEastern_copy1",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "ExcelSource",
+											"additionalColumns": [
+												{
+													"name": "FolderName",
+													"value": {
+														"value": "@item().name",
+														"type": "Expression"
+													}
+												}
+											],
+											"storeSettings": {
+												"type": "FileServerReadSettings",
+												"recursive": true,
+												"wildcardFileName": "*.xlsx",
+												"enablePartitionDiscovery": false
+											}
+										},
+										"sink": {
+											"type": "SqlServerSink",
+											"writeBehavior": "insert",
+											"sqlWriterUseTableLock": false,
+											"tableOption": "autoCreate"
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "dsExcelOnPrem",
+											"type": "DatasetReference",
+											"parameters": {
+												"FolderName": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_SqlServerLoadClaimData",
+											"type": "DatasetReference",
+											"parameters": {
+												"tablename": "JohnEastern"
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"FileDate": {
+						"type": "String"
+					},
+					"DatePart": {
+						"type": "String"
+					},
+					"DataPartArray": {
+						"type": "Array"
+					},
+					"foldername": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/LoadClaimData_Dset')]",
+				"[concat(variables('factoryId'), '/datasets/dsExcelOnPrem')]",
+				"[concat(variables('factoryId'), '/datasets/ds_SqlServerLoadClaimData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LoadClaimData_V5')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "read data from Excel files and load into sql table",
+				"activities": [
+					{
+						"name": "GetMetadata_readFileNames",
+						"description": "read child folder name in folder TPAClaims",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "LoadClaimData_Dset",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "FileServerReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "GetMetadata_readFileNames",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetMetadata_readFileNames').output.childItems",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "GetMetadata2",
+									"description": "go through each folder and read file names",
+									"type": "GetMetadata",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataset": {
+											"referenceName": "DelimitedText4",
+											"type": "DatasetReference",
+											"parameters": {
+												"FolderName": {
+													"value": "@item().name",
+													"type": "Expression"
+												},
+												"FileDate": {
+													"value": "@split(item().Name, ' ')[2]",
+													"type": "Expression"
+												}
+											}
+										},
+										"fieldList": [
+											"childItems"
+										],
+										"storeSettings": {
+											"type": "FileServerReadSettings",
+											"recursive": true,
+											"enablePartitionDiscovery": false
+										},
+										"formatSettings": {
+											"type": "DelimitedTextReadSettings"
+										}
+									}
+								},
+								{
+									"name": "Set variable1",
+									"description": "substring only date from folder name and store it to a variable",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "GetMetadata2",
+											"dependencyConditions": [
+												"Completed"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "FileDate",
+										"value": {
+											"value": "@substring(\n    item().name\n    , add(lastIndexOf(item().name, ' '), 1)\n    , sub(length(item().name), add(lastIndexOf(item().name, ' '),1)))\n  ",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Switch",
+									"type": "Switch",
+									"dependsOn": [
+										{
+											"activity": "Set variable1",
+											"dependencyConditions": [
+												"Completed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"on": {
+											"value": "@replace(\n    substring(item().name, 0, lastIndexOf(item().name, ' '))\n    , ' ', '')",
+											"type": "Expression"
+										},
+										"cases": [
+											{
+												"value": "JohnEastern",
+												"activities": [
+													{
+														"name": "JohnEastern",
+														"type": "Copy",
+														"dependsOn": [],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"source": {
+																"type": "ExcelSource",
+																"additionalColumns": [
+																	{
+																		"name": "ItemName",
+																		"value": {
+																			"value": "@item().name",
+																			"type": "Expression"
+																		}
+																	},
+																	{
+																		"name": "FileDateVariable",
+																		"value": {
+																			"value": "@replace(variables('FileDate'),'.', '/' )\n",
+																			"type": "Expression"
+																		}
+																	}
+																],
+																"storeSettings": {
+																	"type": "FileServerReadSettings",
+																	"recursive": true,
+																	"wildcardFileName": "*.xlsx",
+																	"enablePartitionDiscovery": false
+																}
+															},
+															"sink": {
+																"type": "SqlServerSink",
+																"writeBehavior": "insert",
+																"sqlWriterUseTableLock": false,
+																"tableOption": "autoCreate"
+															},
+															"enableStaging": false,
+															"translator": {
+																"type": "TabularTranslator",
+																"typeConversion": true,
+																"typeConversionSettings": {
+																	"allowDataTruncation": true,
+																	"treatBooleanAsNumber": false
+																}
+															}
+														},
+														"inputs": [
+															{
+																"referenceName": "dsExcelOnPrem",
+																"type": "DatasetReference",
+																"parameters": {
+																	"FolderName": {
+																		"value": "@item().name",
+																		"type": "Expression"
+																	}
+																}
+															}
+														],
+														"outputs": [
+															{
+																"referenceName": "ds_SqlServerLoadClaimData",
+																"type": "DatasetReference",
+																"parameters": {
+																	"tablename": "JohnEastern"
+																}
+															}
+														]
+													}
+												]
+											},
+											{
+												"value": "OlegTPA",
+												"activities": [
+													{
+														"name": "OlegTPA",
+														"type": "Copy",
+														"dependsOn": [],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"source": {
+																"type": "ExcelSource",
+																"additionalColumns": [
+																	{
+																		"name": "ItemName",
+																		"value": {
+																			"value": "@item().name",
+																			"type": "Expression"
+																		}
+																	},
+																	{
+																		"name": "FileDateVariable",
+																		"value": {
+																			"value": "@replace(variables('FileDate'),'.', '/' )\n",
+																			"type": "Expression"
+																		}
+																	}
+																],
+																"storeSettings": {
+																	"type": "FileServerReadSettings",
+																	"recursive": true,
+																	"wildcardFileName": "*.xlsx",
+																	"enablePartitionDiscovery": false
+																}
+															},
+															"sink": {
+																"type": "SqlServerSink",
+																"writeBehavior": "insert",
+																"sqlWriterUseTableLock": false,
+																"tableOption": "autoCreate"
+															},
+															"enableStaging": false,
+															"translator": {
+																"type": "TabularTranslator",
+																"typeConversion": true,
+																"typeConversionSettings": {
+																	"allowDataTruncation": true,
+																	"treatBooleanAsNumber": false
+																}
+															}
+														},
+														"inputs": [
+															{
+																"referenceName": "dsExcelOnPrem",
+																"type": "DatasetReference",
+																"parameters": {
+																	"FolderName": {
+																		"value": "@item().name",
+																		"type": "Expression"
+																	}
+																}
+															}
+														],
+														"outputs": [
+															{
+																"referenceName": "ds_SqlServerLoadClaimData",
+																"type": "DatasetReference",
+																"parameters": {
+																	"tablename": "OlegTPA"
+																}
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"FileDate": {
+						"type": "String"
+					},
+					"DatePart": {
+						"type": "String"
+					},
+					"DataPartArray": {
+						"type": "Array"
+					},
+					"foldername": {
+						"type": "String"
+					}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
@@ -3689,7 +4389,8 @@
 						"type": "string"
 					}
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2023-08-16T04:41:15Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks1')]"
@@ -3925,7 +4626,8 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2023-03-24T01:28:22Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/MTDPremium')]",
@@ -4158,7 +4860,8 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2023-06-02T23:07:46Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DelimitedText2')]",
@@ -4238,7 +4941,8 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2023-06-06T19:05:56Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/eventsourcetrigger')]",
@@ -4319,7 +5023,8 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2023-07-11T04:39:27Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/Json1')]",
@@ -4459,6 +5164,68 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureStorageLinkedService')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CSV_ADSL_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ADLSgen2_LS",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"URL": "https://stormorgandataplatform.dfs.core.windows.net/",
+						"accountkey": "YJBAsl+26wJUY+VOtqUSMZyUe2hWeRJDXz8ekdOdtv/cum3ez9O4DaYiESRp3HC7GXLLcgfjAFlW+AStIrpT1Q=="
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "landing",
+						"fileSystem": "inputdata"
+					},
+					"columnDelimiter": ",",
+					"rowDelimiter": "\n",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ProductId",
+						"type": "String"
+					},
+					{
+						"name": "Price",
+						"type": "String"
+					},
+					{
+						"name": "guid",
+						"type": "String"
+					},
+					{
+						"name": "StartDate",
+						"type": "String"
+					},
+					{
+						"name": "EndDate",
+						"type": "String"
+					},
+					{
+						"name": "CreateDate",
+						"type": "String"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ADLSgen2_LS')]"
 			]
 		},
 		{
@@ -5776,7 +6543,15 @@
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "LS_SQLDB",
-					"type": "LinkedServiceReference"
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"dbname": "myAzureSQLdb"
+					}
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					}
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
@@ -5814,7 +6589,10 @@
 				],
 				"typeProperties": {
 					"schema": "dbo",
-					"table": "VehicleData1"
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
 				}
 			},
 			"dependsOn": [
@@ -6257,6 +7035,111 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ADLSgen2_LS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"URL": {
+						"type": "String"
+					},
+					"accountkey": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ADLSgen2_LS_properties_typeProperties_url')]",
+					"accountkey": {
+						"type": "SecureString",
+						"value": "[parameters('ADLSgen2_LS_accountkey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ADLSv2_LS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"URL": {
+						"type": "String"
+					},
+					"accountkey": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ADLSv2_LS_properties_typeProperties_url')]",
+					"accountkey": {
+						"type": "SecureString",
+						"value": "[parameters('ADLSv2_LS_accountkey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorage1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"URL": {
+						"type": "String"
+					},
+					"accountkey": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]",
+					"accountkey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDataLakeStorage1_accountkey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorage1test')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('AzureDataLakeStorage1test_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDataLakeStorage1test_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureDatabricks1')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -6305,6 +7188,20 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "this linked service is a bridge to azure sql db",
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSqlDatabase1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureStorageLinkedService')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -6330,13 +7227,21 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"description": "connection to data lake storage Gen2",
+				"parameters": {
+					"URL": {
+						"type": "String"
+					},
+					"accountkey": {
+						"type": "String"
+					}
+				},
 				"annotations": [],
 				"type": "AzureBlobFS",
 				"typeProperties": {
 					"url": "[parameters('DLSGen2_LS_properties_typeProperties_url')]",
-					"accountKey": {
+					"accountkey": {
 						"type": "SecureString",
-						"value": "[parameters('DLSGen2_LS_accountKey')]"
+						"value": "[parameters('DLSGen2_LS_accountkey')]"
 					}
 				}
 			},
@@ -6362,6 +7267,11 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"description": "connection to azure sql database",
+				"parameters": {
+					"dbname": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "AzureSqlDatabase",
 				"typeProperties": {
@@ -6459,6 +7369,37 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/EveryMinute')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "test schedule trigger",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Injestion_CustomerData_ADLS",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 1,
+						"startTime": "2023-08-28T23:42:00",
+						"timeZone": "Pacific Standard Time"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/Injestion_CustomerData_ADLS')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/StorageEventTrigger')]",
@@ -6586,6 +7527,16 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/ADLS to SQLDB')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DUAL-IntegrationRuntime')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SelfHostedRuntime')]",

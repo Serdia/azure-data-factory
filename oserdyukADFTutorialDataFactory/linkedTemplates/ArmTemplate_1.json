@@ -6,12 +6,238 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "oserdyukADFTutorialDataFactory"
+		},
+		"AzureStorageLinkedService_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureStorageLinkedService'"
+		},
+		"SqlServerLinkedService_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServerLinkedService'",
+			"defaultValue": "Integrated Security=True;Data Source=10.26.26.14;Initial Catalog=mejames"
+		},
+		"SqlServerLinkedService_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'SqlServerLinkedService'"
+		},
+		"isExcelOnPremise_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'isExcelOnPremise'"
+		},
+		"S3_LS_properties_typeProperties_accessKeyId": {
+			"type": "object",
+			"defaultValue": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KeyVault_LS",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "s3AccessKeyID"
+			}
+		},
+		"SqlServerLinkedService_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "aligngeneral\\oserdyuk"
+		},
+		"isExcelOnPremise_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "\\\\fs01\\Align\\Public\\temp\\TPAClaims"
+		},
+		"isExcelOnPremise_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "aligngeneral\\oserdyuk"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Valid_json_DS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DLSGen2_LS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "staging",
+						"fileSystem": "input"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eventsinktrigger_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DLSGen2_LS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "eventsink"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eventsourcetrigger')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DLSGen2_LS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "eventsource"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDatabricks1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "linked service to create databricks account",
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://adb-2147164793109402.2.azuredatabricks.net",
+					"accessToken": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "osAzureKeyVault_LS",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "databrickstoken",
+						"secretVersion": "660cd5f79cf24f249719e652ae37741e"
+					},
+					"newClusterNodeType": "Standard_DS3_v2",
+					"newClusterNumOfWorker": "1",
+					"newClusterVersion": "10.4.x-scala2.12",
+					"clusterOption": "Fixed",
+					"newClusterInitScripts": []
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureStorageLinkedService')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "connection string to blob storage",
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureStorageLinkedService_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "SelfHostedRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/S3_LS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "connection to S3 bucket AWS",
+				"annotations": [],
+				"type": "AmazonS3",
+				"typeProperties": {
+					"serviceUrl": "https://s3.amazonaws.com",
+					"accessKeyId": "[parameters('S3_LS_properties_typeProperties_accessKeyId')]",
+					"secretAccessKey": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "KeyVault_LS",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "s3SekretKey"
+					},
+					"authenticationType": "AccessKey"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServerLinkedService')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "test to offload pdf file from sql to blob",
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('SqlServerLinkedService_connectionString')]",
+					"userName": "[parameters('SqlServerLinkedService_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('SqlServerLinkedService_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "SelfHostedRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/isExcelOnPremise')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "this linked server is a connection to my local machine",
+				"annotations": [],
+				"type": "FileServer",
+				"typeProperties": {
+					"host": "[parameters('isExcelOnPremise_properties_typeProperties_host')]",
+					"userId": "[parameters('isExcelOnPremise_properties_typeProperties_userId')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('isExcelOnPremise_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "SelfHostedRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ADLS to SQLDB')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -62,6 +288,81 @@
 						"outputs": [
 							{
 								"referenceName": "SQL_DB_DS",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": "AzureDBVehicleSystem"
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Valid_json_DS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Injestion_CustomerData_ADLS')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data from SQL db to ADLS",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".csv"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SQL_DB_DS",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": "Customers"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "CSV_ADSL_ds",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -119,9 +420,12 @@
 						"type": "string"
 					}
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2023-08-16T04:41:15Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks1')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/event_trigger_pipeline')]",
@@ -195,9 +499,13 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2023-06-06T19:05:56Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/eventsourcetrigger')]",
+				"[concat(variables('factoryId'), '/datasets/eventsinktrigger_ds')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
@@ -236,7 +544,9 @@
 				"annotations": [],
 				"lastPublishTime": "2022-06-14T20:52:18Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks1')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/AzureBlobDataset')]",
@@ -265,7 +575,9 @@
 				},
 				"schema": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureStorageLinkedService')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Binary1')]",
@@ -294,7 +606,9 @@
 					}
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureStorageLinkedService')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
@@ -546,7 +860,9 @@
 					}
 				]
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureStorageLinkedService')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DelimitedText2')]",
@@ -733,7 +1049,9 @@
 					}
 				]
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureStorageLinkedService')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DelimitedText3')]",
@@ -930,7 +1248,9 @@
 					}
 				]
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureStorageLinkedService')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DelimitedText4')]",
@@ -966,7 +1286,9 @@
 				},
 				"schema": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/isExcelOnPremise')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Json1')]",
@@ -1018,463 +1340,9 @@
 					}
 				}
 			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LoadClaimData_Dset')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "isExcelOnPremise",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "Sheet1",
-					"location": {
-						"type": "FileServerLocation"
-					}
-				},
-				"schema": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/MTDPremium')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureStorageLinkedService",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"cellRange": {
-						"type": "string",
-						"defaultValue": "A6:F10"
-					},
-					"firstRowAsHeader": {
-						"type": "bool",
-						"defaultValue": true
-					}
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "MTD GWP",
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"folderPath": "input",
-						"container": "nbiscontainer"
-					},
-					"range": {
-						"value": "@dataset().cellRange",
-						"type": "Expression"
-					},
-					"firstRowAsHeader": {
-						"value": "@dataset().firstRowAsHeader",
-						"type": "Expression"
-					}
-				},
-				"schema": [
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SqlServerDataset')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "SqlServerLinkedService",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [
-					{
-						"name": "DocumentStoreGUID",
-						"type": "uniqueidentifier"
-					},
-					{
-						"name": "Description",
-						"type": "nvarchar"
-					},
-					{
-						"name": "FileAssociation",
-						"type": "varchar"
-					},
-					{
-						"name": "Document",
-						"type": "image"
-					},
-					{
-						"name": "DateAdded",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "FileName",
-						"type": "nvarchar"
-					},
-					{
-						"name": "UserGUIDOriginator",
-						"type": "uniqueidentifier"
-					},
-					{
-						"name": "TypeGUID",
-						"type": "uniqueidentifier"
-					},
-					{
-						"name": "CompressionLevel",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Compressed",
-						"type": "bit"
-					},
-					{
-						"name": "OriginalFileSize",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "DocumentThumbnail",
-						"type": "image"
-					},
-					{
-						"name": "FolderID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "CopyAssociationsForwardOnRenewal",
-						"type": "bit"
-					},
-					{
-						"name": "MetaXML",
-						"type": "text"
-					},
-					{
-						"name": "ActualFileSize",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "DocumentStoreId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Deleted",
-						"type": "bit"
-					},
-					{
-						"name": "CreatedDate",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "ModifiedDate",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "CreationDate",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "LastEditDate",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "DocumentLocation",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "CopyAssociationForwardOnlyOnce",
-						"type": "bit"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Align_ArchClaims"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dsExcelOnPrem')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "isExcelOnPremise",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"FolderName": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "Report",
-					"location": {
-						"type": "FileServerLocation",
-						"fileName": {
-							"value": "item().Name",
-							"type": "Expression"
-						},
-						"folderPath": {
-							"value": "@dataset().FolderName",
-							"type": "Expression"
-						}
-					},
-					"firstRowAsHeader": true
-				},
-				"schema": [
-					{
-						"name": "Active Contact List\nAs of: 7/13/2022",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dsTestOnPremXL')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureStorageLinkedService",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"container": "excelonprem"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_SqlServerLoadClaimData')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "SqlServerLinkedService",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"tablename": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": {
-						"value": "@dataset().tablename",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dsetJsonBlobStor')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureStorageLinkedService",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"landingFolder": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "Json",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"folderPath": {
-							"value": "@concat(\n    'landing/',\n    formatDateTime(utcnow(), 'yyyy'), \n    '/', \n    formatDateTime(utcnow(), 'MM'), \n    '/', \n    formatDateTime(utcnow(), 'dd'), \n    '/' )",
-							"type": "Expression"
-						},
-						"container": "input"
-					}
-				},
-				"schema": {
-					"type": "object",
-					"properties": {
-						"CustomerID": {
-							"type": "integer"
-						},
-						"NameStyle": {
-							"type": "boolean"
-						},
-						"Title": {
-							"type": "string"
-						},
-						"FirstName": {
-							"type": "string"
-						},
-						"MiddleName": {
-							"type": "string"
-						},
-						"LastName": {
-							"type": "string"
-						},
-						"Suffix": {
-							"type": "string"
-						},
-						"CompanyName": {
-							"type": "string"
-						},
-						"SalesPerson": {
-							"type": "string"
-						},
-						"EmailAddress": {
-							"type": "string"
-						},
-						"Phone": {
-							"type": "string"
-						},
-						"PasswordHash": {
-							"type": "string"
-						},
-						"PasswordSalt": {
-							"type": "string"
-						},
-						"rowguid": {
-							"type": "string"
-						},
-						"ModifiedDate": {
-							"type": "string"
-						}
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/nbismtd')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "SqlServerLinkedService",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"tablename": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": {
-						"value": "@dataset().tablename",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "DLSA_V2_Excel",
-								"type": "DatasetReference"
-							},
-							"name": "source1"
-						}
-					],
-					"sinks": [
-						{
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "derivedColumn1"
-						}
-					],
-					"scriptLines": [
-						"source(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> source1",
-						"source1 derive(NewCol = 'test') ~> derivedColumn1",
-						"derivedColumn1 sink(validateSchema: false,",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     store: 'cache',",
-						"     format: 'inline',",
-						"     output: false,",
-						"     saveOrder: 1) ~> sink1"
-					]
-				}
-			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/S3_LS')]"
+			]
 		}
 	]
 }

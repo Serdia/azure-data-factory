@@ -11,17 +11,41 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ADLS2toStormorgandataplatform'"
 		},
+		"ADLSgen2_LS_accountkey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountkey' of 'ADLSgen2_LS'"
+		},
+		"ADLSv2_LS_accountkey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountkey' of 'ADLSv2_LS'"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"AzureDataLakeStorage1_accountkey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountkey' of 'AzureDataLakeStorage1'"
+		},
+		"AzureDataLakeStorage1test_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1test'"
+		},
 		"AzureDatabricks2_accessToken": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks2'"
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
 		},
 		"AzureStorageLinkedService_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureStorageLinkedService'"
 		},
-		"DLSGen2_LS_accountKey": {
+		"DLSGen2_LS_accountkey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'DLSGen2_LS'"
+			"metadata": "Secure string for 'accountkey' of 'DLSGen2_LS'"
 		},
 		"LS_SQLDB_connectionString": {
 			"type": "secureString",
@@ -44,13 +68,29 @@
 			"type": "string",
 			"defaultValue": "https://stormorgandataplatform.dfs.core.windows.net/"
 		},
+		"ADLSgen2_LS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().URL}"
+		},
+		"ADLSv2_LS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().URL}"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().URL}"
+		},
+		"AzureDataLakeStorage1test_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://stormorgandataplatform.dfs.core.windows.net/"
+		},
 		"AzureDatabricks2_properties_typeProperties_existingClusterId": {
 			"type": "string",
 			"defaultValue": "0713-054208-n19vt55v"
 		},
 		"DLSGen2_LS_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://datalakev2storacct.dfs.core.windows.net/"
+			"defaultValue": "@{linkedService().URL}"
 		},
 		"KeyVault_LS_properties_typeProperties_baseUrl": {
 			"type": "string",
@@ -133,29 +173,47 @@
 					"ADLS2toStormorgandataplatform_accountKey": {
 						"value": "[parameters('ADLS2toStormorgandataplatform_accountKey')]"
 					},
+					"ADLSgen2_LS_accountkey": {
+						"value": "[parameters('ADLSgen2_LS_accountkey')]"
+					},
+					"ADLSv2_LS_accountkey": {
+						"value": "[parameters('ADLSv2_LS_accountkey')]"
+					},
+					"AzureBlobStorage1_connectionString": {
+						"value": "[parameters('AzureBlobStorage1_connectionString')]"
+					},
+					"AzureDataLakeStorage1_accountkey": {
+						"value": "[parameters('AzureDataLakeStorage1_accountkey')]"
+					},
+					"AzureDataLakeStorage1test_accountKey": {
+						"value": "[parameters('AzureDataLakeStorage1test_accountKey')]"
+					},
 					"AzureDatabricks2_accessToken": {
 						"value": "[parameters('AzureDatabricks2_accessToken')]"
 					},
-					"DLSGen2_LS_accountKey": {
-						"value": "[parameters('DLSGen2_LS_accountKey')]"
+					"AzureSqlDatabase1_connectionString": {
+						"value": "[parameters('AzureSqlDatabase1_connectionString')]"
+					},
+					"DLSGen2_LS_accountkey": {
+						"value": "[parameters('DLSGen2_LS_accountkey')]"
 					},
 					"LS_SQLDB_connectionString": {
 						"value": "[parameters('LS_SQLDB_connectionString')]"
 					},
-					"AzureStorageLinkedService_connectionString": {
-						"value": "[parameters('AzureStorageLinkedService_connectionString')]"
-					},
-					"SqlServerLinkedService_connectionString": {
-						"value": "[parameters('SqlServerLinkedService_connectionString')]"
-					},
-					"SqlServerLinkedService_password": {
-						"value": "[parameters('SqlServerLinkedService_password')]"
-					},
-					"isExcelOnPremise_password": {
-						"value": "[parameters('isExcelOnPremise_password')]"
-					},
 					"ADLS2toStormorgandataplatform_properties_typeProperties_url": {
 						"value": "[parameters('ADLS2toStormorgandataplatform_properties_typeProperties_url')]"
+					},
+					"ADLSgen2_LS_properties_typeProperties_url": {
+						"value": "[parameters('ADLSgen2_LS_properties_typeProperties_url')]"
+					},
+					"ADLSv2_LS_properties_typeProperties_url": {
+						"value": "[parameters('ADLSv2_LS_properties_typeProperties_url')]"
+					},
+					"AzureDataLakeStorage1_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
+					},
+					"AzureDataLakeStorage1test_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorage1test_properties_typeProperties_url')]"
 					},
 					"AzureDatabricks2_properties_typeProperties_existingClusterId": {
 						"value": "[parameters('AzureDatabricks2_properties_typeProperties_existingClusterId')]"
@@ -168,18 +226,6 @@
 					},
 					"osAzureKeyVault_LS_properties_typeProperties_baseUrl": {
 						"value": "[parameters('osAzureKeyVault_LS_properties_typeProperties_baseUrl')]"
-					},
-					"S3_LS_properties_typeProperties_accessKeyId": {
-						"value": "[parameters('S3_LS_properties_typeProperties_accessKeyId')]"
-					},
-					"SqlServerLinkedService_properties_typeProperties_userName": {
-						"value": "[parameters('SqlServerLinkedService_properties_typeProperties_userName')]"
-					},
-					"isExcelOnPremise_properties_typeProperties_host": {
-						"value": "[parameters('isExcelOnPremise_properties_typeProperties_host')]"
-					},
-					"isExcelOnPremise_properties_typeProperties_userId": {
-						"value": "[parameters('isExcelOnPremise_properties_typeProperties_userId')]"
 					}
 				}
 			},
@@ -198,6 +244,30 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"AzureStorageLinkedService_connectionString": {
+						"value": "[parameters('AzureStorageLinkedService_connectionString')]"
+					},
+					"SqlServerLinkedService_connectionString": {
+						"value": "[parameters('SqlServerLinkedService_connectionString')]"
+					},
+					"SqlServerLinkedService_password": {
+						"value": "[parameters('SqlServerLinkedService_password')]"
+					},
+					"isExcelOnPremise_password": {
+						"value": "[parameters('isExcelOnPremise_password')]"
+					},
+					"S3_LS_properties_typeProperties_accessKeyId": {
+						"value": "[parameters('S3_LS_properties_typeProperties_accessKeyId')]"
+					},
+					"SqlServerLinkedService_properties_typeProperties_userName": {
+						"value": "[parameters('SqlServerLinkedService_properties_typeProperties_userName')]"
+					},
+					"isExcelOnPremise_properties_typeProperties_host": {
+						"value": "[parameters('isExcelOnPremise_properties_typeProperties_host')]"
+					},
+					"isExcelOnPremise_properties_typeProperties_userId": {
+						"value": "[parameters('isExcelOnPremise_properties_typeProperties_userId')]"
 					}
 				}
 			},
@@ -224,6 +294,26 @@
 					},
 					"StorageEventTrigger_properties_typeProperties_scope": {
 						"value": "[parameters('StorageEventTrigger_properties_typeProperties_scope')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'oserdyukADFTutorialDataFactory_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "oserdyukADFTutorialDataFactory_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
 					},
 					"Storage_Trigger_For_Json_properties_typeProperties_scope": {
 						"value": "[parameters('Storage_Trigger_For_Json_properties_typeProperties_scope')]"
@@ -237,7 +327,7 @@
 				}
 			},
 			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'oserdyukADFTutorialDataFactory_ArmTemplate_1')]"
+				"[resourceId('Microsoft.Resources/deployments', 'oserdyukADFTutorialDataFactory_ArmTemplate_2')]"
 			]
 		}
 	]
