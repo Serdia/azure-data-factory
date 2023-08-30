@@ -2,7 +2,7 @@
 	"name": "CSV_ADSL_ds",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ADLSgen2_LS2",
+			"referenceName": "AzureDataLakeStorage3test",
 			"type": "LinkedServiceReference",
 			"parameters": {
 				"URL": "https://stormorgandataplatform.dfs.core.windows.net/",
