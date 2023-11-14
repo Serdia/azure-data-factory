@@ -1,0 +1,9 @@
+{
+	"name": "os-datafactory",
+	"location": "westus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "073256d0-e50e-45bc-8a12-8f7f628a68d6",
+		"tenantId": "6e55ae8a-1b0b-492b-9015-98ffd5fe70b9"
+	}
+}
