@@ -1308,7 +1308,7 @@
 									"userProperties": [],
 									"typeProperties": {
 										"command": {
-											"value": "@concat('python cube.py', item())",
+											"value": "@concat('python cube.py ', item())",
 											"type": "Expression"
 										},
 										"resourceLinkedService": {
@@ -1337,11 +1337,11 @@
 					"values": {
 						"type": "Array",
 						"defaultValue": [
-							"{'1'",
-							"'2'",
-							"'3'",
-							"'4'",
-							"'5'}"
+							"1",
+							"2",
+							"3",
+							"4",
+							"5"
 						]
 					}
 				},
