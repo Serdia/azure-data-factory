@@ -28,7 +28,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"command": {
-									"value": "@concat('python cube.py', item())",
+									"value": "@concat('python cube.py ', item())",
 									"type": "Expression"
 								},
 								"resourceLinkedService": {
