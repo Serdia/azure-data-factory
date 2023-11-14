@@ -1,0 +1,1355 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "os-datafactory"
+		},
+		"AzureStorageLinkedService_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureStorageLinkedService'"
+		},
+		"SqlServerLinkedService_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServerLinkedService'",
+			"defaultValue": "Integrated Security=True;Data Source=10.26.26.14;Initial Catalog=mejames"
+		},
+		"SqlServerLinkedService_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'SqlServerLinkedService'"
+		},
+		"isExcelOnPremise_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'isExcelOnPremise'"
+		},
+		"ls_AzireBatch_accessKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessKey' of 'ls_AzireBatch'"
+		},
+		"S3_LS_properties_typeProperties_accessKeyId": {
+			"type": "object",
+			"defaultValue": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KeyVault_LS",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "s3AccessKeyID"
+			}
+		},
+		"SqlServerLinkedService_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "aligngeneral\\oserdyuk"
+		},
+		"isExcelOnPremise_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "\\\\fs01\\Align\\Public\\temp\\TPAClaims"
+		},
+		"isExcelOnPremise_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "aligngeneral\\oserdyuk"
+		},
+		"ls_AzireBatch_properties_typeProperties_batchUri": {
+			"type": "string",
+			"defaultValue": "https://osbatchaccount.westus2.batch.azure.com"
+		},
+		"ls_AzireBatch_properties_typeProperties_poolName": {
+			"type": "string",
+			"defaultValue": "osbatchpool"
+		},
+		"ls_AzireBatch_properties_typeProperties_accountName": {
+			"type": "string",
+			"defaultValue": "osbatchaccount"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Azure_DL_DS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DLSGen2_LS",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"landingFolder": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@dataset().landingFolder",
+							"type": "Expression"
+						},
+						"fileSystem": "input"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CSV_ADSL_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage3test",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"URL": "https://stormorgandataplatform.dfs.core.windows.net/",
+						"accountkey": "7TH/egm+dMWRcZPeEmLihWvsj1DE3tEJoDmdLK9ZcaH5340i+TTWmxe0Spk6y27IwmSVURSFWrIF+AStcM1q1Q=="
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "inputdata"
+					},
+					"columnDelimiter": ",",
+					"rowDelimiter": "\n",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ProductId",
+						"type": "String"
+					},
+					{
+						"name": "Price",
+						"type": "String"
+					},
+					{
+						"name": "guid",
+						"type": "String"
+					},
+					{
+						"name": "StartDate",
+						"type": "String"
+					},
+					{
+						"name": "EndDate",
+						"type": "String"
+					},
+					{
+						"name": "CreateDate",
+						"type": "String"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DLSA_V2_Excel')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DLSGen2_LS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "MyTestFile.xlsx",
+						"folderPath": "inputfolder/AnotherTPA 7.31.2023",
+						"fileSystem": "claimstpa"
+					},
+					"sheetIndex": 0,
+					"firstRowAsHeader": true
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Excel1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DLSGen2_LS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Sheet1",
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "inputfolder",
+						"fileSystem": "claimstpa"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "Field",
+						"type": "String"
+					},
+					{
+						"name": "Coverholder Name",
+						"type": "String"
+					},
+					{
+						"name": "TPA Name",
+						"type": "String"
+					},
+					{
+						"name": "Agreement No",
+						"type": "String"
+					},
+					{
+						"name": "Unique Market Reference (UMR) / Policy Number",
+						"type": "String"
+					},
+					{
+						"name": "Binder Contract Inception",
+						"type": "String"
+					},
+					{
+						"name": "Binder Contract Expiry",
+						"type": "String"
+					},
+					{
+						"name": "Reporting Period (End Date)",
+						"type": "String"
+					},
+					{
+						"name": "Class of Business: Section No, Risk code or description",
+						"type": "String"
+					},
+					{
+						"name": "Class of Business",
+						"type": "String"
+					},
+					{
+						"name": "Lloyd's Risk Code",
+						"type": "String"
+					},
+					{
+						"name": "Section No",
+						"type": "String"
+					},
+					{
+						"name": "Original Currency",
+						"type": "String"
+					},
+					{
+						"name": "Settlement Currency",
+						"type": "String"
+					},
+					{
+						"name": "Rate of Exchange",
+						"type": "String"
+					},
+					{
+						"name": "Certificate Reference",
+						"type": "String"
+					},
+					{
+						"name": "Claim Reference / Number",
+						"type": "String"
+					},
+					{
+						"name": "Insured Full Name or Company Name",
+						"type": "String"
+					},
+					{
+						"name": "Insured State, Province, Territory, Canton etc.",
+						"type": "String"
+					},
+					{
+						"name": "Insured Country",
+						"type": "String"
+					},
+					{
+						"name": "Location of risk State, Province, Territory, Canton",
+						"type": "String"
+					},
+					{
+						"name": "Location of risk Country",
+						"type": "String"
+					},
+					{
+						"name": "Risk Inception Date",
+						"type": "String"
+					},
+					{
+						"name": "Risk Expiry Date",
+						"type": "String"
+					},
+					{
+						"name": "Period of Cover - Narrative",
+						"type": "String"
+					},
+					{
+						"name": "Location of loss State, Province, Territory, Canton ",
+						"type": "String"
+					},
+					{
+						"name": "Location of loss Country",
+						"type": "String"
+					},
+					{
+						"name": "Cause of Loss Code",
+						"type": "String"
+					},
+					{
+						"name": "Loss Description",
+						"type": "String"
+					},
+					{
+						"name": "Date of Loss (From)",
+						"type": "String"
+					},
+					{
+						"name": "Date of Loss to",
+						"type": "String"
+					},
+					{
+						"name": "Date Claim First Advised/Date Claim Made",
+						"type": "String"
+					},
+					{
+						"name": "Claim Status",
+						"type": "String"
+					},
+					{
+						"name": "Refer to Underwriters",
+						"type": "String"
+					},
+					{
+						"name": "Denial",
+						"type": "String"
+					},
+					{
+						"name": "Claimant Name",
+						"type": "String"
+					},
+					{
+						"name": "Loss County",
+						"type": "String"
+					},
+					{
+						"name": "State of Filing",
+						"type": "String"
+					},
+					{
+						"name": "PCS Code",
+						"type": "String"
+					},
+					{
+						"name": "Medicare United States Bodily Injury",
+						"type": "String"
+					},
+					{
+						"name": "Medicare Eligibility Check Performance",
+						"type": "String"
+					},
+					{
+						"name": "Medicare Outcome of Eligibility Status Check",
+						"type": "String"
+					},
+					{
+						"name": "Medicare Conditional Payments",
+						"type": "String"
+					},
+					{
+						"name": "Medicare MSP Compliance Services",
+						"type": "String"
+					},
+					{
+						"name": "Paid this month - Indemnity",
+						"type": "String"
+					},
+					{
+						"name": "Paid this month - Fees",
+						"type": "String"
+					},
+					{
+						"name": "Previously Paid - Indemnity",
+						"type": "String"
+					},
+					{
+						"name": "Previously Paid - Fees",
+						"type": "String"
+					},
+					{
+						"name": "Reserve - Indemnity",
+						"type": "String"
+					},
+					{
+						"name": "Reserve - Fees",
+						"type": "String"
+					},
+					{
+						"name": "Change this month - Indemnity",
+						"type": "String"
+					},
+					{
+						"name": "Change this month - Fees",
+						"type": "String"
+					},
+					{
+						"name": "Total Incurred - Indemnity",
+						"type": "String"
+					},
+					{
+						"name": "Total Incurred - Fees",
+						"type": "String"
+					},
+					{
+						"name": "Coverholder PIN",
+						"type": "String"
+					},
+					{
+						"name": "Reporting Period Start Date",
+						"type": "String"
+					},
+					{
+						"name": "Type of Insurance (Direct, or Type of RI)",
+						"type": "String"
+					},
+					{
+						"name": "Policy or Group Ref",
+						"type": "String"
+					},
+					{
+						"name": "Insured Address ",
+						"type": "String"
+					},
+					{
+						"name": "Insured Postcode / Zip Code or similar",
+						"type": "String"
+					},
+					{
+						"name": "Location of Risk Location ID",
+						"type": "String"
+					},
+					{
+						"name": "Location of Risk Address",
+						"type": "String"
+					},
+					{
+						"name": "Location of Risk Postcode / Zip Code or similar",
+						"type": "String"
+					},
+					{
+						"name": "Deductible Amount",
+						"type": "String"
+					},
+					{
+						"name": "Deductible Basis",
+						"type": "String"
+					},
+					{
+						"name": "Sums Insured Amount",
+						"type": "String"
+					},
+					{
+						"name": "Location of loss Address",
+						"type": "String"
+					},
+					{
+						"name": "Location of loss Postcode / Zip Code or similar",
+						"type": "String"
+					},
+					{
+						"name": "Date Closed",
+						"type": "String"
+					},
+					{
+						"name": "Lloyd's Cat Code",
+						"type": "String"
+					},
+					{
+						"name": "Catastrophe Name",
+						"type": "String"
+					},
+					{
+						"name": "Paid this month - Expenses",
+						"type": "String"
+					},
+					{
+						"name": "Paid this month - Attorney Coverage Fees",
+						"type": "String"
+					},
+					{
+						"name": "Paid this month - Adjusters Fees",
+						"type": "String"
+					},
+					{
+						"name": "Paid this month - Defence Fees",
+						"type": "String"
+					},
+					{
+						"name": "Paid this month - TPA Fees",
+						"type": "String"
+					},
+					{
+						"name": "Previously Paid - Expenses",
+						"type": "String"
+					},
+					{
+						"name": "Previously Paid - Attorney Coverage Fees",
+						"type": "String"
+					},
+					{
+						"name": "Previously Paid - Adjusters Fees",
+						"type": "String"
+					},
+					{
+						"name": "Previously Paid - Defence Fees",
+						"type": "String"
+					},
+					{
+						"name": "Previously Paid - TPA Fees",
+						"type": "String"
+					},
+					{
+						"name": "Reserve - Expenses",
+						"type": "String"
+					},
+					{
+						"name": "Reserve - Attorney Coverage Fees",
+						"type": "String"
+					},
+					{
+						"name": "Reserve - Adjusters Fees",
+						"type": "String"
+					},
+					{
+						"name": "Reserve - Defence Fees",
+						"type": "String"
+					},
+					{
+						"name": "Reserve - TPA Fees",
+						"type": "String"
+					},
+					{
+						"name": "Total Incurred",
+						"type": "String"
+					},
+					{
+						"name": "Name or Reg No of Aircraft Vehicle, Vessel etc. ",
+						"type": "String"
+					},
+					{
+						"name": "% Ceded (Reinsurance)",
+						"type": "String"
+					},
+					{
+						"name": "Plan",
+						"type": "String"
+					},
+					{
+						"name": "Patient Name",
+						"type": "String"
+					},
+					{
+						"name": "Treatment Type",
+						"type": "String"
+					},
+					{
+						"name": "Country of Treatment",
+						"type": "String"
+					},
+					{
+						"name": "Date of Treatment",
+						"type": "String"
+					},
+					{
+						"name": "Expert - Role",
+						"type": "String"
+					},
+					{
+						"name": "Expert Firm / Company Name",
+						"type": "String"
+					},
+					{
+						"name": "Expert Reference No etc.",
+						"type": "String"
+					},
+					{
+						"name": "Expert Address",
+						"type": "String"
+					},
+					{
+						"name": "Expert State, Province, Territory, Canton etc.",
+						"type": "String"
+					},
+					{
+						"name": "Expert Postcode / Zip Code or similar",
+						"type": "String"
+					},
+					{
+						"name": "Expert Country",
+						"type": "String"
+					},
+					{
+						"name": "Notes",
+						"type": "String"
+					},
+					{
+						"name": "Date Claim Opened",
+						"type": "String"
+					},
+					{
+						"name": "Ex gratia payment",
+						"type": "String"
+					},
+					{
+						"name": "Claim First Notification Acknowledgement Date",
+						"type": "String"
+					},
+					{
+						"name": "Date First Reserve Established",
+						"type": "String"
+					},
+					{
+						"name": "Diary date",
+						"type": "String"
+					},
+					{
+						"name": "Peer review date",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQL_DB_DS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_SQLDB",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"dbname": "myAzureSQLdb"
+					}
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "VehicleID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "latitude",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "longtitude",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					},
+					{
+						"name": "City",
+						"type": "nvarchar"
+					},
+					{
+						"name": "temperature",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "speed",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Valid_json_DS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DLSGen2_LS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "staging",
+						"fileSystem": "input"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eventsinktrigger_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DLSGen2_LS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "eventsink"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eventsourcetrigger')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DLSGen2_LS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "eventsource"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDatabricks1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "linked service to create databricks account",
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://adb-2147164793109402.2.azuredatabricks.net",
+					"accessToken": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "osAzureKeyVault_LS",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "databrickstoken",
+						"secretVersion": "660cd5f79cf24f249719e652ae37741e"
+					},
+					"newClusterNodeType": "Standard_DS3_v2",
+					"newClusterNumOfWorker": "1",
+					"newClusterVersion": "10.4.x-scala2.12",
+					"clusterOption": "Fixed",
+					"newClusterInitScripts": []
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureStorageLinkedService')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "connection string to blob storage",
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureStorageLinkedService_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "SelfHostedRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/S3_LS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "connection to S3 bucket AWS",
+				"annotations": [],
+				"type": "AmazonS3",
+				"typeProperties": {
+					"serviceUrl": "https://s3.amazonaws.com",
+					"accessKeyId": "[parameters('S3_LS_properties_typeProperties_accessKeyId')]",
+					"secretAccessKey": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "KeyVault_LS",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "s3SekretKey"
+					},
+					"authenticationType": "AccessKey"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServerLinkedService')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "test to offload pdf file from sql to blob",
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('SqlServerLinkedService_connectionString')]",
+					"userName": "[parameters('SqlServerLinkedService_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('SqlServerLinkedService_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "SelfHostedRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/isExcelOnPremise')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "this linked server is a connection to my local machine",
+				"annotations": [],
+				"type": "FileServer",
+				"typeProperties": {
+					"host": "[parameters('isExcelOnPremise_properties_typeProperties_host')]",
+					"userId": "[parameters('isExcelOnPremise_properties_typeProperties_userId')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('isExcelOnPremise_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "SelfHostedRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_AzireBatch')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBatch",
+				"typeProperties": {
+					"batchUri": "[parameters('ls_AzireBatch_properties_typeProperties_batchUri')]",
+					"poolName": "[parameters('ls_AzireBatch_properties_typeProperties_poolName')]",
+					"accountName": "[parameters('ls_AzireBatch_properties_typeProperties_accountName')]",
+					"linkedServiceName": {
+						"referenceName": "ls_adlsv2",
+						"type": "LinkedServiceReference"
+					},
+					"accessKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_AzireBatch_accessKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ADLS to SQLDB')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "move data from ADLS2 to sql DB",
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "JsonSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "staging",
+									"wildcardFileName": "*.json",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "JsonReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "Valid_json_DS",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "SQL_DB_DS",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": "AzureDBVehicleSystem"
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Valid_json_DS')]",
+				"[concat(variables('factoryId'), '/datasets/SQL_DB_DS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Injestion_CustomerData_ADLS')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data from SQL db to ADLS",
+						"type": "Copy",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".csv"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SQL_DB_DS",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": "Customers"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "CSV_ADSL_ds",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".csv"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SQL_DB_DS",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": "Customers"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "CSV_ADSL_ds",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SQL_DB_DS')]",
+				"[concat(variables('factoryId'), '/datasets/CSV_ADSL_ds')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MorganDataPlatform')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Udemy project",
+				"activities": [
+					{
+						"name": "Notebook1",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Project2",
+							"baseParameters": {
+								"fileName": {
+									"value": "@pipeline().parameters.fileName",
+									"type": "Expression"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks1",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"fileName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-08-16T04:41:15Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/event_trigger_pipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copyeventrigger",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFileName": "*.csv",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "eventsourcetrigger",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "eventsinktrigger_ds",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-06-06T19:05:56Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/eventsourcetrigger')]",
+				"[concat(variables('factoryId'), '/datasets/eventsinktrigger_ds')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Notebook1",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/oserdyuk@aligngeneral.com/12-Production-Workloads-with-Azure-Data-Factory/Record-Run",
+							"baseParameters": {
+								"ranBy": "ADF"
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks1",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-06-14T20:52:18Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_batchcode')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@variables('values')",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Custom1",
+									"description": "execute python script",
+									"type": "Custom",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"command": {
+											"value": "@concat('python cube.py', item())",
+											"type": "Expression"
+										},
+										"resourceLinkedService": {
+											"referenceName": "ls_adlsv2",
+											"type": "LinkedServiceReference"
+										},
+										"folderPath": "input",
+										"referenceObjects": {
+											"linkedServices": [],
+											"datasets": []
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "ls_AzireBatch",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"variables": {
+					"values": {
+						"type": "Array",
+						"defaultValue": [
+							"{'1'",
+							"'2'",
+							"'3'",
+							"'4'",
+							"'5'}"
+						]
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_AzireBatch')]"
+			]
+		}
+	]
+}

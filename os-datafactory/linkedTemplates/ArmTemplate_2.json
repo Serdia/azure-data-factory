@@ -1,0 +1,4970 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "os-datafactory"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobDataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureStorageLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@CONCAT(pipeline().RunId, '.txt')",
+							"type": "Expression"
+						},
+						"folderPath": "fromonprem",
+						"container": "adftutorial"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Binary1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureStorageLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"delfile": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().delfile",
+							"type": "Expression"
+						},
+						"container": "deletefiles"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureStorageLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"filename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().filename",
+							"type": "Expression"
+						},
+						"folderPath": "input",
+						"container": "deletefiles"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "policy_number",
+						"type": "String"
+					},
+					{
+						"name": "policy_effective_date",
+						"type": "String"
+					},
+					{
+						"name": "policy_expiration_date",
+						"type": "String"
+					},
+					{
+						"name": "transaction_type",
+						"type": "String"
+					},
+					{
+						"name": "transaction_effective_date",
+						"type": "String"
+					},
+					{
+						"name": "primary_insured_name",
+						"type": "String"
+					},
+					{
+						"name": "dba_name",
+						"type": "String"
+					},
+					{
+						"name": "primary_insured_street_address_1",
+						"type": "String"
+					},
+					{
+						"name": "primary_insured_street_address_2",
+						"type": "String"
+					},
+					{
+						"name": "primary_insured_city",
+						"type": "String"
+					},
+					{
+						"name": "primary_insured_state",
+						"type": "String"
+					},
+					{
+						"name": "primary_insured_zip_code",
+						"type": "String"
+					},
+					{
+						"name": "primary_insured_country",
+						"type": "String"
+					},
+					{
+						"name": "source_system_module",
+						"type": "String"
+					},
+					{
+						"name": "sic_code",
+						"type": "String"
+					},
+					{
+						"name": "domicile_city",
+						"type": "String"
+					},
+					{
+						"name": "domicile_state",
+						"type": "String"
+					},
+					{
+						"name": "domicile_country",
+						"type": "String"
+					},
+					{
+						"name": "currency",
+						"type": "String"
+					},
+					{
+						"name": "customer_number",
+						"type": "String"
+					},
+					{
+						"name": "qual_exempt_comm_pol_holder",
+						"type": "String"
+					},
+					{
+						"name": "ny_free_trade_zone",
+						"type": "String"
+					},
+					{
+						"name": "underwriter_name",
+						"type": "String"
+					},
+					{
+						"name": "master_company",
+						"type": "String"
+					},
+					{
+						"name": "billing_type",
+						"type": "String"
+					},
+					{
+						"name": "payment_plan",
+						"type": "String"
+					},
+					{
+						"name": "endorsement_billing_method",
+						"type": "String"
+					},
+					{
+						"name": "producer_code",
+						"type": "String"
+					},
+					{
+						"name": "premium_financed_policy",
+						"type": "String"
+					},
+					{
+						"name": "policy_symbol",
+						"type": "String"
+					},
+					{
+						"name": "terrorism_type",
+						"type": "String"
+					},
+					{
+						"name": "terrorism_change_amount",
+						"type": "String"
+					},
+					{
+						"name": "coverage_trigger",
+						"type": "String"
+					},
+					{
+						"name": "claims_made",
+						"type": "String"
+					},
+					{
+						"name": "original_entry_into_claims_made",
+						"type": "String"
+					},
+					{
+						"name": "retroactive_date",
+						"type": "String"
+					},
+					{
+						"name": "pollution_coverage_occurrence_limit",
+						"type": "String"
+					},
+					{
+						"name": "deductible_form",
+						"type": "String"
+					},
+					{
+						"name": "pollution_coverage_deductible_amount",
+						"type": "String"
+					},
+					{
+						"name": "premium_change_amount",
+						"type": "String"
+					},
+					{
+						"name": "policy_aggregate_limit",
+						"type": "String"
+					},
+					{
+						"name": "commission_rate",
+						"type": "String"
+					},
+					{
+						"name": "professional_coverage_occurrence_limit",
+						"type": "String"
+					},
+					{
+						"name": "professional_coverage_deductible_amount",
+						"type": "String"
+					},
+					{
+						"name": "cancellation_reason",
+						"type": "String"
+					},
+					{
+						"name": "cancellation_reason_other_description",
+						"type": "String"
+					},
+					{
+						"name": "nonrenewal_reason",
+						"type": "String"
+					},
+					{
+						"name": "nonrenewal_reason_other_description",
+						"type": "String"
+					},
+					{
+						"name": "tax_surcharge_type_1",
+						"type": "String"
+					},
+					{
+						"name": "tax_surcharge_type_2",
+						"type": "String"
+					},
+					{
+						"name": "tax_surcharge_change_amount_1",
+						"type": "String"
+					},
+					{
+						"name": "tax_surcharge_change_amount_2",
+						"type": "String"
+					},
+					{
+						"name": "tax_location_code",
+						"type": "String"
+					},
+					{
+						"name": "policy_mod",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureStorageLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "deletefiles"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureStorageLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"filename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().filename",
+							"type": "Expression"
+						},
+						"container": "deletefiles"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText4')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "isExcelOnPremise",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"FolderName": {
+						"type": "string"
+					},
+					"FileDate": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "FileServerLocation",
+						"folderPath": {
+							"value": "@dataset().FolderName",
+							"type": "Expression"
+						}
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": false,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Json1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "S3_LS",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"folderPath": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AmazonS3Location",
+						"bucketName": "bkt-iotdata",
+						"folderPath": {
+							"value": "@dataset().folderPath",
+							"type": "Expression"
+						}
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"VehicleID": {
+							"type": "string"
+						},
+						"latitiude": {
+							"type": "number"
+						},
+						"longitude": {
+							"type": "number"
+						},
+						"City": {
+							"type": "string"
+						},
+						"temeprature": {
+							"type": "integer"
+						},
+						"speed": {
+							"type": "integer"
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LoadClaimData_Dset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "isExcelOnPremise",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Sheet1",
+					"location": {
+						"type": "FileServerLocation"
+					}
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MTDPremium')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureStorageLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"cellRange": {
+						"type": "string",
+						"defaultValue": "A6:F10"
+					},
+					"firstRowAsHeader": {
+						"type": "bool",
+						"defaultValue": true
+					}
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "MTD GWP",
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "input",
+						"container": "nbiscontainer"
+					},
+					"range": {
+						"value": "@dataset().cellRange",
+						"type": "Expression"
+					},
+					"firstRowAsHeader": {
+						"value": "@dataset().firstRowAsHeader",
+						"type": "Expression"
+					}
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServerDataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SqlServerLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "DocumentStoreGUID",
+						"type": "uniqueidentifier"
+					},
+					{
+						"name": "Description",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FileAssociation",
+						"type": "varchar"
+					},
+					{
+						"name": "Document",
+						"type": "image"
+					},
+					{
+						"name": "DateAdded",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "FileName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "UserGUIDOriginator",
+						"type": "uniqueidentifier"
+					},
+					{
+						"name": "TypeGUID",
+						"type": "uniqueidentifier"
+					},
+					{
+						"name": "CompressionLevel",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Compressed",
+						"type": "bit"
+					},
+					{
+						"name": "OriginalFileSize",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DocumentThumbnail",
+						"type": "image"
+					},
+					{
+						"name": "FolderID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CopyAssociationsForwardOnRenewal",
+						"type": "bit"
+					},
+					{
+						"name": "MetaXML",
+						"type": "text"
+					},
+					{
+						"name": "ActualFileSize",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "DocumentStoreId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Deleted",
+						"type": "bit"
+					},
+					{
+						"name": "CreatedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "CreationDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "LastEditDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "DocumentLocation",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CopyAssociationForwardOnlyOnce",
+						"type": "bit"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Align_ArchClaims"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dsExcelOnPrem')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "isExcelOnPremise",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"FolderName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Report",
+					"location": {
+						"type": "FileServerLocation",
+						"fileName": {
+							"value": "item().Name",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().FolderName",
+							"type": "Expression"
+						}
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "Active Contact List\nAs of: 7/13/2022",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dsTestOnPremXL')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureStorageLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "excelonprem"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_SqlServerLoadClaimData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SqlServerLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"tablename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": {
+						"value": "@dataset().tablename",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dsetJsonBlobStor')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureStorageLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"landingFolder": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": {
+							"value": "@concat(\n    'landing/',\n    formatDateTime(utcnow(), 'yyyy'), \n    '/', \n    formatDateTime(utcnow(), 'MM'), \n    '/', \n    formatDateTime(utcnow(), 'dd'), \n    '/' )",
+							"type": "Expression"
+						},
+						"container": "input"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"CustomerID": {
+							"type": "integer"
+						},
+						"NameStyle": {
+							"type": "boolean"
+						},
+						"Title": {
+							"type": "string"
+						},
+						"FirstName": {
+							"type": "string"
+						},
+						"MiddleName": {
+							"type": "string"
+						},
+						"LastName": {
+							"type": "string"
+						},
+						"Suffix": {
+							"type": "string"
+						},
+						"CompanyName": {
+							"type": "string"
+						},
+						"SalesPerson": {
+							"type": "string"
+						},
+						"EmailAddress": {
+							"type": "string"
+						},
+						"Phone": {
+							"type": "string"
+						},
+						"PasswordHash": {
+							"type": "string"
+						},
+						"PasswordSalt": {
+							"type": "string"
+						},
+						"rowguid": {
+							"type": "string"
+						},
+						"ModifiedDate": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/nbismtd')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SqlServerLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"tablename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": {
+						"value": "@dataset().tablename",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DLSA_V2_Excel",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source1 derive(NewCol = 'test') ~> derivedColumn1",
+						"derivedColumn1 sink(validateSchema: false,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     store: 'cache',",
+						"     format: 'inline',",
+						"     output: false,",
+						"     saveOrder: 1) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LoadClaimData')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "read data from Excel files and load into sql table",
+				"activities": [
+					{
+						"name": "GetMetadata_readFileNames",
+						"description": "read child folder name in folder TPAClaims",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "LoadClaimData_Dset",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "FileServerReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "GetMetadata_readFileNames",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetMetadata_readFileNames').output.childItems",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "GetMetadata2",
+									"description": "go through each folder and read file names",
+									"type": "GetMetadata",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataset": {
+											"referenceName": "DelimitedText4",
+											"type": "DatasetReference",
+											"parameters": {
+												"FolderName": {
+													"value": "@item().name",
+													"type": "Expression"
+												},
+												"FileDate": {
+													"value": "@split(item().Name, ' ')[2]",
+													"type": "Expression"
+												}
+											}
+										},
+										"fieldList": [
+											"childItems"
+										],
+										"storeSettings": {
+											"type": "FileServerReadSettings",
+											"recursive": true,
+											"enablePartitionDiscovery": false
+										},
+										"formatSettings": {
+											"type": "DelimitedTextReadSettings"
+										}
+									}
+								},
+								{
+									"name": "Copy data1",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "Set variable2",
+											"dependencyConditions": [
+												"Completed"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "ExcelSource",
+											"additionalColumns": [
+												{
+													"name": "FileDate",
+													"value": {
+														"value": "@variables('DatePart')",
+														"type": "Expression"
+													}
+												}
+											],
+											"storeSettings": {
+												"type": "FileServerReadSettings",
+												"recursive": true,
+												"wildcardFileName": "*.xlsx",
+												"enablePartitionDiscovery": false
+											}
+										},
+										"sink": {
+											"type": "SqlServerSink",
+											"writeBehavior": "insert",
+											"sqlWriterUseTableLock": false,
+											"tableOption": "autoCreate"
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "dsExcelOnPrem",
+											"type": "DatasetReference",
+											"parameters": {
+												"FolderName": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_SqlServerLoadClaimData",
+											"type": "DatasetReference",
+											"parameters": {
+												"tablename": "dbo.mytest"
+											}
+										}
+									]
+								},
+								{
+									"name": "Set variable1",
+									"description": "substring only date from folder name and store it to a variable",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "GetMetadata2",
+											"dependencyConditions": [
+												"Completed"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "FileDate",
+										"value": {
+											"value": "@substring(\n    item().name\n    , add(lastIndexOf(item().name, ' '), 1)\n    , sub(length(item().name), add(lastIndexOf(item().name, ' '),1)))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set variable2",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set variable1",
+											"dependencyConditions": [
+												"Completed"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "DatePart",
+										"value": {
+											"value": "@replace(variables('FileDate'), '.', '/')",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"variables": {
+					"FileDate": {
+						"type": "String"
+					},
+					"DatePart": {
+						"type": "String"
+					},
+					"DataPartArray": {
+						"type": "Array"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-08-16T04:41:15Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/LoadClaimData_Dset')]",
+				"[concat(variables('factoryId'), '/datasets/DelimitedText4')]",
+				"[concat(variables('factoryId'), '/datasets/dsExcelOnPrem')]",
+				"[concat(variables('factoryId'), '/datasets/ds_SqlServerLoadClaimData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LoadClaimData_V2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "read data from Excel files and load into sql table",
+				"activities": [
+					{
+						"name": "GetMetadata_readFileNames",
+						"description": "read child folder name in folder TPAClaims",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "LoadClaimData_Dset",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "FileServerReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "GetMetadata_readFileNames",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetMetadata_readFileNames').output.childItems",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "GetMetadata2",
+									"description": "go through each folder and read file names",
+									"type": "GetMetadata",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataset": {
+											"referenceName": "DelimitedText4",
+											"type": "DatasetReference",
+											"parameters": {
+												"FolderName": {
+													"value": "@item().name",
+													"type": "Expression"
+												},
+												"FileDate": {
+													"value": "@split(item().Name, ' ')[2]",
+													"type": "Expression"
+												}
+											}
+										},
+										"fieldList": [
+											"childItems"
+										],
+										"storeSettings": {
+											"type": "FileServerReadSettings",
+											"recursive": true,
+											"enablePartitionDiscovery": false
+										},
+										"formatSettings": {
+											"type": "DelimitedTextReadSettings"
+										}
+									}
+								},
+								{
+									"name": "Set variable1",
+									"description": "substring only date from folder name and store it to a variable",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "GetMetadata2",
+											"dependencyConditions": [
+												"Completed"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "FileDate",
+										"value": {
+											"value": "@substring(\n    item().name\n    , add(lastIndexOf(item().name, ' '), 1)\n    , sub(length(item().name), add(lastIndexOf(item().name, ' '),1)))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set variable2",
+									"description": "convert file date to format 1/1/2023",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set variable1",
+											"dependencyConditions": [
+												"Completed"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "DatePart",
+										"value": {
+											"value": "@substring(\n    item().name\n    , add(lastIndexOf(item().name, ' '), 1)\n    , sub(length(item().name), add(lastIndexOf(item().name, ' '),1)))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set variable3",
+									"description": "get folder name without spaces to use it as a table name dynamically",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set variable2",
+											"dependencyConditions": [
+												"Completed"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "foldername",
+										"value": {
+											"value": "@replace(\n    substring(item().name, 0, lastIndexOf(item().name, ' '))\n    , ' ', '')",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Switch1",
+									"type": "Switch",
+									"state": "Inactive",
+									"onInactiveMarkAs": "Succeeded",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"on": {
+											"value": "@variables('foldername')",
+											"type": "Expression"
+										},
+										"cases": [
+											{
+												"value": "JohnEastern",
+												"activities": [
+													{
+														"name": "JohnEastern",
+														"type": "Copy",
+														"dependsOn": [],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"source": {
+																"type": "ExcelSource",
+																"additionalColumns": [
+																	{
+																		"name": "FileDate",
+																		"value": {
+																			"value": "@variables('FileDate')",
+																			"type": "Expression"
+																		}
+																	}
+																],
+																"storeSettings": {
+																	"type": "FileServerReadSettings",
+																	"recursive": true,
+																	"wildcardFileName": "*.xlsx",
+																	"enablePartitionDiscovery": false
+																}
+															},
+															"sink": {
+																"type": "SqlServerSink",
+																"writeBehavior": "insert",
+																"sqlWriterUseTableLock": false,
+																"tableOption": "autoCreate"
+															},
+															"enableStaging": false,
+															"translator": {
+																"type": "TabularTranslator",
+																"typeConversion": true,
+																"typeConversionSettings": {
+																	"allowDataTruncation": true,
+																	"treatBooleanAsNumber": false
+																}
+															}
+														},
+														"inputs": [
+															{
+																"referenceName": "dsExcelOnPrem",
+																"type": "DatasetReference",
+																"parameters": {
+																	"FolderName": {
+																		"value": "@item().name",
+																		"type": "Expression"
+																	}
+																}
+															}
+														],
+														"outputs": [
+															{
+																"referenceName": "ds_SqlServerLoadClaimData",
+																"type": "DatasetReference",
+																"parameters": {
+																	"tablename": {
+																		"value": "@variables('foldername')",
+																		"type": "Expression"
+																	}
+																}
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								},
+								{
+									"name": "JohnEastern_copy1",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "Set variable3",
+											"dependencyConditions": [
+												"Completed"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "ExcelSource",
+											"additionalColumns": [
+												{
+													"name": "ItemName",
+													"value": {
+														"value": "@item().name",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "FileDateVariable",
+													"value": {
+														"value": "@variables('DatePart')",
+														"type": "Expression"
+													}
+												}
+											],
+											"storeSettings": {
+												"type": "FileServerReadSettings",
+												"recursive": true,
+												"wildcardFileName": "*.xlsx",
+												"enablePartitionDiscovery": false
+											}
+										},
+										"sink": {
+											"type": "SqlServerSink",
+											"writeBehavior": "insert",
+											"sqlWriterUseTableLock": false,
+											"tableOption": "autoCreate"
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"mappings": [
+												{
+													"source": {
+														"name": "Field",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Field",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Coverholder Name",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Coverholder Name",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "TPA Name",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "TPA Name",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Agreement No",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Agreement No",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Unique Market Reference (UMR) / Policy Number",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Unique Market Reference (UMR) / Policy Number",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Binder Contract Inception",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Binder Contract Inception",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Binder Contract Expiry",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Binder Contract Expiry",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Reporting Period (End Date)",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Reporting Period (End Date)",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Class of Business: Section No, Risk code or description",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Class of Business: Section No, Risk code or description",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Class of Business",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Class of Business",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Lloyd's Risk Code",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Lloyd's Risk Code",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Section No",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Section No",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Original Currency",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Original Currency",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Settlement Currency",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Settlement Currency",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Rate of Exchange",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Rate of Exchange",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Certificate Reference",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Certificate Reference",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Claim Reference / Number",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Claim Reference / Number",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Insured Full Name or Company Name",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Insured Full Name or Company Name",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Insured State, Province, Territory, Canton etc.",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Insured State, Province, Territory, Canton etc.",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Insured Country",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Insured Country",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Location of risk State, Province, Territory, Canton",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Location of risk State, Province, Territory, Canton",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Location of risk Country",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Location of risk Country",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Risk Inception Date",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Risk Inception Date",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Risk Expiry Date",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Risk Expiry Date",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Period of Cover - Narrative",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Period of Cover - Narrative",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Location of loss State, Province, Territory, Canton ",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Location of loss State, Province, Territory, Canton ",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Location of loss Country",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Location of loss Country",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Cause of Loss Code",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Cause of Loss Code",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Loss Description",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Loss Description",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Date of Loss (From)",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Date of Loss (From)",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Date of Loss to",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Date of Loss to",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Date Claim First Advised/Date Claim Made",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Date Claim First Advised/Date Claim Made",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Claim Status",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Claim Status",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Refer to Underwriters",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Refer to Underwriters",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Denial",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Denial",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Claimant Name",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Claimant Name",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Loss County",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Loss County",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "State of Filing",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "State of Filing",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "PCS Code",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "PCS Code",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Medicare United States Bodily Injury",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Medicare United States Bodily Injury",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Medicare Eligibility Check Performance",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Medicare Eligibility Check Performance",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Medicare Outcome of Eligibility Status Check",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Medicare Outcome of Eligibility Status Check",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Medicare Conditional Payments",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Medicare Conditional Payments",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Medicare MSP Compliance Services",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Medicare MSP Compliance Services",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Paid this month - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Paid this month - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Paid this month - Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Paid this month - Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Previously Paid - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Previously Paid - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Previously Paid - Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Previously Paid - Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Reserve - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Reserve - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Reserve - Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Reserve - Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Change this month - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Change this month - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Change this month - Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Change this month - Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Total Incurred - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Total Incurred - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Total Incurred - Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Total Incurred - Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Coverholder PIN",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Coverholder PIN",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Reporting Period Start Date",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Reporting Period Start Date",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Type of Insurance (Direct, or Type of RI)",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Type of Insurance (Direct, or Type of RI)",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Policy or Group Ref",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Policy or Group Ref",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Insured Address ",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Insured Address ",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Insured Postcode / Zip Code or similar",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Insured Postcode / Zip Code or similar",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Location of Risk Location ID",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Location of Risk Location ID",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Location of Risk Address",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Location of Risk Address",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Location of Risk Postcode / Zip Code or similar",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Location of Risk Postcode / Zip Code or similar",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Deductible Amount",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Deductible Amount",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Deductible Basis",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Deductible Basis",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Sums Insured Amount",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Sums Insured Amount",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Location of loss Address",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Location of loss Address",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Location of loss Postcode / Zip Code or similar",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Location of loss Postcode / Zip Code or similar",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Date Closed",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Date Closed",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Lloyd's Cat Code",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Lloyd's Cat Code",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Catastrophe Name",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Catastrophe Name",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Paid this month - Expenses",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Paid this month - Expenses",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Paid this month - Attorney Coverage Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Paid this month - Attorney Coverage Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Paid this month - Adjusters Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Paid this month - Adjusters Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Paid this month - Defence Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Paid this month - Defence Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Paid this month - TPA Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Paid this month - TPA Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Previously Paid - Expenses",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Previously Paid - Expenses",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Previously Paid - Attorney Coverage Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Previously Paid - Attorney Coverage Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Previously Paid - Adjusters Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Previously Paid - Adjusters Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Previously Paid - Defence Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Previously Paid - Defence Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Previously Paid - TPA Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Previously Paid - TPA Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Reserve - Expenses",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Reserve - Expenses",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Reserve - Attorney Coverage Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Reserve - Attorney Coverage Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Reserve - Adjusters Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Reserve - Adjusters Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Reserve - Defence Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Reserve - Defence Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Reserve - TPA Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Reserve - TPA Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Total Incurred",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Total Incurred",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Name or Reg No of Aircraft Vehicle, Vessel etc. ",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Name or Reg No of Aircraft Vehicle, Vessel etc. ",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "% Ceded (Reinsurance)",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "% Ceded (Reinsurance)",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Plan",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Plan",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Patient Name",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Patient Name",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Treatment Type",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Treatment Type",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Country of Treatment",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Country of Treatment",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Date of Treatment",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Date of Treatment",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Expert - Role",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Expert - Role",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Expert Firm / Company Name",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Expert Firm / Company Name",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Expert Reference No etc.",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Expert Reference No etc.",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Expert Address",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Expert Address",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Expert State, Province, Territory, Canton etc.",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Expert State, Province, Territory, Canton etc.",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Expert Postcode / Zip Code or similar",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Expert Postcode / Zip Code or similar",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Expert Country",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Expert Country",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Notes",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Notes",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Date Claim Opened",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Date Claim Opened",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Ex gratia payment",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Ex gratia payment",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Claim First Notification Acknowledgement Date",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Claim First Notification Acknowledgement Date",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Date First Reserve Established",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Date First Reserve Established",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Diary date",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Diary date",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Peer review date",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Peer review date",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "ItemName",
+														"type": "String"
+													},
+													"sink": {
+														"name": "ItemName",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "FileDateVariable",
+														"type": "String"
+													},
+													"sink": {
+														"name": "FileDateVariable",
+														"type": "String",
+														"physicalType": "String"
+													}
+												}
+											],
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "dsExcelOnPrem",
+											"type": "DatasetReference",
+											"parameters": {
+												"FolderName": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_SqlServerLoadClaimData",
+											"type": "DatasetReference",
+											"parameters": {
+												"tablename": "JohnEastern"
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"variables": {
+					"FileDate": {
+						"type": "String"
+					},
+					"DatePart": {
+						"type": "String"
+					},
+					"DataPartArray": {
+						"type": "Array"
+					},
+					"foldername": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-08-22T02:37:50Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/LoadClaimData_Dset')]",
+				"[concat(variables('factoryId'), '/datasets/DelimitedText4')]",
+				"[concat(variables('factoryId'), '/datasets/dsExcelOnPrem')]",
+				"[concat(variables('factoryId'), '/datasets/ds_SqlServerLoadClaimData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LoadClaimData_V3')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "read data from Excel files and load into sql table",
+				"activities": [
+					{
+						"name": "GetMetadata_readFileNames",
+						"description": "read child folder name in folder TPAClaims",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "LoadClaimData_Dset",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "FileServerReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "GetMetadata_readFileNames",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetMetadata_readFileNames').output.childItems",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "GetMetadata2",
+									"description": "go through each folder and read file names",
+									"type": "GetMetadata",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataset": {
+											"referenceName": "DelimitedText4",
+											"type": "DatasetReference",
+											"parameters": {
+												"FolderName": {
+													"value": "@item().name",
+													"type": "Expression"
+												},
+												"FileDate": {
+													"value": "@split(item().Name, ' ')[2]",
+													"type": "Expression"
+												}
+											}
+										},
+										"fieldList": [
+											"childItems"
+										],
+										"storeSettings": {
+											"type": "FileServerReadSettings",
+											"recursive": true,
+											"enablePartitionDiscovery": false
+										},
+										"formatSettings": {
+											"type": "DelimitedTextReadSettings"
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "ForEach2",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "ForEach1",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetMetadata2').output.childItems",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "JohnEastern",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "ExcelSource",
+											"additionalColumns": [
+												{
+													"name": "ItemName",
+													"value": {
+														"value": "@item().name",
+														"type": "Expression"
+													}
+												}
+											],
+											"storeSettings": {
+												"type": "FileServerReadSettings",
+												"recursive": true,
+												"enablePartitionDiscovery": false
+											}
+										},
+										"sink": {
+											"type": "SqlServerSink",
+											"writeBehavior": "insert",
+											"sqlWriterUseTableLock": false,
+											"tableOption": "autoCreate"
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"mappings": [
+												{
+													"source": {
+														"name": "Field",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Field",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Coverholder Name",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Coverholder Name",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "TPA Name",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "TPA Name",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Agreement No",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Agreement No",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Unique Market Reference (UMR) / Policy Number",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Unique Market Reference (UMR) / Policy Number",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Binder Contract Inception",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Binder Contract Inception",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Binder Contract Expiry",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Binder Contract Expiry",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Reporting Period (End Date)",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Reporting Period (End Date)",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Class of Business: Section No, Risk code or description",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Class of Business: Section No, Risk code or description",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Class of Business",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Class of Business",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Lloyd's Risk Code",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Lloyd's Risk Code",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Section No",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Section No",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Original Currency",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Original Currency",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Settlement Currency",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Settlement Currency",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Rate of Exchange",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Rate of Exchange",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Certificate Reference",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Certificate Reference",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Claim Reference / Number",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Claim Reference / Number",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Insured Full Name or Company Name",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Insured Full Name or Company Name",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Insured State, Province, Territory, Canton etc.",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Insured State, Province, Territory, Canton etc.",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Insured Country",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Insured Country",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Location of risk State, Province, Territory, Canton",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Location of risk State, Province, Territory, Canton",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Location of risk Country",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Location of risk Country",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Risk Inception Date",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Risk Inception Date",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Risk Expiry Date",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Risk Expiry Date",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Period of Cover - Narrative",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Period of Cover - Narrative",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Location of loss State, Province, Territory, Canton ",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Location of loss State, Province, Territory, Canton ",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Location of loss Country",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Location of loss Country",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Cause of Loss Code",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Cause of Loss Code",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Loss Description",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Loss Description",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Date of Loss (From)",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Date of Loss (From)",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Date of Loss to",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Date of Loss to",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Date Claim First Advised/Date Claim Made",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Date Claim First Advised/Date Claim Made",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Claim Status",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Claim Status",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Refer to Underwriters",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Refer to Underwriters",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Denial",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Denial",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Claimant Name",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Claimant Name",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Loss County",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Loss County",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "State of Filing",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "State of Filing",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "PCS Code",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "PCS Code",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Medicare United States Bodily Injury",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Medicare United States Bodily Injury",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Medicare Eligibility Check Performance",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Medicare Eligibility Check Performance",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Medicare Outcome of Eligibility Status Check",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Medicare Outcome of Eligibility Status Check",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Medicare Conditional Payments",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Medicare Conditional Payments",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Medicare MSP Compliance Services",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Medicare MSP Compliance Services",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Paid this month - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Paid this month - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Paid this month - Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Paid this month - Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Previously Paid - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Previously Paid - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Previously Paid - Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Previously Paid - Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Reserve - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Reserve - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Reserve - Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Reserve - Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Change this month - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Change this month - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Change this month - Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Change this month - Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Total Incurred - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Total Incurred - Indemnity",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Total Incurred - Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Total Incurred - Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Coverholder PIN",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Coverholder PIN",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Reporting Period Start Date",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Reporting Period Start Date",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Type of Insurance (Direct, or Type of RI)",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Type of Insurance (Direct, or Type of RI)",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Policy or Group Ref",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Policy or Group Ref",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Insured Address ",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Insured Address ",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Insured Postcode / Zip Code or similar",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Insured Postcode / Zip Code or similar",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Location of Risk Location ID",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Location of Risk Location ID",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Location of Risk Address",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Location of Risk Address",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Location of Risk Postcode / Zip Code or similar",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Location of Risk Postcode / Zip Code or similar",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Deductible Amount",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Deductible Amount",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Deductible Basis",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Deductible Basis",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Sums Insured Amount",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Sums Insured Amount",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Location of loss Address",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Location of loss Address",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Location of loss Postcode / Zip Code or similar",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Location of loss Postcode / Zip Code or similar",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Date Closed",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Date Closed",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Lloyd's Cat Code",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Lloyd's Cat Code",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Catastrophe Name",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Catastrophe Name",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Paid this month - Expenses",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Paid this month - Expenses",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Paid this month - Attorney Coverage Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Paid this month - Attorney Coverage Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Paid this month - Adjusters Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Paid this month - Adjusters Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Paid this month - Defence Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Paid this month - Defence Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Paid this month - TPA Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Paid this month - TPA Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Previously Paid - Expenses",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Previously Paid - Expenses",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Previously Paid - Attorney Coverage Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Previously Paid - Attorney Coverage Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Previously Paid - Adjusters Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Previously Paid - Adjusters Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Previously Paid - Defence Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Previously Paid - Defence Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Previously Paid - TPA Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Previously Paid - TPA Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Reserve - Expenses",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Reserve - Expenses",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Reserve - Attorney Coverage Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Reserve - Attorney Coverage Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Reserve - Adjusters Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Reserve - Adjusters Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Reserve - Defence Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Reserve - Defence Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Reserve - TPA Fees",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Reserve - TPA Fees",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Total Incurred",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Total Incurred",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Name or Reg No of Aircraft Vehicle, Vessel etc. ",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Name or Reg No of Aircraft Vehicle, Vessel etc. ",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "% Ceded (Reinsurance)",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "% Ceded (Reinsurance)",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Plan",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Plan",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Patient Name",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Patient Name",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Treatment Type",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Treatment Type",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Country of Treatment",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Country of Treatment",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Date of Treatment",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Date of Treatment",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Expert - Role",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Expert - Role",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Expert Firm / Company Name",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Expert Firm / Company Name",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Expert Reference No etc.",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Expert Reference No etc.",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Expert Address",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Expert Address",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Expert State, Province, Territory, Canton etc.",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Expert State, Province, Territory, Canton etc.",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Expert Postcode / Zip Code or similar",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Expert Postcode / Zip Code or similar",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Expert Country",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Expert Country",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Notes",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Notes",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Date Claim Opened",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Date Claim Opened",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Ex gratia payment",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Ex gratia payment",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Claim First Notification Acknowledgement Date",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Claim First Notification Acknowledgement Date",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Date First Reserve Established",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Date First Reserve Established",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Diary date",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Diary date",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "Peer review date",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Peer review date",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "ItemName",
+														"type": "String"
+													},
+													"sink": {
+														"name": "ItemName",
+														"type": "String",
+														"physicalType": "String"
+													}
+												},
+												{
+													"source": {
+														"name": "FileDateVariable",
+														"type": "String"
+													},
+													"sink": {
+														"name": "FileDateVariable",
+														"type": "String",
+														"physicalType": "String"
+													}
+												}
+											],
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "dsExcelOnPrem",
+											"type": "DatasetReference",
+											"parameters": {
+												"FolderName": {
+													"value": "@activity('GetMetadata_readFileNames').output.childItems",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_SqlServerLoadClaimData",
+											"type": "DatasetReference",
+											"parameters": {
+												"tablename": "JohnEastern"
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"variables": {
+					"myvar": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-08-22T02:37:50Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/LoadClaimData_Dset')]",
+				"[concat(variables('factoryId'), '/datasets/DelimitedText4')]",
+				"[concat(variables('factoryId'), '/datasets/dsExcelOnPrem')]",
+				"[concat(variables('factoryId'), '/datasets/ds_SqlServerLoadClaimData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LoadClaimData_V4')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "read data from Excel files and load into sql table",
+				"activities": [
+					{
+						"name": "GetMetadata_readFileNames",
+						"description": "read child folder name in folder TPAClaims",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "LoadClaimData_Dset",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "FileServerReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "GetMetadata_readFileNames",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetMetadata_readFileNames').output.childItems",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Switch1",
+									"type": "Switch",
+									"state": "Inactive",
+									"onInactiveMarkAs": "Succeeded",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"on": {
+											"value": "@variables('foldername')",
+											"type": "Expression"
+										},
+										"cases": [
+											{
+												"value": "JohnEastern",
+												"activities": [
+													{
+														"name": "JohnEastern",
+														"type": "Copy",
+														"dependsOn": [],
+														"policy": {
+															"timeout": "0.12:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"source": {
+																"type": "ExcelSource",
+																"additionalColumns": [
+																	{
+																		"name": "FileDate",
+																		"value": {
+																			"value": "@variables('FileDate')",
+																			"type": "Expression"
+																		}
+																	}
+																],
+																"storeSettings": {
+																	"type": "FileServerReadSettings",
+																	"recursive": true,
+																	"wildcardFileName": "*.xlsx",
+																	"enablePartitionDiscovery": false
+																}
+															},
+															"sink": {
+																"type": "SqlServerSink",
+																"writeBehavior": "insert",
+																"sqlWriterUseTableLock": false,
+																"tableOption": "autoCreate"
+															},
+															"enableStaging": false,
+															"translator": {
+																"type": "TabularTranslator",
+																"typeConversion": true,
+																"typeConversionSettings": {
+																	"allowDataTruncation": true,
+																	"treatBooleanAsNumber": false
+																}
+															}
+														},
+														"inputs": [
+															{
+																"referenceName": "dsExcelOnPrem",
+																"type": "DatasetReference",
+																"parameters": {
+																	"FolderName": {
+																		"value": "@item().name",
+																		"type": "Expression"
+																	}
+																}
+															}
+														],
+														"outputs": [
+															{
+																"referenceName": "ds_SqlServerLoadClaimData",
+																"type": "DatasetReference",
+																"parameters": {
+																	"tablename": {
+																		"value": "@variables('foldername')",
+																		"type": "Expression"
+																	}
+																}
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								},
+								{
+									"name": "JohnEastern_copy1",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "ExcelSource",
+											"additionalColumns": [
+												{
+													"name": "FolderName",
+													"value": {
+														"value": "@item().name",
+														"type": "Expression"
+													}
+												}
+											],
+											"storeSettings": {
+												"type": "FileServerReadSettings",
+												"recursive": true,
+												"wildcardFileName": "*.xlsx",
+												"enablePartitionDiscovery": false
+											}
+										},
+										"sink": {
+											"type": "SqlServerSink",
+											"writeBehavior": "insert",
+											"sqlWriterUseTableLock": false,
+											"tableOption": "autoCreate"
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "dsExcelOnPrem",
+											"type": "DatasetReference",
+											"parameters": {
+												"FolderName": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_SqlServerLoadClaimData",
+											"type": "DatasetReference",
+											"parameters": {
+												"tablename": "JohnEastern"
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"variables": {
+					"FileDate": {
+						"type": "String"
+					},
+					"DatePart": {
+						"type": "String"
+					},
+					"DataPartArray": {
+						"type": "Array"
+					},
+					"foldername": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/LoadClaimData_Dset')]",
+				"[concat(variables('factoryId'), '/datasets/dsExcelOnPrem')]",
+				"[concat(variables('factoryId'), '/datasets/ds_SqlServerLoadClaimData')]"
+			]
+		}
+	]
+}
