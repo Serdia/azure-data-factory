@@ -2,7 +2,7 @@
 	"name": "StorageEventTrigger",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
@@ -12,14 +12,20 @@
 				"parameters": {
 					"fileName": "@triggerBody().fileName"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "run_databricks_notebook",
+					"type": "PipelineReference"
+				}
 			}
 		],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
-			"blobPathBeginsWith": "/inputdata/blobs/landing/",
-			"blobPathEndsWith": ".csv",
+			"blobPathBeginsWith": "/claimtool/blobs/raw/",
+			"blobPathEndsWith": ".xlsx",
 			"ignoreEmptyBlobs": true,
-			"scope": "/subscriptions/204031b5-0de4-401e-83b5-7a551ee0c4b2/resourceGroups/rg_MorganDataPlatform/providers/Microsoft.Storage/storageAccounts/stormorgandataplatform",
+			"scope": "/subscriptions/204031b5-0de4-401e-83b5-7a551ee0c4b2/resourceGroups/os_resourcegroup/providers/Microsoft.Storage/storageAccounts/osadlsv2",
 			"events": [
 				"Microsoft.Storage.BlobCreated"
 			]
