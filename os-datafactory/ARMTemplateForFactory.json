@@ -122,7 +122,7 @@
 		},
 		"AzureDatabricks2_properties_typeProperties_existingClusterId": {
 			"type": "string",
-			"defaultValue": "0713-054208-n19vt55v"
+			"defaultValue": "0323-213043-fyreksoc"
 		},
 		"DLSGen2_LS_properties_typeProperties_url": {
 			"type": "string",
@@ -173,15 +173,7 @@
 		},
 		"osAzureKeyVault_LS_properties_typeProperties_baseUrl": {
 			"type": "string",
-			"defaultValue": "https://osAzureKeyvault.vault.azure.net/"
-		},
-		"StorageEventTrigger_properties_MorganDataPlatform_parameters_fileName": {
-			"type": "string",
-			"defaultValue": "@triggerBody().fileName"
-		},
-		"StorageEventTrigger_properties_typeProperties_scope": {
-			"type": "string",
-			"defaultValue": "/subscriptions/204031b5-0de4-401e-83b5-7a551ee0c4b2/resourceGroups/rg_MorganDataPlatform/providers/Microsoft.Storage/storageAccounts/stormorgandataplatform"
+			"defaultValue": "https://oskeyvaultpersonal.vault.azure.net/"
 		},
 		"Storage_Trigger_For_Json_properties_typeProperties_scope": {
 			"type": "string",
@@ -194,6 +186,10 @@
 		"testtrigger1_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/204031b5-0de4-401e-83b5-7a551ee0c4b2/resourceGroups/rg_VehicleSystem/providers/Microsoft.Storage/storageAccounts/datalakev2storacct"
+		},
+		"storage_event_trigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/204031b5-0de4-401e-83b5-7a551ee0c4b2/resourceGroups/os_resourcegroup/providers/Microsoft.Storage/storageAccounts/osadlsv2"
 		}
 	},
 	"variables": {
@@ -5200,7 +5196,7 @@
 									"userProperties": [],
 									"typeProperties": {
 										"command": {
-											"value": "@concat('python cube.py ', item())",
+											"value": "@concat('python3 cube.py ', item())",
 											"type": "Expression"
 										},
 										"resourceLinkedService": {
@@ -5219,6 +5215,68 @@
 									}
 								}
 							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"variables": {
+					"values": {
+						"type": "Array",
+						"defaultValue": [
+							"1",
+							"2",
+							"3",
+							"4",
+							"5"
+						]
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adlsv2')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_AzireBatch')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_batchcode_2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Custom1",
+						"description": "execute python script",
+						"type": "Custom",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"command": {
+								"value": "python cube.py",
+								"type": "Expression"
+							},
+							"resourceLinkedService": {
+								"referenceName": "ls_adlsv2",
+								"type": "LinkedServiceReference"
+							},
+							"folderPath": "input",
+							"referenceObjects": {
+								"linkedServices": [],
+								"datasets": []
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_AzireBatch",
+							"type": "LinkedServiceReference"
 						}
 					}
 				],
@@ -7420,7 +7478,7 @@
 				"annotations": [],
 				"type": "AzureDatabricks",
 				"typeProperties": {
-					"domain": "https://adb-2147164793109402.2.azuredatabricks.net",
+					"domain": "https://adb-298806917296345.5.azuredatabricks.net",
 					"accessToken": {
 						"type": "SecureString",
 						"value": "[parameters('AzureDatabricks2_accessToken')]"
@@ -7701,39 +7759,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/StorageEventTrigger')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Stopped",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "MorganDataPlatform",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"fileName": "[parameters('StorageEventTrigger_properties_MorganDataPlatform_parameters_fileName')]"
-						}
-					}
-				],
-				"type": "BlobEventsTrigger",
-				"typeProperties": {
-					"blobPathBeginsWith": "/inputdata/blobs/landing/",
-					"blobPathEndsWith": ".csv",
-					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('StorageEventTrigger_properties_typeProperties_scope')]",
-					"events": [
-						"Microsoft.Storage.BlobCreated"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/MorganDataPlatform')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/Storage_Trigger_For_Json')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
@@ -7901,6 +7926,73 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DLSA_V2_Excel')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/run_databricks_notebook')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Notebook1",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/claimtool/injestion/JohnEastern"
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureDatabricks2",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricks2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/storage_event_trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "run_databricks_notebook",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/claimtool/blobs/raw/",
+					"blobPathEndsWith": ".xlsx",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('storage_event_trigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/run_databricks_notebook')]"
 			]
 		}
 	]

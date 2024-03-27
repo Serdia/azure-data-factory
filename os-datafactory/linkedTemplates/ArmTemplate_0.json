@@ -101,7 +101,7 @@
 		},
 		"AzureDatabricks2_properties_typeProperties_existingClusterId": {
 			"type": "string",
-			"defaultValue": "0713-054208-n19vt55v"
+			"defaultValue": "0323-213043-fyreksoc"
 		},
 		"DLSGen2_LS_properties_typeProperties_url": {
 			"type": "string",
@@ -117,7 +117,7 @@
 		},
 		"osAzureKeyVault_LS_properties_typeProperties_baseUrl": {
 			"type": "string",
-			"defaultValue": "https://osAzureKeyvault.vault.azure.net/"
+			"defaultValue": "https://oskeyvaultpersonal.vault.azure.net/"
 		}
 	},
 	"variables": {
@@ -327,7 +327,7 @@
 				"annotations": [],
 				"type": "AzureDatabricks",
 				"typeProperties": {
-					"domain": "https://adb-2147164793109402.2.azuredatabricks.net",
+					"domain": "https://adb-298806917296345.5.azuredatabricks.net",
 					"accessToken": {
 						"type": "SecureString",
 						"value": "[parameters('AzureDatabricks2_accessToken')]"
