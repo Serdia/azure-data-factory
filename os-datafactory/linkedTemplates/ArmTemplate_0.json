@@ -101,7 +101,7 @@
 		},
 		"AzureDatabricks2_properties_typeProperties_existingClusterId": {
 			"type": "string",
-			"defaultValue": "0323-213043-fyreksoc"
+			"defaultValue": "0401-185742-ota5alnv"
 		},
 		"DLSGen2_LS_properties_typeProperties_url": {
 			"type": "string",
