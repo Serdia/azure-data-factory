@@ -65,6 +65,9 @@
 		"ls_adlsv2_connectionString": {
 			"value": ""
 		},
+		"ls_formula1dl_storage_accountKey": {
+			"value": ""
+		},
 		"ADLS2toStormorgandataplatform_properties_typeProperties_url": {
 			"value": "https://stormorgandataplatform.dfs.core.windows.net/"
 		},
@@ -128,6 +131,12 @@
 		},
 		"ls_GitHub_properties_typeProperties_username": {
 			"value": "serdia"
+		},
+		"ls_databricks_ws_properties_typeProperties_existingClusterId": {
+			"value": "0525-000909-6dlaje7z"
+		},
+		"ls_formula1dl_storage_properties_typeProperties_url": {
+			"value": "https://osadlsv2.dfs.core.windows.net/"
 		},
 		"osAzureKeyVault_LS_properties_typeProperties_baseUrl": {
 			"value": "https://oskeyvaultpersonal.vault.azure.net/"

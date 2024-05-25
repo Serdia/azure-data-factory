@@ -88,6 +88,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_adlsv2'"
 		},
+		"ls_formula1dl_storage_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_formula1dl_storage'"
+		},
 		"ADLS2toStormorgandataplatform_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://stormorgandataplatform.dfs.core.windows.net/"
@@ -170,6 +174,14 @@
 		"ls_GitHub_properties_typeProperties_username": {
 			"type": "string",
 			"defaultValue": "serdia"
+		},
+		"ls_databricks_ws_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0525-000909-6dlaje7z"
+		},
+		"ls_formula1dl_storage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://osadlsv2.dfs.core.windows.net/"
 		},
 		"osAzureKeyVault_LS_properties_typeProperties_baseUrl": {
 			"type": "string",
@@ -263,6 +275,9 @@
 					"ls_adlsv2_connectionString": {
 						"value": "[parameters('ls_adlsv2_connectionString')]"
 					},
+					"ls_formula1dl_storage_accountKey": {
+						"value": "[parameters('ls_formula1dl_storage_accountKey')]"
+					},
 					"ADLS2toStormorgandataplatform_properties_typeProperties_url": {
 						"value": "[parameters('ADLS2toStormorgandataplatform_properties_typeProperties_url')]"
 					},
@@ -298,6 +313,12 @@
 					},
 					"ls_GitHub_properties_typeProperties_username": {
 						"value": "[parameters('ls_GitHub_properties_typeProperties_username')]"
+					},
+					"ls_databricks_ws_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('ls_databricks_ws_properties_typeProperties_existingClusterId')]"
+					},
+					"ls_formula1dl_storage_properties_typeProperties_url": {
+						"value": "[parameters('ls_formula1dl_storage_properties_typeProperties_url')]"
 					},
 					"osAzureKeyVault_LS_properties_typeProperties_baseUrl": {
 						"value": "[parameters('osAzureKeyVault_LS_properties_typeProperties_baseUrl')]"
@@ -375,9 +396,6 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
-					},
-					"storage_event_trigger_properties_typeProperties_scope": {
-						"value": "[parameters('storage_event_trigger_properties_typeProperties_scope')]"
 					}
 				}
 			},
@@ -398,6 +416,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"storage_event_trigger_properties_typeProperties_scope": {
+						"value": "[parameters('storage_event_trigger_properties_typeProperties_scope')]"
 					},
 					"Storage_Trigger_For_Json_properties_typeProperties_scope": {
 						"value": "[parameters('Storage_Trigger_For_Json_properties_typeProperties_scope')]"
