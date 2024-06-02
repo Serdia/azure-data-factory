@@ -121,7 +121,7 @@
 		},
 		"ls_databricks_ws_properties_typeProperties_existingClusterId": {
 			"type": "string",
-			"defaultValue": "0525-000909-6dlaje7z"
+			"defaultValue": "0602-185508-we2ue1dj"
 		},
 		"ls_formula1dl_storage_properties_typeProperties_url": {
 			"type": "string",
